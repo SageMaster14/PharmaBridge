@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeoPharmaBridge Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      /* Ambient gradient background matching logo colors */
+      background: linear-gradient(135deg, #cce7ff, #28a745, #f2f9ff);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
+    }
+
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+	
+	@media (max-width: 400px) {
+      .logo img {
+          width: 80%;
+      }
+      .login-container {
+          width: 90%;
+          padding: 30px 20px;
+      }
+  }
+
+  body:hover {
+      animation-play-state: paused;
+  }
+    .logo {
+      margin-bottom: 30px;
+    }
+
+    .logo img {
+      width: 350px;
+	  padding: 12px;
+	   border-radius: 6px;
+      height: auto;
+    }
+
+    .login-container {
+      background-color: rgba(255, 255, 255, 0.95); /* slightly transparent to blend with background */
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      width: 360px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 20px;
+      color: #333;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      font-size: 13px;
+      margin: 10px 0;
+    }
+
+    .checkbox-container input {
+      margin-right: 8px;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background-color: #0057b7;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-btn:hover {
+      background-color: #004a9a;
+    }
+
+    .links {
+      margin-top: 15px;
+      font-size: 13px;
+    }
+
+    .links a {
+      color: #0057b7;
+      text-decoration: none;
+      margin: 0 5px;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      margin-top: 25px;
+      font-size: 11px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .verified {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #28a745;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .verified::before {
+      content: "✔";
+      margin-right: 6px;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Logo placed above the login container -->
+  <div class="logo">
+    <img src="NeoPharmaBridge Logo.jpeg" alt="NeoPharmaBridge Logo.jpeg">
+  </div>
+
+  <div class="login-container">
+    <h2>Secure Login</h2>
+   <form id="loginForm">
+  <input type="text" 
+         id="username"
+         placeholder="HPCSA/SAPC ID (7 digits)" 
+         required>
+         
+  <input type="password" 
+         id="password"
+         placeholder="Password (4 uppercase, 3 lowercase, 4 digits)" 
+         required>
+
+  <div class="checkbox-container">
+    <input type="checkbox" id="remember">
+    <label for="remember">Remember Me</label>
+  </div>
+
+  <button type="submit" class="login-btn">Login</button>
+</form>
+
+<div id="error-msg" style="color:red; margin-top:10px;"></div>
+
+<script>
+  const loginForm = document.getElementById('loginForm');
+  const errorMsg = document.getElementById('error-msg');
+
+  loginForm.addEventListener('submit', function(e) {
+      e.preventDefault(); // prevent form submission
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      // Username: exactly 7 digits
+      const usernamePattern = /^\d{7}$/;
+
+      // Password: 4 uppercase + 3 lowercase + 4 digits
+      const passwordPattern = /^[A-Z]{4}[a-z]{3}\d{4}$/;
+
+      if(!usernamePattern.test(username)) {
+          errorMsg.textContent = "Username must be exactly 7 digits.";
+          return;
+      }
+
+      if(!passwordPattern.test(password)) {
+          errorMsg.textContent = "Password must be 4 uppercase letters, 3 lowercase letters, followed by 4 digits.";
+          return;
+      }
+
+      // If all validation passes
+      errorMsg.textContent = "";
+     
+      // Here you can redirect or handle the login
+      window.location.href = "NeoPharmaBridge Dashboard.html";
+  });
+</script>
+    <div class="links">
+      <a href="#">Forgot Password?</a> |
+      <a href="#">Need Help?</a>
+    </div>
+    <div class="verified">SAHPRA Verified Access</div>
+  </div>
+
+  <div class="footer">© 2026 NeoPharmaBridge - Private Access Only</div>
+</body>
+</html>
+
+
