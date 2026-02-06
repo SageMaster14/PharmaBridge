@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NeoPharmaBridge | Prescription</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f9ff;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #0057b7;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      color: #28a745;
+      margin-bottom: 15px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      background: #0057b7;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #004a9a;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+    }
+
+    li {
+      background: #f7f7f7;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .remove-btn {
+      background: #dc3545;
+      border: none;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .remove-btn:hover {
+      background: #b52a37;
+    }
+
+    #message {
+      text-align: center;
+      font-weight: bold;
+      color: green;
+      margin-top: 15px;
+    }
+
+    #error {
+      text-align: center;
+      font-weight: bold;
+      color: red;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>New Prescription</h1>
+
+<!-- Pharmacy Selection -->
+<div class="card">
+  <h3>Selected Pharmacy</h3>
+  <select id="pharmacy">
+    <option disabled selected>Select Linked Pharmacy</option>
+    <option value="dischem">Dis-Chem Pharmacy</option>
+    <option value="clicks">Clicks Pharmacy</option>
+    <option value="neo">NeoPharmacare Pharmacy</option>
+  </select>
+  <div id="error"></div>
+</div>
+
+<!-- Patient Details -->
+<div class="card">
+  <h3>Patient Details</h3>
+  <input type="text" placeholder="Patient Full Name" required id="patientName">
+  <input type="text" placeholder="ID Number / Passport" id="patientID">
+  <input type="number" placeholder="Age" id="patientAge">
+  <select id="patientGender">
+    <option disabled selected>Select Gender</option>
+    <option>Male</option>
+    <option>Female</option>
+    <option>Other</option>
+  </select>
+</div>
+
+<!-- Medication Entry -->
+<div class="card">
+  <h3>Add Medication (Generic Only)</h3>
+
+  <select id="medicine">
+    <option disabled selected>Select Generic Medicine</option>
+    <option value="Paracetamol">Paracetamol</option>
+    <option value="Amoxicillin">Amoxicillin</option>
+    <option value="Metformin">Metformin</option>
+  </select>
+
+  <select id="dose">
+    <option disabled selected>Select Dose</option>
+  </select>
+
+  <select id="instructions">
+    <option disabled selected>Select Instructions</option>
+    <option>PRN (as needed)</option>
+    <option>BD (twice daily)</option>
+    <option>TDS (three times daily)</option>
+    <option>QDS (four times daily)</option>
+    <option>Nocte (at night)</option>
+    <option>Mane (in the morning)</option>
+    <option>HS (at bedtime)</option>
+  </select>
+  
+   <select id="Repeats">
+    <option disabled selected>Select Repeats</option>
+	<option>1 Month</option>
+    <option>2 Months</option>
+    <option>3 Months</option>
+    <option>4 Months</option>
+    <option>5 Months</option>
+    <option>6 Months</option>
+    <option>No Repeats</option>
+  </select>
+  <!-- Special Instructions -->
+<div class="card">
+  <h3>Special Instructions</h3>
+  <p>Additional instructions for the patient or pharmacist.</p>
+
+  <textarea id="specialInstructions"
+    placeholder="e.g. Take with food. Avoid alcohol. Do not exceed prescribed dose."
+    rows="4"
+    style="width:100%; padding:12px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+  </textarea>
+
+  <p class="note">These instructions will appear on the prescription and pharmacy copy.</p>
+</div>
+
+  <button id="addMedicationBtn">Add to Prescription</button>
+</div>
+
+
+<!-- Prescription List --> 
+<div class="card"> 
+<h3>Prescription Items</h3> 
+<ul id="prescriptionList"></ul>
+
+  <button id="submitBtn">Submit Prescription to NeoPharmacare</button>
+  <div id="message"></div>
+</div>
+
+<script>
+  const doseMap = {
+    Paracetamol: ["500 mg PO", "1 g PO"],
+    Amoxicillin: ["500 mg PO", "875 mg PO"],
+    Metformin: ["500 mg PO", "850 mg PO"]
+  };
+
+  const pharmacySelect = document.getElementById("pharmacy");
+  const medicineSelect = document.getElementById("medicine");
+  const doseSelect = document.getElementById("dose");
+  const instructionsSelect = document.getElementById("instructions");
+  const addBtn = document.getElementById("addMedicationBtn");
+  const list = document.getElementById("prescriptionList");
+  const submitBtn = document.getElementById("submitBtn");
+  const errorDiv = document.getElementById("error");
+  const messageDiv = document.getElementById("message");
+
+  // Populate dose dropdown based on medicine
+  medicineSelect.addEventListener("change", () => {
+    doseSelect.innerHTML = '<option disabled selected>Select Dose</option>';
+    doseMap[medicineSelect.value].forEach(d => {
+      const opt = document.createElement("option");
+      opt.textContent = d;
+      doseSelect.appendChild(opt);
+    });
+  });
+
+  // Add medication
+  const repeatsSelect = document.getElementById("Repeats");
+
+addBtn.addEventListener("click", () => {
+  if (pharmacySelect.value !== "neo") {
+    errorDiv.textContent = "Stock Card Needed for selected pharmacy!";
+    return;
+  }
+  errorDiv.textContent = "";
+
+  if (!medicineSelect.value || !doseSelect.value || !instructionsSelect.value || !repeatsSelect.value) {
+    alert("Please complete all medication fields.");
+    return;
+  }
+
+  const li = document.createElement("li");
+  li.innerHTML = `
+    <span>
+      ${medicineSelect.value} – ${doseSelect.value} – 
+      ${instructionsSelect.value} – Repeats: ${repeatsSelect.value}
+    </span>
+    <button class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+  `;
+  list.appendChild(li);
+
+  medicineSelect.selectedIndex = 0;
+  doseSelect.innerHTML = '<option disabled selected>Select Dose</option>';
+  instructionsSelect.selectedIndex = 0;
+  repeatsSelect.selectedIndex = 0;
+});
+
+
+  // Submit prescription
+ submitBtn.addEventListener("click", () => {
+    if (list.children.length === 0) {
+      alert("Add at least one medication before submitting.");
+      return;
+    }
+
+    // Gather prescription data
+    const patient = {
+      name: document.getElementById("patientName").value,
+      id: document.getElementById("patientID").value,
+      age: document.getElementById("patientAge").value,
+      gender: document.getElementById("patientGender").value
+    };
+
+    const medications = [];
+    for (let li of list.children) {
+      medications.push(li.children[0].textContent);
+    }
+
+    const prescriptionData = {
+  pharmacy: pharmacySelect.value,
+  patient,
+  medications,
+  specialInstructions: document.getElementById("specialInstructions").value,
+  timestamp: new Date().toISOString()
+};
+
+
+    // Save to "admin" in localStorage
+    let adminRecords = JSON.parse(localStorage.getItem("adminPrescriptions")) || [];
+    adminRecords.push(prescriptionData);
+    localStorage.setItem("adminPrescriptions", JSON.stringify(adminRecords));
+
+    // Show submission message
+    messageDiv.textContent = "Prescription Submitted Successfully! Redirecting...";
+	
+	document.getElementById("specialInstructions").value = "";
+
+
+    // Redirect to main dashboard after 2 seconds
+    setTimeout(() => {
+        window.location.href = "NeoPharmaBridge Dashboard.html"; // change this to your dashboard filename
+    }, 2000);
+});
+
+</script>
+</body>
+</html>

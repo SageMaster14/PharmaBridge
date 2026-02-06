@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeoPharmaBridge | Doctor Dashboard</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #cce7ff, #28a745, #f2f9ff);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
+    }
+
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .topbar {
+      background: linear-gradient(135deg, #cce7ff, #28a745, #f2f9ff);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      animation: gradientMove 15s ease infinite;
+    }
+
+    .topbar img {
+      height: 70px;
+    }
+
+    .doctor-info {
+      text-align: right;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      color: #0057b7;
+      margin-bottom: 25px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 25px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .card h3 {
+      margin-bottom: 15px;
+      color: #28a745;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #0057b7;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #777;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    footer {
+      text-align: center;
+      margin: 40px 0 20px;
+      font-size: 12px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <img src="NeoPharmaBridge Logo.jpeg" alt="NeoPharmaBridge Logo">
+  <div class="doctor-info">
+    <strong>Dr KOALANE</strong>
+    <p><span>SAHPRA Verified</span></p>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+  <h1>Doctor's Dashboard</h1>
+
+  <div class="cards">
+
+    <!-- Pharmacy Selection -->
+    <div class="card">
+      <h3>Select Pharmacy</h3>
+      <select id="pharmacySelect">
+        <option value="" selected disabled>Select Linked Pharmacy</option>
+        <option>Dis-Chem Pharmacy</option>
+        <option>Clicks Pharmacy</option>
+        <option value="neo">NeoPharmacare Pharmacy</option>
+      </select>
+      <p class="note">Only SAHPRA-linked pharmacies are shown.</p>
+    </div>
+
+    <!-- Prescription Module -->
+    <div class="card">
+      <h3>Create Prescription</h3>
+      <button id="startPrescription" disabled onclick="openPrescription()">Start New Prescription</button>
+
+
+      <!-- Prescription Form -->
+      <div id="prescriptionForm" class="hidden">
+        <select id="medicineSelect">
+          <option selected disabled>Select Generic Medicine</option>
+          <option value="paracetamol">Paracetamol</option>
+          <option value="amoxicillin">Amoxicillin</option>
+          <option value="metformin">Metformin</option>
+        </select>
+
+        <select id="doseSelect">
+          <option selected disabled>Select Dose</option>
+        </select>
+
+        <button>Submit Prescription</button>
+        <p class="note">Medicines listed per SAHPRA EML (generic only).</p>
+      </div>
+    </div>
+
+    <!-- Patient Records -->
+    <div class="card">
+      <h3>Patient Records</h3>
+      <button>View Patient Records</button>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  © 2026 NeoPharmaBridge · Doctor Access · Private & Secure
+</footer>
+
+<<script>
+  const pharmacySelect = document.getElementById("pharmacySelect");
+  const startBtn = document.getElementById("startPrescription");
+
+  pharmacySelect.addEventListener("change", () => {
+    startBtn.disabled = pharmacySelect.value !== "neo";
+  });
+
+  function openPrescription() {
+    window.open("prescription.html", "_blank");
+  }
+</script>
+
+
+</body>
+</html>
