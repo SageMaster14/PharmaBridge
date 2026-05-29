@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>View Prescription | NeoPharmaBridge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:linear-gradient(to right,#e6f2ff,#f8fbff);
+padding:30px;
+margin:0;
+}
+
+.topbar{
+background:linear-gradient(135deg,#0057b7,#28a745);
+padding:15px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-radius:0 0 14px 14px;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.topbar img{
+height:70px;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:14px;
+box-shadow:0 6px 18px rgba(0,0,0,0.12);
+margin-top:20px;
+}
+
+h2,h3{
+color:#0057b7;
+margin-top:0;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:12px;
+margin-bottom:15px;
+}
+
+.info{
+background:#f7fbff;
+padding:12px;
+border-radius:10px;
+border-left:4px solid #0057b7;
+}
+
+.label{
+font-size:12px;
+color:#666;
+margin-bottom:5px;
+font-weight:bold;
+}
+
+.value{
+font-size:15px;
+font-weight:bold;
+color:#222;
+word-break:break-word;
+}
+
+.med-box{
+background:#f8fbff;
+padding:15px;
+border-radius:10px;
+margin-bottom:10px;
+border-left:5px solid #0057b7;
+}
+
+.status{
+padding:10px 14px;
+border-radius:8px;
+display:inline-block;
+font-weight:bold;
+color:white;
+}
+
+.pending{
+background:#ffc107;
+color:#222;
+}
+
+.dispensed{
+background:#28a745;
+}
+
+.queryRaised{
+background:#dc3545;
+}
+
+button{
+padding:12px 16px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+margin-right:10px;
+font-weight:bold;
+}
+
+.dispense{
+background:#28a745;
+color:white;
+}
+
+.query{
+background:#ffc107;
+color:black;
+}
+
+.savequery{
+background:#dc3545;
+color:white;
+}
+
+.repeat{
+background:#6f42c1;
+color:white;
+}
+
+.back{
+background:#0057b7;
+color:white;
+}
+
+.download{
+background:#111;
+color:white;
+}
+
+textarea{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid #ccc;
+box-sizing:border-box;
+resize:vertical;
+}
+
+.signature-box{
+background:#f8fbff;
+padding:18px;
+border-radius:12px;
+margin-top:15px;
+border:1px solid #dbeeff;
+}
+
+.signature-name{
+font-size:28px;
+font-family:cursive;
+font-weight:bold;
+margin-top:8px;
+}
+
+.signature-green{
+color:#28a745;
+}
+
+.signature-blue{
+color:#0057b7;
+}
+
+.badge{
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+background:#eef6ff;
+margin-top:6px;
+}
+
+.footer{
+text-align:center;
+margin-top:30px;
+font-size:11px;
+color:#b5b5b5;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+
+<img src="NeoPharmaBridge Logo.jpeg">
+
+</div>
+
+<div class="container">
+
+<div class="card" id="prescriptionCard"></div>
+
+<div class="card">
+
+<h3>Patient History</h3>
+
+<textarea
+id="historyBox"
+readonly
+style="height:180px;background:#f7f7f7;"
+></textarea>
+
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+
+/* =========================================
+LOAD PRESCRIPTION
+========================================= */
+
+const index =
+localStorage.getItem(
+"selectedPrescription"
+);
+
+let prescriptions =
+JSON.parse(
+localStorage.getItem(
+"adminPrescriptions"
+)
+) || [];
+
+const p = prescriptions[index];
+
+const container =
+document.getElementById(
+"prescriptionCard"
+);
+
+/* =========================================
+LOAD HISTORY
+========================================= */
+
+document.getElementById(
+"historyBox"
+).value =
+p.history ||
+"No patient history available.";
+
+/* =========================================
+RENDER
+========================================= */
+
+function render(){
+
+let statusClass = "pending";
+
+if(p.status === "Dispensed"){
+statusClass = "dispensed";
+}
+
+if(p.status === "Query Raised"){
+statusClass = "queryRaised";
+}
+
+container.innerHTML = `
+
+<h2>
+Prescription Details
+</h2>
+
+<div class="grid">
+
+<div class="info">
+<div class="label">PATIENT NAME</div>
+<div class="value">${p.patient || "N/A"}</div>
+</div>
+
+<div class="info">
+<div class="label">ICAM NUMBER</div>
+<div class="value">${p.icam || "N/A"}</div>
+</div>
+
+<div class="info">
+<div class="label">ID / PASSPORT</div>
+<div class="value">${p.patientID || "N/A"}</div>
+</div>
+
+<div class="info">
+<div class="label">AGE</div>
+<div class="value">${p.age || "N/A"}</div>
+</div>
+
+<div class="info">
+<div class="label">CONTACT</div>
+<div class="value">${p.contact || "N/A"}</div>
+</div>
+
+<div class="info">
+<div class="label">ALLERGIES</div>
+<div class="value">${p.allergies || "None"}</div>
+</div>
+
+<div class="info">
+<div class="label">DATE ISSUED</div>
+<div class="value">${new Date(p.date).toLocaleString()}</div>
+</div>
+
+<div class="info">
+<div class="label">PHARMACY</div>
+<div class="value">
+${p.pharmacyName || "NeoPharmaCare"}
+</div>
+<div class="badge">
+Y Number:
+${p.pharmacyYNumber || "Y1234567"}
+</div>
+</div>
+
+</div>
+
+<h3>Prescription Status</h3>
+
+<div class="status ${statusClass}">
+${p.status || "Pending"}
+</div>
+
+<br><br>
+
+<h3>Medication</h3>
+
+${p.meds.map(m => `
+<div class="med-box">
+${m}
+</div>
+`).join("")}
+
+<h3>Special Instructions</h3>
+
+<p>
+${p.notes || "None"}
+</p>
+
+<h3>Doctor Authentication</h3>
+
+<div class="signature-box">
+
+<div>
+<strong>Doctor:</strong>
+${p.doctorName || "DR KOALANE"}
+</div>
+
+<div>
+<strong>HPCSA Number:</strong>
+${p.doctorHPCSA || "MP123456"}
+</div>
+
+<div class="signature-name signature-blue">
+${p.doctorSignature || "DR KOALANE"}
+</div>
+
+</div>
+
+${
+p.status === "Dispensed"
+?
+
+`
+
+<h3 style="margin-top:25px;">
+Dispensing Pharmacist
+</h3>
+
+<div class="signature-box">
+
+<div>
+<strong>Pharmacist:</strong>
+${p.pharmacistName || "N.K KOALANE"}
+</div>
+
+<div>
+<strong>P Number:</strong>
+${p.pharmacistPNumber || "P72436"}
+</div>
+
+<div>
+<strong>Dispenser ID:</strong>
+${p.dispenserID || "DSP-72436"}
+</div>
+
+<div class="signature-name signature-green">
+${p.pharmacistSignature || "N.K KOALANE"}
+</div>
+
+<div class="badge">
+Dispensed:
+${p.dispensedDate || ""}
+</div>
+
+</div>
+
+`
+
+:
+
+`
+
+<div style="
+background:#fff8e1;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+">
+
+<strong>
+Awaiting Pharmacist Dispensing Signature
+</strong>
+
+</div>
+
+`
+}
+
+${
+p.query
+?
+
+`
+
+<div style="
+background:#fff3cd;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+border-left:5px solid #dc3545;
+">
+
+<h3 style="color:#dc3545;">
+Pharmacist Query
+</h3>
+
+<p>${p.query}</p>
+
+</div>
+
+`
+
+:
+
+""
+}
+
+<br>
+
+<button
+class="dispense"
+onclick="dispensePrescription()"
+>
+Dispense Medication
+</button>
+
+<button
+class="query"
+onclick="showQueryBox()"
+>
+Raise Query
+</button>
+
+<button
+class="repeat"
+onclick="useRepeat()"
+>
+Use Repeat
+</button>
+
+<button
+class="download"
+onclick="downloadPDF()"
+>
+Download PDF
+</button>
+
+<div
+id="queryBox"
+style="display:none;margin-top:20px;"
+>
+
+<textarea
+id="queryInput"
+placeholder="Enter pharmacist query..."
+style="height:120px;"
+></textarea>
+
+<button
+class="savequery"
+onclick="submitQuery()"
+>
+Submit Query
+</button>
+
+</div>
+
+<br>
+
+<button
+class="back"
+onclick="goBack()"
+>
+Back to Dashboard
+</button>
+
+`;
+
+}
+
+/* =========================================
+DISPENSE
+========================================= */
+
+function dispensePrescription(){
+
+if(p.status === "Dispensed"){
+
+alert(
+"Prescription already dispensed"
+);
+
+return;
+
+}
+
+p.status = "Dispensed";
+
+p.pharmacistName =
+"N.K KOALANE";
+
+p.pharmacistPNumber =
+"P72436";
+
+p.dispenserID =
+"DSP-72436";
+
+p.pharmacistSignature =
+"N.K KOALANE";
+
+p.dispensedDate =
+new Date().toLocaleString();
+
+localStorage.setItem(
+"adminPrescriptions",
+JSON.stringify(prescriptions)
+);
+
+alert(
+"Medication Dispensed Successfully"
+);
+
+render();
+
+}
+
+/* =========================================
+QUERY
+========================================= */
+
+function showQueryBox(){
+
+document.getElementById(
+"queryBox"
+).style.display = "block";
+
+}
+
+function submitQuery(){
+
+const q =
+document.getElementById(
+"queryInput"
+).value.trim();
+
+if(!q){
+
+alert(
+"Please type a query"
+);
+
+return;
+
+}
+
+p.query = q;
+
+p.status = "Query Raised";
+
+localStorage.setItem(
+"adminPrescriptions",
+JSON.stringify(prescriptions)
+);
+
+alert(
+"Query Submitted"
+);
+
+render();
+
+}
+
+/* =========================================
+REPEATS
+========================================= */
+
+function useRepeat(){
+
+if((p.repeatsLeft || 0) <= 0){
+
+alert(
+"No repeats left"
+);
+
+return;
+
+}
+
+p.repeatsLeft--;
+
+localStorage.setItem(
+"adminPrescriptions",
+JSON.stringify(prescriptions)
+);
+
+alert(
+"Repeat used successfully"
+);
+
+render();
+
+}
+
+/* =========================================
+DOWNLOAD PDF
+========================================= */
+
+async function downloadPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const doc =
+new jsPDF();
+
+let y = 20;
+
+doc.setFontSize(22);
+doc.text(
+"NeoPharmaBridge Prescription",
+20,
+y
+);
+
+y += 15;
+
+doc.setFontSize(12);
+
+doc.text(
+`Patient: ${p.patient || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`ICAM: ${p.icam || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`ID / Passport: ${p.patientID || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`Date: ${new Date(p.date).toLocaleString()}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`Status: ${p.status || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`Pharmacy: ${p.pharmacyName || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`Y Number: ${p.pharmacyYNumber || ""}`,
+20,
+y
+);
+
+y += 15;
+
+doc.setFontSize(15);
+
+doc.text(
+"Medication",
+20,
+y
+);
+
+y += 10;
+
+doc.setFontSize(11);
+
+p.meds.forEach(m => {
+
+doc.text(
+`• ${m}`,
+25,
+y
+);
+
+y += 8;
+
+});
+
+y += 8;
+
+doc.setFontSize(15);
+
+doc.text(
+"Doctor Authentication",
+20,
+y
+);
+
+y += 10;
+
+doc.setFontSize(11);
+
+doc.text(
+`Doctor: ${p.doctorName || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`HPCSA: ${p.doctorHPCSA || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`Digital Signature: ${p.doctorSignature || ""}`,
+20,
+y
+);
+
+y += 15;
+
+if(p.status === "Dispensed"){
+
+doc.setFontSize(15);
+
+doc.text(
+"Dispensing Pharmacist",
+20,
+y
+);
+
+y += 10;
+
+doc.setFontSize(11);
+
+doc.text(
+`Pharmacist: ${p.pharmacistName || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`P Number: ${p.pharmacistPNumber || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`Dispenser ID: ${p.dispenserID || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`Signature: ${p.pharmacistSignature || ""}`,
+20,
+y
+);
+
+y += 8;
+
+doc.text(
+`Dispensed On: ${p.dispensedDate || ""}`,
+20,
+y
+);
+
+y += 15;
+
+}
+
+doc.setFontSize(15);
+
+doc.text(
+"Patient History",
+20,
+y
+);
+
+y += 10;
+
+doc.setFontSize(11);
+
+const splitHistory =
+doc.splitTextToSize(
+p.history || "None",
+170
+);
+
+doc.text(
+splitHistory,
+20,
+y
+);
+
+y += splitHistory.length * 7;
+
+doc.save(
+`${p.patient}_Prescription.pdf`
+);
+
+}
+
+/* =========================================
+BACK
+========================================= */
+
+function goBack(){
+
+window.location.href =
+"Pharmacist_Dashboard.html";
+
+}
+
+/* =========================================
+INIT
+========================================= */
+
+render();
+
+</script>
+
+<div class="footer">
+NeoPharmaBridge © 2026
+<P>Jesus Christ</p>
+</div>
+
+</body>
+</html>

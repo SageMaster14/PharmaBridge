@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pharmacist Access | NeoPharmaBridge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+  font-family:Arial,sans-serif;
+  height:100vh;
+  margin:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:
+  linear-gradient(
+    135deg,
+    #cce7ff,
+    #28a745,
+    #f2f9ff
+  );
+}
+
+.card{
+  background:#fff;
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  width:350px;
+  text-align:center;
+  position:relative;
+}
+
+h2{
+  color:#0057b7;
+  margin-bottom:20px;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  border-radius:6px;
+  border:none;
+  background:#0057b7;
+  color:white;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+button:hover{
+  background:#004a9a;
+}
+
+#error{
+  color:red;
+  margin-top:10px;
+  font-weight:bold;
+}
+
+.footer{
+  margin-top:20px;
+  font-size:12px;
+  color:#777;
+}
+
+.jesus{
+  margin-top:10px;
+  font-size:10px;
+  color:#d9d9d9;
+  opacity:0.6;
+  letter-spacing:1px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <h2>Pharmacist Access</h2>
+
+  <input
+    type="text"
+    id="yNumber"
+    placeholder="Enter Y-Number (Y1234567)"
+  >
+
+  <button onclick="validateY()">
+    Access Dashboard
+  </button>
+
+  <div id="error"></div>
+
+  <div class="footer">
+    © 2026 NeoPharmaBridge - Private Access Only
+  </div>
+
+  <div class="jesus">
+    Jesus Christ
+  </div>
+
+</div>
+
+<script>
+
+function validateY() {
+
+  const yInput = document.getElementById("yNumber").value.trim();
+  const errorDiv = document.getElementById("error");
+
+  // Regex: must start with Y and exactly 7 digits
+  const pattern = /^Y\d{7}$/;
+
+  if (!pattern.test(yInput)) {
+    errorDiv.textContent = "Invalid Y-Number format. Must be Y + 7 digits.";
+    return;
+  }
+
+  // If valid
+  errorDiv.textContent = "";
+  localStorage.setItem("pharmacistAccess", "granted");
+
+  window.location.href = "Pharmacist_Dashboard.html";
+}
+
+</script>
+
+</body>
+</html>

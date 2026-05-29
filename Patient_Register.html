@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NeoPharmaBridge | Patient Registration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family: Arial;
+background:#f2f9ff;
+padding:40px;
+}
+
+h1{
+color:#0057b7;
+margin-bottom:20px;
+}
+
+.card{
+background:#fff;
+padding:25px;
+border-radius:12px;
+box-shadow:0 6px 16px rgba(0,0,0,0.15);
+max-width:500px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-bottom:12px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+button{
+background:#0057b7;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.success{
+color:#28a745;
+margin-top:15px;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Register New Patient</h1>
+
+<div class="card">
+
+<input id="name" placeholder="Full Name">
+
+<input id="id" placeholder="SA ID / Passport">
+
+<input id="dob" type="date">
+
+<input id="age" placeholder="Age">
+
+<input id="phone" placeholder="Phone Number">
+
+<select id="gender">
+  <option disabled selected>Select Gender</option>
+  <option>Male</option>
+  <option>Female</option>
+  <option>Other</option>
+</select>
+
+<textarea
+id="allergies"
+placeholder="Allergies / Chronic Conditions"
+style="
+width:100%;
+padding:10px;
+margin-bottom:12px;
+border-radius:6px;
+border:1px solid #ccc;
+height:90px;
+"></textarea>
+
+<button onclick="registerPatient()">Register Patient</button>
+
+<div id="msg" class="success"></div>
+
+</div>
+
+<script>
+
+function generateICAM(){
+
+return "ICAM" + Math.floor(100000 + Math.random()*900000);
+
+}
+
+function registerPatient(){
+
+const name =
+document.getElementById("name").value.trim();
+
+const id =
+document.getElementById("id").value.trim();
+
+const dob =
+document.getElementById("dob").value;
+
+const age =
+document.getElementById("age").value.trim();
+
+const phone =
+document.getElementById("phone").value.trim();
+
+const gender =
+document.getElementById("gender").value;
+
+const allergies =
+document.getElementById("allergies").value.trim();
+
+/* VALIDATION */
+
+if(
+!name ||
+!id ||
+!dob ||
+!age ||
+!phone
+){
+
+alert("Please complete all required fields");
+
+return;
+
+}
+
+/* LOAD PATIENTS */
+
+let patients =
+JSON.parse(
+localStorage.getItem("patients")
+) || [];
+
+/* CHECK DUPLICATE ID */
+
+const existingPatient =
+patients.find(p => p.id === id);
+
+if(existingPatient){
+
+alert("Patient already registered");
+
+return;
+
+}
+
+/* GENERATE ICAM */
+
+const icam = generateICAM();
+
+/* SAVE PATIENT */
+
+patients.push({
+
+name:name,
+
+id:id,
+
+dob:dob,
+
+age:age,
+
+contact:phone,
+
+gender:gender,
+
+allergies:allergies,
+
+icam:icam
+
+});
+
+/* SAVE TO LOCAL STORAGE */
+
+localStorage.setItem(
+"patients",
+JSON.stringify(patients)
+);
+
+/* SUCCESS MESSAGE */
+
+document.getElementById("msg").innerHTML =
+`
+Patient Registered Successfully
+<br><br>
+
+<strong>ICAM:</strong> ${icam}
+`;
+
+/* CLEAR FORM */
+
+document.getElementById("name").value = "";
+document.getElementById("id").value = "";
+document.getElementById("dob").value = "";
+document.getElementById("age").value = "";
+document.getElementById("phone").value = "";
+document.getElementById("gender").selectedIndex = 0;
+document.getElementById("allergies").value = "";
+
+}
+
+</script>
+
+
+
+</body>
+</html>
