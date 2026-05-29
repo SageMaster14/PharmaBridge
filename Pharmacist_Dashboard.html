@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NeoPharmaBridge | Pharmacist Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(to right,#e6f2ff,#f8fbff);
+padding:30px;
+margin:0;
+}
+
+.topbar{
+background:linear-gradient(135deg,#cce7ff,#28a745,#f2f9ff);
+padding:15px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+border-radius:14px;
+margin-bottom:25px;
+}
+
+.topbar img{
+height:70px;
+}
+
+h1{
+text-align:center;
+color:#0057b7;
+margin-bottom:25px;
+}
+
+.card{
+background:#fff;
+padding:20px;
+border-radius:12px;
+box-shadow:0 6px 16px rgba(0,0,0,0.15);
+margin-bottom:20px;
+}
+
+input,
+textarea,
+button{
+padding:10px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+cursor:pointer;
+border:none;
+}
+
+.search-btn{
+background:#28a745;
+color:white;
+}
+
+.view-btn{
+background:#0057b7;
+color:white;
+margin-top:10px;
+}
+
+.dispense-btn{
+background:#28a745;
+color:white;
+margin-top:10px;
+margin-left:5px;
+}
+
+.repeat-btn{
+background:#6f42c1;
+color:white;
+margin-top:10px;
+margin-left:5px;
+}
+
+.query-btn{
+background:#ffc107;
+color:black;
+margin-top:10px;
+margin-left:5px;
+}
+
+.query-save{
+background:#dc3545;
+color:white;
+margin-top:10px;
+}
+
+.logout-btn{
+background:#dc3545;
+color:white;
+float:right;
+margin-top:10px;
+}
+
+.status{
+font-weight:bold;
+margin-top:10px;
+}
+
+.pending{
+color:#ffc107;
+}
+
+.dispensed{
+color:#28a745;
+}
+
+.queried{
+color:#dc3545;
+}
+
+.prescription-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+gap:20px;
+}
+
+textarea{
+width:100%;
+margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+  <img src="NeoPharmaBridge Logo.jpeg" alt="NeoPharmaBridge Logo">
+
+  <div>
+    <strong>N.K KOALANE</strong>
+    <p>P72436</p>
+    <p>SAPC Verified</p>
+  </div>
+
+</div>
+
+<h1>Pharmacist Dashboard</h1>
+
+<!-- SEARCH -->
+
+<div class="card">
+
+  <h3>Search Patient</h3>
+
+  <input
+    id="icamSearch"
+    placeholder="Search by ICAM or Patient Name"
+    style="width:70%;"
+  >
+
+  <button 
+  onclick="searchPatient()"
+    id="searchBtn"
+    class="search-btn"
+    style="width:28%;margin-left:1%;"
+  >
+    Search
+  </button>
+
+  <div
+    id="patientResult"
+    style="margin-top:15px;font-weight:bold;"
+  ></div>
+
+</div>
+
+<!-- PRESCRIPTIONS -->
+
+<div
+  id="prescriptions"
+  class="prescription-grid"
+></div>
+
+<!-- LOGOUT -->
+
+<button
+  onclick="logout()"
+  class="logout-btn"
+>
+  Logout
+</button>
+
+<script>
+
+/* =========================================
+ACCESS CONTROL
+========================================= */
+
+const role = localStorage.getItem("neoRole");
+
+if(role !== "pharmacist"){
+  window.location.href = "Login.html";
+}
+
+if(localStorage.getItem("pharmacistAccess") !== "granted"){
+  window.location.href = "Pharmacist_Access.html";
+}
+
+/* =========================================
+LOAD DATA
+========================================= */
+
+let prescriptions =
+JSON.parse(
+  localStorage.getItem("adminPrescriptions")
+) || [];
+
+const container =
+document.getElementById("prescriptions");
+
+const patientResult =
+document.getElementById("patientResult");
+
+/* =========================================
+AUTO FIX DATA
+========================================= */
+
+prescriptions.forEach(p => {
+
+  if(!p.status){
+    p.status = "Pending";
+  }
+
+  if(p.repeatsLeft == null){
+    p.repeatsLeft = 1;
+  }
+
+});
+
+localStorage.setItem(
+  "adminPrescriptions",
+  JSON.stringify(prescriptions)
+);
+
+/* =========================================
+RENDER
+========================================= */
+
+function renderPrescriptions(list){
+
+  container.innerHTML = "";
+
+  if(list.length === 0){
+
+    container.innerHTML = `
+      <div class="card">
+        <h3>No prescriptions found</h3>
+      </div>
+    `;
+
+    return;
+  }
+
+  list
+  .slice()
+  .reverse()
+  .forEach((prescription) => {
+
+    const realIndex =
+    prescriptions.indexOf(prescription);
+
+    let statusClass = "pending";
+
+    if(prescription.status === "Dispensed"){
+      statusClass = "dispensed";
+    }
+
+    if(prescription.status === "Query Raised"){
+      statusClass = "queried";
+    }
+
+    const repeats =
+    prescription.repeatsLeft ?? 0;
+
+    const medsHTML =
+    Array.isArray(prescription.meds)
+    ?
+    prescription.meds
+      .map(m => `<li>${m}</li>`)
+      .join("")
+    :
+    "<li>No medication</li>";
+
+    const card =
+    document.createElement("div");
+
+    card.className = "card";
+
+    card.innerHTML = `
+
+      <h3 style="color:#0057b7;">
+        ${prescription.patient || "Unknown Patient"}
+      </h3>
+
+      <p>
+        <strong>ICAM:</strong>
+        ${prescription.icam || "N/A"}
+      </p>
+
+      <p>
+        <strong>Contact:</strong>
+        ${prescription.contact || "N/A"}
+      </p>
+
+      <p>
+        <strong>Allergies:</strong>
+        ${prescription.allergies || "None"}
+      </p>
+
+      <p>
+        <strong>History:</strong><br>
+        ${prescription.history || "No history"}
+      </p>
+
+      <p>
+        <strong>Date:</strong><br>
+        ${
+          prescription.date
+          ?
+          new Date(
+            prescription.date
+          ).toLocaleString()
+          :
+          "Unknown"
+        }
+      </p>
+
+      <p class="status ${statusClass}">
+        Status:
+        ${prescription.status}
+      </p>
+
+      <p>
+        <strong>Repeats Left:</strong>
+        ${repeats}
+      </p>
+
+      ${
+        repeats <= 0
+        ?
+        `
+        <p style="
+          color:red;
+          font-weight:bold;
+        ">
+          OUT OF REPEATS
+        </p>
+        `
+        :
+        ""
+      }
+
+      ${
+        prescription.query
+        ?
+        `
+        <p style="color:#dc3545;">
+          <strong>Query:</strong><br>
+          ${prescription.query}
+        </p>
+        `
+        :
+        ""
+      }
+
+      <h4>Medication</h4>
+
+      <ul>
+        ${medsHTML}
+      </ul>
+
+      <button
+        class="view-btn"
+        onclick="viewDetails(${realIndex})"
+      >
+        View Prescription
+      </button>
+
+      <button
+        class="dispense-btn"
+        onclick="markDispensed(${realIndex})"
+      >
+        Dispense
+      </button>
+
+      <button
+        class="repeat-btn"
+        onclick="reduceRepeat(${realIndex})"
+      >
+        Use Repeat
+      </button>
+
+      <button
+        class="query-btn"
+        onclick="toggleQuery(${realIndex})"
+      >
+        Raise Query
+      </button>
+
+      <div
+        id="queryBox${realIndex}"
+        style="
+          display:none;
+          margin-top:10px;
+        "
+      >
+
+        <textarea
+          id="queryInput${realIndex}"
+          placeholder="Type pharmacist query..."
+        ></textarea>
+
+        <button
+          class="query-save"
+          onclick="saveQuery(${realIndex})"
+        >
+          Submit Query
+        </button>
+
+      </div>
+
+    `;
+
+    container.appendChild(card);
+
+  });
+
+}
+
+/* =========================================
+SEARCH FUNCTION
+========================================= */
+
+function searchPatient(){
+
+  const search =
+  document.getElementById(
+    "icamSearch"
+  ).value
+  .trim()
+  .toLowerCase();
+
+  /* EMPTY SEARCH */
+
+  if(search === ""){
+
+    showRecentPrescriptions();
+
+    patientResult.innerHTML =
+    "Showing prescriptions from last 24 hours";
+
+    return;
+  }
+
+  /* FILTER */
+
+  const filtered =
+  prescriptions.filter(p => {
+
+    const patientName =
+    (p.patient || "")
+    .toLowerCase();
+
+    const patientICAM =
+    (p.icam || "")
+    .toLowerCase();
+
+    return (
+      patientName.includes(search)
+      ||
+      patientICAM.includes(search)
+    );
+
+  });
+
+  /* NO RESULTS */
+
+  if(filtered.length === 0){
+
+    patientResult.innerHTML =
+    "<span style='color:red;'>No patient found</span>";
+
+    renderPrescriptions([]);
+
+    return;
+  }
+
+  /* RESULTS FOUND */
+
+  patientResult.innerHTML =
+  `
+  <span style="color:#28a745;">
+    ${filtered.length}
+    prescription(s) found
+  </span>
+  `;
+
+  renderPrescriptions(filtered);
+
+}
+
+/* =========================================
+RECENT PRESCRIPTIONS
+========================================= */
+
+function showRecentPrescriptions(){
+
+  const now = new Date();
+
+  const recent =
+  prescriptions.filter(p => {
+
+    if(!p.date){
+      return false;
+    }
+
+    const prescriptionDate =
+    new Date(p.date);
+
+    const diffHours =
+    (now - prescriptionDate)
+    / (1000 * 60 * 60);
+
+    return diffHours <= 24;
+
+  });
+
+  renderPrescriptions(recent);
+
+}
+
+/* =========================================
+VIEW
+========================================= */
+
+function viewDetails(index){
+
+  localStorage.setItem(
+    "selectedPrescription",
+    index
+  );
+
+  window.open(
+    "View_Prescription.html",
+    "_blank"
+  );
+
+}
+
+/* =========================================
+DISPENSE
+========================================= */
+
+function markDispensed(index){
+
+  prescriptions[index].status =
+  "Dispensed";
+
+  localStorage.setItem(
+    "adminPrescriptions",
+    JSON.stringify(prescriptions)
+  );
+
+  searchPatient();
+
+}
+
+/* =========================================
+REPEATS
+========================================= */
+
+function reduceRepeat(index){
+
+  if(
+    prescriptions[index].repeatsLeft <= 0
+  ){
+
+    alert(
+      "Prescription is out of repeats"
+    );
+
+    return;
+  }
+
+  prescriptions[index].repeatsLeft--;
+
+  localStorage.setItem(
+    "adminPrescriptions",
+    JSON.stringify(prescriptions)
+  );
+
+  alert(
+    "Repeat used successfully"
+  );
+
+  searchPatient();
+
+}
+
+/* =========================================
+QUERY
+========================================= */
+
+function toggleQuery(index){
+
+  const box =
+  document.getElementById(
+    "queryBox" + index
+  );
+
+  if(box.style.display === "block"){
+    box.style.display = "none";
+  }else{
+    box.style.display = "block";
+  }
+
+}
+
+function saveQuery(index){
+
+  const text =
+  document.getElementById(
+    "queryInput" + index
+  ).value.trim();
+
+  if(!text){
+
+    alert("Please type a query");
+
+    return;
+  }
+
+  prescriptions[index].query =
+  text;
+
+  prescriptions[index].status =
+  "Query Raised";
+
+  localStorage.setItem(
+    "adminPrescriptions",
+    JSON.stringify(prescriptions)
+  );
+
+  alert(
+    "Query submitted successfully"
+  );
+
+  searchPatient();
+
+}
+
+/* =========================================
+LOGOUT
+========================================= */
+
+function logout(){
+
+  localStorage.removeItem(
+    "pharmacistAccess"
+  );
+
+  window.location.href =
+  "NeoPharmaBridge Homepage.html";
+
+}
+
+/* =========================================
+BUTTON FIX
+========================================= */
+
+document
+.getElementById("searchBtn")
+.addEventListener(
+  "click",
+  searchPatient
+);
+
+document
+.getElementById("icamSearch")
+.addEventListener(
+  "keypress",
+  function(e){
+
+    if(e.key === "Enter"){
+      searchPatient();
+    }
+
+  }
+);
+
+/* =========================================
+INITIAL LOAD
+========================================= */
+
+showRecentPrescriptions();
+
+patientResult.innerHTML =
+"Showing prescriptions from the last 24 hours";
+
+</script>
+
+<footer style="
+text-align:center;
+margin-top:40px;
+font-size:10px;
+color:#e5e5e5;
+opacity:0.6;
+">
+Jesus Christ
+</footer>
+
+</body>
+</html>

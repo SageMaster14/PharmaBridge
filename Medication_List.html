@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Medication List A–Z</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f2f9ff;
+  padding:20px;
+}
+
+h2{
+  color:#0057b7;
+  margin-bottom:15px;
+}
+
+#search{
+  width:100%;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  margin-bottom:20px;
+}
+
+.med-card{
+  background:#fff;
+  padding:15px;
+  margin-bottom:12px;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.med-name{
+  font-size:18px;
+  font-weight:bold;
+  color:#0057b7;
+  margin-bottom:10px;
+}
+
+.strength{
+  background:#e9f3ff;
+  padding:10px;
+  border-radius:6px;
+  margin-bottom:8px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.strength:hover{
+  background:#cfe6ff;
+}
+
+.note{
+  color:#666;
+  font-size:13px;
+  margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>Select Medication & Dose</h2>
+
+<input
+  type="text"
+  id="search"
+  placeholder="Search medication..."
+>
+
+<div id="medList"></div>
+
+<script>
+
+/* =========================
+   MEDICATION DATABASE
+========================= */
+
+const medicines = [
+
+{
+name:"Aciclovir",
+strengths:[
+"200 mg Tablet",
+"200 mg/5 mL Oral Liquid"
+]
+},
+
+{
+name:"Amoxicillin",
+strengths:[
+"250 mg Capsule",
+"500 mg Capsule"
+]
+},
+
+{
+name:"Ampicillin",
+strengths:[
+"500 mg Injection",
+"1 g Injection"
+]
+},
+
+{
+name:"Aspirin",
+strengths:[
+"75 mg Tablet",
+"300 mg Tablet"
+]
+},
+
+{
+name:"Atorvastatin",
+strengths:[
+"10 mg Tablet",
+"20 mg Tablet"
+]
+},
+
+{
+name:"Azithromycin",
+strengths:[
+"250 mg Tablet",
+"500 mg Tablet"
+]
+},
+
+{
+name:"Budesonide",
+strengths:[
+"100 mcg Inhaler",
+"200 mcg Inhaler"
+]
+},
+
+{
+name:"Cefalexin",
+strengths:[
+"125 mg Tablet",
+"250 mg Tablet",
+"500 mg Tablet",
+"125 mg/5 mL Oral Liquid",
+"250 mg/5 mL Oral Liquid"
+]
+},
+
+{
+name:"Chloramphenicol",
+strengths:[
+"1% Ophthalmic Ointment"
+]
+},
+
+{
+name:"Ciprofloxacin",
+strengths:[
+"250 mg Tablet",
+"500 mg Tablet",
+"1 g Oral Dose"
+]
+},
+
+{
+name:"Clindamycin",
+strengths:[
+"150 mg Capsule",
+"600 mg/4 mL Injection",
+"900 mg/6 mL Injection"
+]
+},
+
+{
+name:"Codeine",
+strengths:[
+"30 mg Tablet"
+]
+},
+
+{
+name:"Dexamethasone",
+strengths:[
+"0.5 mg Tablet",
+"0.75 mg Tablet",
+"1.5 mg Tablet",
+"2 mg Tablet",
+"4 mg Tablet",
+"4 mg/mL Injection"
+]
+},
+
+{
+name:"Empagliflozin",
+strengths:[
+"10 mg Tablet",
+"25 mg Tablet"
+]
+},
+
+{
+name:"Entecavir",
+strengths:[
+"0.5 mg Tablet",
+"1 mg Tablet",
+"0.05 mg/mL Oral Liquid"
+]
+},
+
+{
+name:"Epinephrine",
+strengths:[
+"1 mg/mL Injection"
+]
+},
+
+{
+name:"Fluconazole",
+strengths:[
+"50 mg Capsule",
+"50 mg/5 mL Oral Liquid"
+]
+},
+
+{
+name:"Gliclazide",
+strengths:[
+"30 mg Tablet",
+"60 mg Tablet",
+"80 mg Tablet"
+]
+},
+
+{
+name:"Ibuprofen",
+strengths:[
+"200 mg Tablet",
+"400 mg Tablet",
+"600 mg Tablet",
+"100 mg/5 mL Oral Liquid"
+]
+},
+
+{
+name:"Ipratropium Bromide",
+strengths:[
+"20 mcg Inhaler"
+]
+},
+
+{
+name:"Levothyroxine",
+strengths:[
+"25 mcg Tablet",
+"50 mcg Tablet",
+"100 mcg Tablet"
+]
+},
+
+{
+name:"Metformin",
+strengths:[
+"500 mg Tablet",
+"850 mg Tablet"
+]
+},
+
+{
+name:"Metoclopramide",
+strengths:[
+"10 mg Tablet",
+"5 mg/5 mL Oral Liquid",
+"5 mg/mL Injection"
+]
+},
+
+{
+name:"Metronidazole",
+strengths:[
+"200 mg Tablet",
+"250 mg Tablet",
+"400 mg Tablet",
+"500 mg Tablet",
+"200 mg/5 mL Oral Liquid",
+"500 mg Injection"
+]
+},
+
+{
+name:"Midazolam",
+strengths:[
+"7.5 mg Tablet",
+"15 mg Tablet",
+"1 mg/mL Injection",
+"5 mg/mL Injection"
+]
+},
+
+{
+name:"Morphine",
+strengths:[
+"10 mg Tablet",
+"10 mg/mL Injection",
+"5 mg/5 mL Oral Liquid",
+"10 mg/5 mL Oral Liquid"
+]
+},
+
+{
+name:"Omeprazole",
+strengths:[
+"10 mg Capsule",
+"20 mg Capsule",
+"40 mg Capsule",
+"40 mg Injection"
+]
+},
+
+{
+name:"Ondansetron",
+strengths:[
+"4 mg Tablet",
+"8 mg Tablet",
+"24 mg Tablet",
+"4 mg/5 mL Oral Liquid",
+"2 mg/mL Injection"
+]
+},
+
+{
+name:"Paracetamol",
+strengths:[
+"250 mg Tablet",
+"500 mg Tablet",
+"1 g Tablet",
+"120 mg/5 mL Oral Liquid",
+"250 mg/5 mL Oral Liquid"
+]
+},
+
+{
+name:"Potassium Chloride",
+strengths:[
+"Powder for Solution"
+]
+},
+
+{
+name:"Ranitidine",
+strengths:[
+"150 mg Tablet",
+"75 mg/5 mL Oral Liquid",
+"25 mg/mL Injection"
+]
+},
+
+{
+name:"Salbutamol",
+strengths:[
+"100 mcg Inhaler",
+"2.5 mg/2.5 mL Nebules",
+"5 mg/2.5 mL Nebules"
+]
+},
+
+{
+name:"Semaglutide",
+strengths:[
+"0.68 mg/mL Injection",
+"1.34 mg/mL Injection",
+"2.68 mg/mL Injection"
+]
+},
+
+{
+name:"Spironolactone",
+strengths:[
+"25 mg Tablet",
+"12.5 mg Tablet",
+"25 mg/5 mL Oral Liquid"
+]
+},
+
+{
+name:"Sulfasalazine",
+strengths:[
+"500 mg Tablet",
+"500 mg Suppository",
+"3 g/100 mL Retention Enema"
+]
+},
+
+{
+name:"Tenofovir",
+strengths:[
+"300 mg Tablet"
+]
+},
+
+{
+name:"Tiotropium",
+strengths:[
+"18 mcg Capsule",
+"1.25 mcg Inhaler",
+"2.5 mcg Inhaler"
+]
+},
+
+{
+name:"Vitamin A",
+strengths:[
+"100 000 IU Capsule",
+"200 000 IU Capsule"
+]
+},
+
+{
+name:"Zinc",
+strengths:[
+"10 mg Tablet"
+]
+}
+
+];
+
+/* =========================
+   RENDER MEDICATIONS
+========================= */
+
+const medList =
+  document.getElementById("medList");
+
+const search =
+  document.getElementById("search");
+
+function renderMeds(filter=""){
+
+  medList.innerHTML = "";
+
+  const filtered =
+    medicines.filter(m =>
+      m.name.toLowerCase()
+      .includes(filter.toLowerCase())
+    );
+
+  filtered.forEach(med => {
+
+    const card =
+      document.createElement("div");
+
+    card.className = "med-card";
+
+    let strengthsHTML = "";
+
+    med.strengths.forEach(strength => {
+
+      strengthsHTML += `
+        <div class="strength"
+          onclick="selectMedicine(
+            '${med.name}',
+            '${strength}'
+          )">
+          ${strength}
+        </div>
+      `;
+    });
+
+    card.innerHTML = `
+      <div class="med-name">
+        ${med.name}
+      </div>
+
+      ${strengthsHTML}
+    `;
+
+    medList.appendChild(card);
+
+  });
+
+}
+
+/* =========================
+   SELECT MEDICATION
+========================= */
+
+function selectMedicine(name,dose){
+
+  // save selected medication
+  localStorage.setItem(
+    "selectedMedicine",
+    name
+  );
+
+  // save selected dose
+  localStorage.setItem(
+    "selectedDose",
+    dose
+  );
+
+  // redirect back to prescription page
+  window.location.href =
+    "prescription.html";
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+search.addEventListener("input", () => {
+
+  renderMeds(search.value);
+
+});
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+renderMeds();
+
+</script>
+
+<footer style="
+text-align:center;
+margin-top:40px;
+font-size:10px;
+color:#e5e5e5;
+opacity:0.6;
+">
+Jesus Christ
+</footer>
+
+</body>
+</html>

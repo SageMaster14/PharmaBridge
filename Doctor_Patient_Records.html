@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NeoPharmaBridge | Patient Records</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f2f9ff;
+padding:30px;
+margin:0;
+}
+
+h1{
+color:#0057b7;
+margin-bottom:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 6px 16px rgba(0,0,0,0.15);
+margin-bottom:20px;
+}
+
+.patient-card{
+border-left:6px solid #0057b7;
+}
+
+button{
+padding:10px 14px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+margin-top:10px;
+margin-right:5px;
+}
+
+.open-btn{
+background:#0057b7;
+color:white;
+}
+
+.new-btn{
+background:#28a745;
+color:white;
+}
+
+.update-btn{
+background:#ffc107;
+color:black;
+}
+
+.save-btn{
+background:#dc3545;
+color:white;
+}
+
+textarea{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #ccc;
+margin-top:10px;
+height:120px;
+resize:vertical;
+}
+
+.history-box{
+background:#f7f7f7;
+padding:12px;
+border-radius:8px;
+margin-top:10px;
+}
+
+.prescription-item{
+padding:10px;
+background:#f8fbff;
+border-radius:8px;
+margin-top:10px;
+border-left:4px solid #28a745;
+}
+
+.logout-btn{
+position:absolute;
+top:20px;
+right:30px;
+background:#dc3545;
+color:white;
+}
+
+.search-box{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid #ccc;
+margin-bottom:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Patient Records</h1>
+
+<button
+onclick="logout()"
+class="logout-btn"
+>
+Logout
+</button>
+
+<input
+id="searchPatient"
+class="search-box"
+placeholder="Search Patient Name or ICAM"
+onkeyup="searchPatients()"
+>
+
+<div id="records"></div>
+
+<script>
+
+/* =========================================
+LOAD DATA
+========================================= */
+
+let patients =
+JSON.parse(
+localStorage.getItem("patients")
+) || [];
+
+let prescriptions =
+JSON.parse(
+localStorage.getItem("adminPrescriptions")
+) || [];
+
+const container =
+document.getElementById("records");
+
+/* =========================================
+RENDER PATIENTS
+========================================= */
+
+function renderPatients(list = patients){
+
+container.innerHTML = "";
+
+if(list.length === 0){
+
+container.innerHTML = `
+<div class="card">
+<h3>No patients found</h3>
+</div>
+`;
+
+return;
+
+}
+
+list.forEach((patient,index)=>{
+
+const patientPrescriptions =
+prescriptions.filter(p =>
+
+p.icam === patient.icam
+
+);
+
+const card =
+document.createElement("div");
+
+card.className =
+"card patient-card";
+
+card.innerHTML = `
+
+<!-- CLICKABLE HEADER -->
+
+<div
+onclick="togglePatient(${index})"
+style="
+cursor:pointer;
+"
+>
+
+<h2 style="
+color:#0057b7;
+margin-bottom:10px;
+">
+${patient.name || "Unknown"}
+</h2>
+
+<p>
+<strong>ICAM:</strong>
+${patient.icam || "N/A"}
+</p>
+
+<p>
+<strong>ID:</strong>
+${patient.id || "N/A"}
+</p>
+
+<p>
+<strong>Phone:</strong>
+${patient.contact || "N/A"}
+</p>
+
+<p>
+<strong>Gender:</strong>
+${patient.gender || "N/A"}
+</p>
+
+<p>
+<strong>Allergies:</strong>
+${patient.allergies || "None"}
+</p>
+
+<p style="
+color:#0057b7;
+font-weight:bold;
+margin-top:10px;
+">
+Click to expand record
+</p>
+
+</div>
+
+<!-- EXPANDABLE SECTION -->
+
+<div
+id="expand${index}"
+style="
+display:none;
+margin-top:20px;
+"
+>
+
+<!-- HISTORY -->
+
+<div class="history-box">
+
+<h3>Medical History</h3>
+
+<textarea
+id="history${index}"
+>${patient.history || ""}</textarea>
+
+<button
+class="save-btn"
+onclick="saveHistory(${index})"
+>
+Save History
+</button>
+
+</div>
+
+<!-- PRESCRIPTION TIMELINE -->
+
+<h3 style="margin-top:20px;">
+Prescription Timeline
+</h3>
+
+${
+patientPrescriptions.length > 0
+
+?
+
+patientPrescriptions
+.slice()
+.reverse()
+
+.map(p => {
+
+let flagColor = "#ffc107";
+let flagText = "🟡 Pending";
+
+if(p.status === "Dispensed"){
+
+flagColor = "#28a745";
+flagText = "🟢 Dispensed";
+
+}
+
+if(p.status === "Query Raised"){
+
+flagColor = "#dc3545";
+flagText = "🔴 Query Raised";
+
+}
+
+return `
+
+<div
+class="prescription-item"
+style="
+border-left:5px solid ${flagColor};
+"
+>
+
+<p>
+<strong>Date:</strong>
+${p.date
+?
+new Date(p.date).toLocaleString()
+:
+"N/A"}
+</p>
+
+<p style="
+font-weight:bold;
+color:${flagColor};
+">
+${flagText}
+</p>
+
+${
+p.query
+?
+`
+<p style="color:#dc3545;">
+<strong>Pharmacist Query:</strong><br>
+${p.query}
+</p>
+`
+:
+""
+}
+
+<p>
+<strong>Clinical Notes:</strong><br>
+${p.history || "None"}
+</p>
+
+<p>
+<strong>Medication:</strong>
+</p>
+
+<ul>
+${
+p.meds
+?
+p.meds
+.map(m => `<li>${m}</li>`)
+.join("")
+:
+"<li>No medication</li>"
+}
+</ul>
+
+<p>
+<strong>Instructions:</strong><br>
+${p.notes || "None"}
+</p>
+
+<button
+class="update-btn"
+onclick="updatePrescription('${p.date}')"
+>
+Update Prescription
+</button>
+
+</div>
+
+`;
+
+}).join("")
+
+:
+
+"<p>No prescriptions available</p>"
+
+}
+
+<!-- ACTION BUTTONS -->
+
+<button
+class="open-btn"
+onclick="viewPatient(${index})"
+>
+Open Full Record
+</button>
+
+<button
+class="new-btn"
+onclick="newPrescription(${index})"
+>
+Start New Prescription
+</button>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+/* =========================================
+TOGGLE PATIENT CARD
+========================================= */
+
+function togglePatient(index){
+
+const section =
+document.getElementById(
+"expand" + index
+);
+
+section.style.display =
+
+section.style.display === "block"
+
+?
+
+"none"
+
+:
+
+"block";
+
+}
+
+/* =========================================
+SEARCH
+========================================= */
+
+function searchPatients(){
+
+const q =
+document.getElementById(
+"searchPatient"
+).value
+.toLowerCase()
+.trim();
+
+if(q === ""){
+
+renderPatients();
+
+return;
+
+}
+
+const filtered =
+patients.filter(p =>
+
+(p.name || "")
+.toLowerCase()
+.includes(q)
+
+||
+
+(p.icam || "")
+.toLowerCase()
+.includes(q)
+
+);
+
+renderPatients(filtered);
+
+}
+
+/* =========================================
+SAVE HISTORY
+========================================= */
+
+function saveHistory(index){
+
+patients[index].history =
+
+document.getElementById(
+"history" + index
+).value;
+
+localStorage.setItem(
+"patients",
+JSON.stringify(patients)
+);
+
+alert(
+"History updated successfully"
+);
+
+}
+
+/* =========================================
+NEW PRESCRIPTION
+========================================= */
+
+function newPrescription(index){
+
+localStorage.setItem(
+"prescriptionPatient",
+JSON.stringify(patients[index])
+);
+
+localStorage.removeItem(
+"editPrescription"
+);
+
+window.location.href =
+"Prescription.html";
+
+}
+
+/* =========================================
+VIEW FULL RECORD
+========================================= */
+
+function viewPatient(index){
+
+localStorage.setItem(
+"selectedPatient",
+JSON.stringify(patients[index])
+);
+
+window.location.href =
+"Patient_Full_Record.html";
+
+}
+
+/* =========================================
+UPDATE PRESCRIPTION
+========================================= */
+
+function updatePrescription(date){
+
+const prescription =
+prescriptions.find(p =>
+
+p.date === date
+
+);
+
+if(!prescription){
+
+alert(
+"Prescription not found"
+);
+
+return;
+
+}
+
+/* SAVE PRESCRIPTION */
+
+localStorage.setItem(
+"editPrescription",
+JSON.stringify(prescription)
+);
+
+/* LOAD PATIENT */
+
+const patient =
+patients.find(pt =>
+
+pt.icam === prescription.icam
+
+);
+
+if(patient){
+
+localStorage.setItem(
+"prescriptionPatient",
+JSON.stringify(patient)
+);
+
+}
+
+window.location.href =
+"Prescription.html";
+
+}
+
+/* =========================================
+LOGOUT
+========================================= */
+
+function logout(){
+
+localStorage.removeItem(
+"doctorAccess"
+);
+
+window.location.href =
+"NeoPharmaBridge Homepage.html";
+
+}
+
+/* =========================================
+START
+========================================= */
+
+renderPatients();
+
+</script>
+
+ <footer style="
+text-align:center;
+margin-top:40px;
+font-size:10px;
+color:#e5e5e5;
+opacity:0.6;
+">
+Jesus Christ
+</footer>
+
+</body>
+</html>

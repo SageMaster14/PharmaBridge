@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NeoPharmaBridge | Pharmacy Archives</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f2f9ff;
+padding:30px;
+margin:0;
+}
+
+h1{
+color:#0057b7;
+margin-bottom:25px;
+}
+
+.section{
+background:white;
+padding:20px;
+border-radius:14px;
+margin-bottom:25px;
+box-shadow:0 6px 16px rgba(0,0,0,0.1);
+}
+
+.section h2{
+color:#0057b7;
+margin-bottom:5px;
+}
+
+.year{
+margin-top:18px;
+padding:15px;
+background:#eef6ff;
+border-radius:10px;
+}
+
+.month{
+margin-top:15px;
+padding:15px;
+background:#f8fbff;
+border-radius:10px;
+}
+
+.script{
+padding:14px;
+margin-top:12px;
+border-left:5px solid #0057b7;
+background:white;
+border-radius:8px;
+box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+.pending{
+border-left-color:#ffc107;
+}
+
+.dispensed{
+border-left-color:#28a745;
+}
+
+.queried{
+border-left-color:#dc3545;
+}
+
+button{
+padding:10px 14px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+background:#0057b7;
+color:white;
+font-weight:bold;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+.download{
+background:#28a745;
+}
+
+.small{
+font-size:13px;
+color:#666;
+}
+
+.timeline{
+font-size:13px;
+color:#0057b7;
+font-weight:bold;
+margin-top:5px;
+}
+
+ul{
+padding-left:20px;
+}
+
+.footer{
+text-align:center;
+margin-top:40px;
+font-size:10px;
+color:#d9d9d9;
+opacity:0.5;
+}
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+
+<body>
+
+<h1>Prescription Archives</h1>
+
+<div id="archiveContainer"></div>
+
+<script>
+
+/* =========================================
+LOAD PRESCRIPTIONS
+========================================= */
+
+let prescriptions =
+JSON.parse(
+localStorage.getItem(
+"adminPrescriptions"
+)
+) || [];
+
+const container =
+document.getElementById(
+"archiveContainer"
+);
+
+/* =========================================
+NO PRESCRIPTIONS
+========================================= */
+
+if(prescriptions.length === 0){
+
+container.innerHTML = `
+
+<div class="section">
+
+<h2>No Prescriptions Found</h2>
+
+<p>
+There are currently no archived prescriptions.
+</p>
+
+</div>
+
+`;
+
+}
+
+/* =========================================
+REAL TIME DATES
+========================================= */
+
+prescriptions = prescriptions.map(p => {
+
+const d =
+new Date(p.date);
+
+p.realYear =
+d.getFullYear();
+
+p.realMonth =
+d.toLocaleString(
+"default",
+{ month:"long" }
+);
+
+p.realDate =
+d.toLocaleString();
+
+return p;
+
+});
+
+/* =========================================
+GROUP BY PHARMACY
+========================================= */
+
+const grouped = {};
+
+prescriptions.forEach(p => {
+
+const pharmacy =
+p.pharmacyName ||
+"NeoPharmaBridge Pharmacy";
+
+const year =
+p.realYear;
+
+const month =
+p.realMonth;
+
+if(!grouped[pharmacy]){
+
+grouped[pharmacy] = {};
+
+}
+
+if(!grouped[pharmacy][year]){
+
+grouped[pharmacy][year] = {};
+
+}
+
+if(!grouped[pharmacy][year][month]){
+
+grouped[pharmacy][year][month] = [];
+
+}
+
+grouped[pharmacy][year][month]
+.push(p);
+
+});
+
+/* =========================================
+MONTH ORDER
+========================================= */
+
+const monthOrder = [
+
+"January",
+"February",
+"March",
+"April",
+"May",
+"June",
+"July",
+"August",
+"September",
+"October",
+"November",
+"December"
+
+];
+
+/* =========================================
+RENDER ARCHIVES
+========================================= */
+
+for(const pharmacy in grouped){
+
+const section =
+document.createElement("div");
+
+section.className =
+"section";
+
+section.innerHTML = `
+
+<h2>${pharmacy}</h2>
+
+<button
+class="download"
+onclick="
+downloadPharmacyPDF(
+'${pharmacy}'
+)
+"
+>
+Download Full PDF Archive
+</button>
+
+`;
+
+const years =
+Object.keys(grouped[pharmacy])
+.sort((a,b)=>b-a);
+
+years.forEach(year => {
+
+const yearDiv =
+document.createElement("div");
+
+yearDiv.className =
+"year";
+
+yearDiv.innerHTML =
+`<h3>${year}</h3>`;
+
+const months =
+Object.keys(grouped[pharmacy][year])
+.sort((a,b)=>
+
+monthOrder.indexOf(a)
+-
+monthOrder.indexOf(b)
+
+);
+
+months.forEach(month => {
+
+const monthDiv =
+document.createElement("div");
+
+monthDiv.className =
+"month";
+
+monthDiv.innerHTML =
+`<h4>${month}</h4>`;
+
+grouped[pharmacy][year][month]
+.reverse()
+.forEach(p => {
+
+let statusClass =
+"pending";
+
+let statusText =
+"🟡 Pending";
+
+if(p.status === "Dispensed"){
+
+statusClass =
+"dispensed";
+
+statusText =
+"🟢 Dispensed";
+
+}
+
+if(p.status === "Query Raised"){
+
+statusClass =
+"queried";
+
+statusText =
+"🔴 Query Raised";
+
+}
+
+const div =
+document.createElement("div");
+
+div.className =
+`script ${statusClass}`;
+
+div.innerHTML = `
+
+<p>
+<strong>Patient:</strong>
+${p.patient || "Unknown"}
+</p>
+
+<p>
+<strong>ICAM:</strong>
+${p.icam || "N/A"}
+</p>
+
+<p>
+<strong>Status:</strong>
+${statusText}
+</p>
+
+<p>
+<strong>Doctor:</strong>
+${p.doctorName || "N/A"}
+</p>
+
+<p>
+<strong>Pharmacist:</strong>
+${p.pharmacistName || "Pending"}
+</p>
+
+<p class="timeline">
+📅 ${p.realDate}
+</p>
+
+<p>
+<strong>Medication:</strong>
+</p>
+
+<ul>
+
+${(p.meds || [])
+.map(m => `
+<li>${m}</li>
+`).join("")}
+
+</ul>
+
+`;
+
+monthDiv.appendChild(div);
+
+});
+
+yearDiv.appendChild(monthDiv);
+
+});
+
+section.appendChild(yearDiv);
+
+});
+
+container.appendChild(section);
+
+}
+
+/* =========================================
+DOWNLOAD COMPLETE PDF
+========================================= */
+
+async function downloadPharmacyPDF(pharmacy){
+
+const scripts =
+prescriptions.filter(p =>
+
+(p.pharmacyName ||
+"NeoPharmaBridge Pharmacy")
+
+=== pharmacy
+
+);
+
+const { jsPDF } =
+window.jspdf;
+
+const doc =
+new jsPDF();
+
+let y = 20;
+
+doc.setFontSize(20);
+
+doc.text(
+"NeoPharmaBridge Archive",
+20,
+y
+);
+
+y += 10;
+
+doc.setFontSize(12);
+
+doc.text(
+`Pharmacy: ${pharmacy}`,
+20,
+y
+);
+
+y += 10;
+
+doc.text(
+`Generated: ${
+new Date()
+.toLocaleString()
+}`,
+20,
+y
+);
+
+y += 20;
+
+scripts.forEach((p,index)=>{
+
+if(y > 240){
+
+doc.addPage();
+
+y = 20;
+
+}
+
+doc.setFontSize(14);
+
+doc.text(
+`Prescription ${index + 1}`,
+20,
+y
+);
+
+y += 10;
+
+doc.setFontSize(11);
+
+doc.text(
+`Patient: ${p.patient || "N/A"}`,
+20,
+y
+);
+
+y += 7;
+
+doc.text(
+`ICAM: ${p.icam || "N/A"}`,
+20,
+y
+);
+
+y += 7;
+
+doc.text(
+`Doctor: ${p.doctorName || "N/A"}`,
+20,
+y
+);
+
+y += 7;
+
+doc.text(
+`Doctor Signature: ${
+p.doctorSignature ||
+"N/A"
+}`,
+20,
+y
+);
+
+y += 7;
+
+doc.text(
+`Pharmacist: ${
+p.pharmacistName ||
+"Pending"
+}`,
+20,
+y
+);
+
+y += 7;
+
+doc.text(
+`Pharmacist Signature: ${
+p.pharmacistSignature ||
+"N/A"
+}`,
+20,
+y
+);
+
+y += 7;
+
+doc.text(
+`Status: ${
+p.status || "Pending"
+}`,
+20,
+y
+);
+
+y += 7;
+
+doc.text(
+`Date: ${
+new Date(p.date)
+.toLocaleString()
+}`,
+20,
+y
+);
+
+y += 10;
+
+doc.text(
+"Medication:",
+20,
+y
+);
+
+y += 7;
+
+(p.meds || [])
+.forEach(med => {
+
+doc.text(
+`• ${med}`,
+25,
+y
+);
+
+y += 6;
+
+});
+
+y += 8;
+
+doc.line(
+20,
+y,
+190,
+y
+);
+
+y += 12;
+
+});
+
+doc.save(
+`${pharmacy}_Archive.pdf`
+);
+
+}
+
+</script>
+
+<footer class="footer">
+Jesus Christ
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeoPharmaBridge | Admin Dashboard</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+display:flex;
+min-height:100vh;
+background:linear-gradient(
+135deg,
+#cce7ff,
+#28a745,
+#f2f9ff
+);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:260px;
+background:#0b1f3a;
+padding:25px;
+color:white;
+display:flex;
+flex-direction:column;
+}
+
+.logo{
+text-align:center;
+margin-bottom:35px;
+}
+
+.logo img{
+width:170px;
+}
+
+.menu{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.menu button{
+background:#112b4a;
+color:white;
+border:none;
+padding:14px;
+border-radius:12px;
+cursor:pointer;
+text-align:left;
+font-size:15px;
+transition:0.3s;
+}
+
+.menu button:hover{
+background:#0057b7;
+transform:translateX(5px);
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:25px;
+overflow-y:auto;
+}
+
+/* TOPBAR */
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.search{
+width:300px;
+max-width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.clock{
+font-size:18px;
+font-weight:bold;
+color:#0057b7;
+}
+
+/* CARDS */
+
+.cards{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,0.12);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h2{
+font-size:34px;
+color:#0057b7;
+margin-bottom:10px;
+}
+
+.card p{
+color:#666;
+font-size:15px;
+}
+
+/* ACTIVITY */
+
+.activity{
+margin-top:30px;
+background:white;
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,0.12);
+}
+
+.activity h3{
+color:#28a745;
+margin-bottom:20px;
+}
+
+.prescription{
+border-bottom:1px solid #ddd;
+padding:15px 0;
+}
+
+.prescription:last-child{
+border-bottom:none;
+}
+
+.status{
+font-weight:bold;
+margin-top:8px;
+}
+
+.pending{
+color:#ffc107;
+}
+
+.queried{
+color:#dc3545;
+}
+
+.dispensed{
+color:#28a745;
+}
+
+.view-btn{
+margin-top:10px;
+background:#0057b7;
+color:white;
+border:none;
+padding:8px 14px;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* TABLE */
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+background:white;
+}
+
+th{
+background:#0057b7;
+color:white;
+padding:12px;
+}
+
+td{
+padding:12px;
+border-bottom:1px solid #ddd;
+}
+
+/* BOT */
+
+#botButton{
+position:fixed;
+bottom:20px;
+right:20px;
+width:65px;
+height:65px;
+border:none;
+border-radius:50%;
+background:#28a745;
+color:white;
+font-size:24px;
+cursor:pointer;
+box-shadow:0 6px 16px rgba(0,0,0,0.3);
+z-index:1000;
+}
+
+#botWindow{
+display:none;
+position:fixed;
+bottom:95px;
+right:20px;
+width:320px;
+background:white;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+z-index:1000;
+}
+
+#botWindow header{
+background:#0057b7;
+color:white;
+padding:12px;
+text-align:center;
+font-weight:bold;
+}
+
+.messages{
+height:250px;
+overflow-y:auto;
+padding:12px;
+background:#f8fbff;
+}
+
+#botInput{
+width:100%;
+padding:12px;
+border:none;
+border-top:1px solid #ddd;
+outline:none;
+}
+
+/* FOOTER */
+
+.footer{
+text-align:center;
+margin-top:40px;
+font-size:10px;
+color:#d9d9d9;
+opacity:0.6;
+letter-spacing:1px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+body{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+overflow-x:auto;
+}
+
+.menu{
+flex-direction:row;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+<img src="NeoPharmaBridge Logo.jpeg">
+</div>
+
+<div class="menu">
+
+<button>🏠 Dashboard</button>
+
+<button onclick="showPatientsTab()">
+🧑 Patients
+</button>
+
+<button onclick="showDoctorsTab()">
+🩺 Doctors
+</button>
+
+<button onclick="showPharmacistsTab()">
+💊 Pharmacists
+</button>
+
+<button onclick="openArchives()">
+📄 Prescriptions
+</button>
+<button>📊 Reports</button>
+
+<button>⚙ Settings</button>
+
+<button
+onclick="logout()"
+style="background:#dc3545;"
+>
+🚪 Logout
+</button>
+
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<input
+class="search"
+placeholder="Search patients, prescriptions..."
+>
+
+<div class="clock" id="clock"></div>
+
+</div>
+
+<!-- STATS -->
+
+<div class="cards">
+
+<div class="card">
+<h2 id="patientCount">0</h2>
+<p>Total Patients</p>
+</div>
+
+<div class="card">
+<h2 id="prescriptionCount">0</h2>
+<p>Total Prescriptions</p>
+</div>
+
+<div class="card">
+<h2 id="queryCount">0</h2>
+<p>Queries Raised</p>
+</div>
+
+<div class="card">
+<h2 id="dispensedCount">0</h2>
+<p>Dispensed Scripts</p>
+</div>
+
+</div>
+
+<!-- ACTIVITY -->
+
+<div class="activity">
+
+<h3>Recent Prescription Activity</h3>
+
+<div id="activityList"></div>
+
+</div>
+
+<!-- PATIENTS -->
+
+<div
+class="activity"
+id="patientsSection"
+style="display:none;"
+>
+
+<h3>Registered Patients</h3>
+
+<div style="overflow-x:auto;">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ICAM</th>
+<th>Full Name</th>
+<th>DOB</th>
+<th>Gender</th>
+<th>Allergies</th>
+<th>Contact</th>
+
+</tr>
+
+</thead>
+
+<tbody id="patientsTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<div class="footer">
+Jesus Christ
+</div>
+
+</div>
+
+<!-- DOCTORS SECTION -->
+
+<div class="activity"
+id="doctorsSection"
+style="display:none;">
+
+<h3>Registered Doctors</h3>
+
+<table style="
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+background:white;
+">
+
+<thead>
+
+<tr style="
+background:#0057b7;
+color:white;
+">
+
+<th style="padding:12px;">
+Doctor
+</th>
+
+<th style="padding:12px;">
+HPCSA
+</th>
+
+<th style="padding:12px;">
+Digital Signature
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="doctorsTable">
+
+<tr>
+
+<td style="padding:12px;">
+DR KOALANE
+</td>
+
+<td style="padding:12px;">
+MP123456
+</td>
+
+<td style="padding:12px;">
+Dr_Koalane_Signature
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- PHARMACISTS SECTION -->
+
+<div class="activity"
+id="pharmacistsSection"
+style="display:none;">
+
+<h3>Registered Pharmacists</h3>
+
+<table style="
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+background:white;
+">
+
+<thead>
+
+<tr style="
+background:#28a745;
+color:white;
+">
+
+<th style="padding:12px;">
+Pharmacist
+</th>
+
+<th style="padding:12px;">
+P Number
+</th>
+
+<th style="padding:12px;">
+Dispenser ID
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="pharmacistsTable">
+
+<tr>
+
+<td style="padding:12px;">
+N.K KOALANE
+</td>
+
+<td style="padding:12px;">
+P72436
+</td>
+
+<td style="padding:12px;">
+DSP-72436
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- BOT -->
+
+<button
+id="botButton"
+onclick="toggleBot()"
+>
+💬
+</button>
+
+<div id="botWindow">
+
+<header>
+NeoPharmaBridge Assistant
+</header>
+
+<div
+class="messages"
+id="messages"
+></div>
+
+<input
+id="botInput"
+placeholder="Ask something..."
+onkeydown="
+if(event.key==='Enter')
+sendMessage()
+"
+>
+
+</div>
+
+<script>
+
+/* =========================================
+ACCESS CONTROL
+========================================= */
+
+const role =
+localStorage.getItem("neoRole");
+
+if(role !== "admin"){
+
+window.location.href =
+"Login.html";
+
+}
+
+/* =========================================
+LOAD DATA
+========================================= */
+
+let prescriptions =
+JSON.parse(
+localStorage.getItem(
+"adminPrescriptions"
+)
+) || [];
+
+let patients =
+JSON.parse(
+localStorage.getItem("patients")
+) || [];
+
+/* =========================================
+CLOCK
+========================================= */
+
+function updateClock(){
+
+const now = new Date();
+
+document.getElementById(
+"clock"
+).innerText =
+now.toLocaleTimeString();
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+/* =========================================
+COUNTS
+========================================= */
+
+document.getElementById(
+"prescriptionCount"
+).innerText =
+prescriptions.length;
+
+document.getElementById(
+"patientCount"
+).innerText =
+patients.length;
+
+let queryCount = 0;
+let dispensedCount = 0;
+
+prescriptions.forEach(p => {
+
+if(p.status === "Query Raised"){
+queryCount++;
+}
+
+if(p.status === "Dispensed"){
+dispensedCount++;
+}
+
+});
+
+document.getElementById(
+"queryCount"
+).innerText =
+queryCount;
+
+document.getElementById(
+"dispensedCount"
+).innerText =
+dispensedCount;
+
+/* =========================================
+ACTIVITY
+========================================= */
+
+const activityList =
+document.getElementById(
+"activityList"
+);
+
+if(prescriptions.length === 0){
+
+activityList.innerHTML =
+"<p>No prescription activity available.</p>";
+
+}else{
+
+[...prescriptions]
+.reverse()
+.forEach((p,index)=>{
+
+let statusClass = "pending";
+let statusText = "🟡 Pending";
+
+if(p.status === "Query Raised"){
+
+statusClass = "queried";
+statusText = "🔴 Query Raised";
+
+}
+
+if(p.status === "Dispensed"){
+
+statusClass = "dispensed";
+statusText = "🟢 Dispensed";
+
+}
+
+const div =
+document.createElement("div");
+
+div.className =
+"prescription";
+
+div.innerHTML = `
+
+<p>
+<strong>Patient:</strong>
+${p.patient || "Unknown"}
+</p>
+
+<p>
+<strong>Date:</strong>
+${p.date
+? new Date(p.date)
+.toLocaleString()
+: "Unknown"}
+</p>
+
+<p class="status ${statusClass}">
+${statusText}
+</p>
+
+<button
+class="view-btn"
+onclick="openPrescription(${index})"
+>
+View Prescription
+</button>
+
+`;
+
+activityList.appendChild(div);
+
+});
+
+}
+
+/* =========================================
+PATIENTS TAB
+========================================= */
+
+function showPatientsTab(){
+
+const section =
+document.getElementById(
+"patientsSection"
+);
+
+section.style.display =
+"block";
+
+loadPatients();
+
+}
+
+/* =========================================
+LOAD PATIENTS
+========================================= */
+
+function loadPatients(){
+
+const table =
+document.getElementById(
+"patientsTable"
+);
+
+table.innerHTML = "";
+
+patients =
+JSON.parse(
+localStorage.getItem("patients")
+) || [];
+
+if(patients.length === 0){
+
+table.innerHTML = `
+
+<tr>
+
+<td
+colspan="6"
+style="
+padding:15px;
+text-align:center;
+"
+>
+No registered patients found
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+patients.forEach(patient => {
+
+const row =
+document.createElement("tr");
+
+row.innerHTML = `
+
+<td>
+${patient.icam || "N/A"}
+</td>
+
+<td>
+${patient.name || "N/A"}
+</td>
+
+<td>
+${patient.dob || "N/A"}
+</td>
+
+<td>
+${patient.gender || "N/A"}
+</td>
+
+<td>
+${patient.allergies || "None"}
+</td>
+
+<td>
+${patient.contact || "N/A"}
+</td>
+
+`;
+
+table.appendChild(row);
+
+});
+
+}
+/* =========================================
+SHOW DOCTORS TAB
+========================================= */
+
+function showDoctorsTab(){
+
+document.getElementById(
+"patientsSection"
+).style.display = "none";
+
+document.getElementById(
+"pharmacistsSection"
+).style.display = "none";
+
+document.getElementById(
+"doctorsSection"
+).style.display = "block";
+
+}
+
+/* =========================================
+SHOW PHARMACISTS TAB
+========================================= */
+
+function showPharmacistsTab(){
+
+document.getElementById(
+"patientsSection"
+).style.display = "none";
+
+document.getElementById(
+"doctorsSection"
+).style.display = "none";
+
+document.getElementById(
+"pharmacistsSection"
+).style.display = "block";
+
+}
+
+/* =========================================
+AUTO REFRESH
+========================================= */
+
+setInterval(loadDoctors,2000);
+
+setInterval(loadPharmacists,2000);
+
+/* =========================================
+AUTO REFRESH
+========================================= */
+
+setInterval(loadPatients,2000);
+
+/* =========================================
+OPEN PRESCRIPTION
+========================================= */
+
+function openPrescription(index){
+
+localStorage.setItem(
+"selectedPrescriptionIndex",
+index
+);
+
+window.open(
+"View-Prescription.html",
+"_blank"
+);
+
+}
+
+/* =========================================
+LOGOUT
+========================================= */
+
+function logout(){
+
+localStorage.removeItem(
+"neoRole"
+);
+
+window.location.href =
+"NeoPharmaBridge Homepage.html";
+
+}
+
+/* =========================================
+BOT
+========================================= */
+
+const botWindow =
+document.getElementById(
+"botWindow"
+);
+
+const messages =
+document.getElementById(
+"messages"
+);
+
+function toggleBot(){
+
+botWindow.style.display =
+
+botWindow.style.display
+=== "block"
+
+?
+
+"none"
+
+:
+
+"block";
+
+}
+
+function sendMessage(){
+
+const input =
+document.getElementById(
+"botInput"
+);
+
+if(input.value.trim() === "")
+return;
+
+addMessage(
+"You: " + input.value
+);
+
+const text =
+input.value.toLowerCase();
+
+input.value = "";
+
+setTimeout(()=>{
+
+let reply =
+"NeoPharmaBridge Assistant: Please contact support for advanced assistance.";
+
+if(text.includes("query")){
+
+reply =
+"NeoPharmaBridge Assistant: Queries are highlighted in red.";
+
+}
+
+if(text.includes("dispense")){
+
+reply =
+"NeoPharmaBridge Assistant: Dispensed prescriptions appear in green.";
+
+}
+
+addMessage(reply);
+
+},500);
+
+}
+
+function addMessage(msg){
+
+const div =
+document.createElement("div");
+
+div.style.marginBottom =
+"10px";
+
+div.innerText = msg;
+
+messages.appendChild(div);
+
+messages.scrollTop =
+messages.scrollHeight;
+
+}
+
+/* =========================================
+OPEN PRESCRIPTION ARCHIVES
+========================================= */
+
+function openArchives(){
+
+  window.location.href =
+  "Pharmacy_Archives.html";
+
+}
+
+</script>
+
+</body>
+</html>

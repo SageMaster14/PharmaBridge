@@ -91,29 +91,71 @@
     <img src="NeoPharmaBridge Logo.jpeg" alt="NeoPharmaBridge Logo">
   </div>
 
-  <h1>Select Your Role</h1>
-
-  <!-- Dashboard tiles -->
-  <div class="dashboard">
-    <div class="tile" 
-     style="background-image: url('NeoPharmaBridge Doctor tile.jpg');"
-     onclick="location.href='Doctor-Dashboard.html'">
-  Doctor
+ <div class="tile"
+onclick="openDoctor()">
+Doctor
 </div>
 
+<div class="tile"
+onclick="openPharmacist()">
+Pharmacist
+</div>
 
-    <!-- Pharmacist Tile -->
-    <div class="tile" style="background-image: url('NeoPharmaBridge Pharmacist tile.jpg');" 
-         onclick="alert('Pharmacist Dashboard Coming Soon!')">
-      Pharmacist
-    </div>
+<div class="tile"
+onclick="openAdmin()">
+Admin
+</div>
 
-    <!-- Admin Tile -->
-    <div class="tile" style="background-image: url('NeoPharmaBridge Admin tile.jpg');" 
-         onclick="alert('Admin Dashboard Coming Soon!')">
-      Admin
-    </div>
-  </div>
+</div>
+<script>
+function openDoctor(){
 
+  if(localStorage.getItem("neoRole") === "doctor"){
+
+    window.location.href =
+      "Doctor-Dashboard.html";
+
+  } else {
+
+    alert("Doctor access only.");
+  }
+}
+
+function openPharmacist(){
+
+  if(localStorage.getItem("neoRole") === "pharmacist"){
+
+    window.location.href =
+      "Pharmacist_Dashboard.html";
+
+  } else {
+
+    alert("Pharmacist access only.");
+  }
+}
+
+function openAdmin(){
+
+  if(localStorage.getItem("neoRole") === "admin"){
+
+    window.location.href =
+      "Admin_Dashboard.html";
+
+  } else {
+
+    alert("Admin access only.");
+  }
+}
+<script/>
+
+<footer style="
+text-align:center;
+margin-top:40px;
+font-size:10px;
+color:#e5e5e5;
+opacity:0.6;
+">
+Jesus Christ
+</footer>
 </body>
 </html>

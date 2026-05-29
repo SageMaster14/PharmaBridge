@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Prescription Record</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f9ff;
+padding:30px;
+}
+
+.card{
+background:#fff;
+padding:25px;
+border-radius:12px;
+box-shadow:0 6px 16px rgba(0,0,0,0.15);
+max-width:700px;
+margin:auto;
+}
+
+h2{
+color:#0057b7;
+margin-bottom:20px;
+}
+
+.flag{
+font-size:18px;
+font-weight:bold;
+margin-bottom:15px;
+}
+
+.red{color:#dc3545;}
+.green{color:#28a745;}
+.yellow{color:#ffc107;}
+
+ul{
+margin-top:10px;
+}
+
+button{
+margin-top:20px;
+padding:10px 14px;
+border:none;
+border-radius:6px;
+background:#0057b7;
+color:white;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Prescription Record</h2>
+
+<div id="record"></div>
+
+<button onclick="window.close()">Close</button>
+
+</div>
+
+<script>
+
+const index = localStorage.getItem("selectedPrescription");
+
+const prescriptions =
+JSON.parse(localStorage.getItem("adminPrescriptions")) || [];
+
+const p = prescriptions[index];
+
+let statusClass="yellow";
+let statusText="🟡 Pending";
+
+if(p.status==="Query Raised"){
+statusClass="red";
+statusText="🔴 Query Raised";
+}
+
+if(p.status==="Dispensed"){
+statusClass="green";
+statusText="🟢 Dispensed";
+}
+
+document.getElementById("record").innerHTML = `
+
+<p><strong>Patient:</strong> ${p.patient}</p>
+
+<p><strong>Date:</strong> ${new Date(p.date).toLocaleString()}</p>
+
+<p class="flag ${statusClass}">
+${statusText}
+</p>
+
+<p><strong>Medications</strong></p>
+
+<ul>
+${p.meds.map(m=>`<li>${m}</li>`).join("")}
+</ul>
+
+<p><strong>Notes</strong></p>
+
+<p>${p.notes}</p>
+
+${p.query ? `
+<p style="color:red;">
+<strong>Pharmacy Query:</strong><br>
+${p.query}
+</p>
+` : ""}
+
+`;
+
+</script>
+
+
+
+</body>
+</html>
