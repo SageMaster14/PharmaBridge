@@ -1,141 +1,698 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<title>Pharmacist Access | NeoPharmaBridge</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>NeoPharmaBridge | Pharmacist Access</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
 
 <style>
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
 body{
-  font-family:Arial,sans-serif;
-  height:100vh;
-  margin:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:
-  linear-gradient(
-    135deg,
-    #cce7ff,
-    #28a745,
-    #f2f9ff
-  );
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:20px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #cce7ff,
+        #28a745,
+        #f2f9ff
+    );
+
 }
 
 .card{
-  background:#fff;
-  padding:30px;
-  border-radius:12px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.2);
-  width:350px;
-  text-align:center;
-  position:relative;
+
+    width:100%;
+
+    max-width:390px;
+
+    background:rgba(255,255,255,.97);
+
+    padding:35px 30px;
+
+    border-radius:20px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.18);
+
+    text-align:center;
+
+}
+
+.logo{
+
+    margin-bottom:20px;
+
+}
+
+.logo img{
+
+    width:220px;
+
+    max-width:100%;
+
+    height:auto;
+
+}
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    background:#eaf8ef;
+
+    color:#218838;
+
+    padding:7px 12px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    margin-bottom:15px;
+
 }
 
 h2{
-  color:#0057b7;
-  margin-bottom:20px;
+
+    color:#0057b7;
+
+    margin-bottom:8px;
+
+    font-size:24px;
+
+}
+
+.subtitle{
+
+    color:#777;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+    margin-bottom:25px;
+
+}
+
+.user-box{
+
+    background:#f4f8fc;
+
+    border:1px solid #e1e8ef;
+
+    border-radius:12px;
+
+    padding:13px;
+
+    margin-bottom:20px;
+
+    text-align:left;
+
+}
+
+.user-box span{
+
+    display:block;
+
+    color:#888;
+
+    font-size:11px;
+
+    margin-bottom:3px;
+
+}
+
+.user-box strong{
+
+    color:#222;
+
+    font-size:14px;
+
 }
 
 input{
-  width:100%;
-  padding:12px;
-  margin-bottom:15px;
-  border-radius:6px;
-  border:1px solid #ccc;
-  box-sizing:border-box;
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #ccc;
+
+    border-radius:10px;
+
+    outline:none;
+
+    font-size:15px;
+
+    text-align:center;
+
+    letter-spacing:1px;
+
+    margin-bottom:12px;
+
+    transition:.2s;
+
+}
+
+input:focus{
+
+    border-color:#0057b7;
+
+    box-shadow:
+    0 0 0 3px rgba(0,87,183,.1);
+
 }
 
 button{
-  width:100%;
-  padding:12px;
-  border-radius:6px;
-  border:none;
-  background:#0057b7;
-  color:white;
-  cursor:pointer;
-  transition:0.2s;
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#0057b7;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
 }
 
 button:hover{
-  background:#004a9a;
+
+    background:#004a9a;
+
+    transform:translateY(-1px);
+
+}
+
+button:disabled{
+
+    background:#aaa;
+
+    cursor:not-allowed;
+
+    transform:none;
+
 }
 
 #error{
-  color:red;
-  margin-top:10px;
-  font-weight:bold;
+
+    min-height:20px;
+
+    margin-top:12px;
+
+    color:#dc3545;
+
+    font-size:13px;
+
+    font-weight:500;
+
+}
+
+.security{
+
+    margin-top:20px;
+
+    padding-top:15px;
+
+    border-top:1px solid #eee;
+
+    color:#777;
+
+    font-size:11px;
+
+    line-height:1.5;
+
 }
 
 .footer{
-  margin-top:20px;
-  font-size:12px;
-  color:#777;
+
+    margin-top:20px;
+
+    font-size:10px;
+
+    color:#aaa;
+
 }
 
 .jesus{
-  margin-top:10px;
-  font-size:10px;
-  color:#d9d9d9;
-  opacity:0.6;
-  letter-spacing:1px;
+
+    margin-top:10px;
+
+    font-size:10px;
+
+    color:#d0d0d0;
+
+    letter-spacing:1px;
+
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="card">
 
-  <h2>Pharmacist Access</h2>
+```
+<!-- LOGO -->
 
-  <input
+<div class="logo">
+
+    <img
+        src="NeoPharmaBridge Logo.jpeg"
+        alt="NeoPharmaBridge Logo"
+    >
+
+</div>
+
+
+<!-- VERIFIED -->
+
+<div class="badge">
+
+    <span>✓</span>
+
+    Pharmacist Portal
+
+</div>
+
+
+<h2>
+
+    Pharmacist Access
+
+</h2>
+
+
+<p class="subtitle">
+
+    Enter your registered NeoPharmaBridge
+    Y-Number to access the pharmacist dashboard.
+
+</p>
+
+
+<!-- LOGGED-IN USER -->
+
+<div
+    class="user-box"
+    id="userBox"
+>
+
+    <span>
+
+        Logged in as
+
+    </span>
+
+    <strong id="userName">
+
+        Loading...
+
+    </strong>
+
+    <span style="margin-top:6px;">
+
+        SAPC Number
+
+    </span>
+
+    <strong id="sapcNumber">
+
+        Loading...
+
+    </strong>
+
+</div>
+
+
+<!-- Y NUMBER -->
+
+<input
+
     type="text"
+
     id="yNumber"
-    placeholder="Enter Y-Number (Y1234567)"
-  >
 
-  <button onclick="validateY()">
+    placeholder="Y1234567"
+
+    maxlength="8"
+
+    autocomplete="off"
+
+>
+
+
+<button
+    id="accessButton"
+    onclick="validateY()"
+>
+
     Access Dashboard
-  </button>
 
-  <div id="error"></div>
+</button>
 
-  <div class="footer">
-    © 2026 NeoPharmaBridge - Private Access Only
-  </div>
 
-  <div class="jesus">
+<div id="error"></div>
+
+
+<div class="security">
+
+    🔒 Secure pharmacist access
+
+    <br>
+
+    Your Y-Number is used to verify
+    your registered pharmacy profile.
+
+</div>
+
+
+<div class="footer">
+
+    © 2026 NeoPharmaBridge
+    - Private Access Only
+
+</div>
+
+
+<div class="jesus">
+
     Jesus Christ
-  </div>
+
+</div>
+```
 
 </div>
 
 <script>
 
-function validateY() {
 
-  const yInput = document.getElementById("yNumber").value.trim();
-  const errorDiv = document.getElementById("error");
+/* =====================================================
+GET LOGGED-IN USER
+===================================================== */
 
-  // Regex: must start with Y and exactly 7 digits
-  const pattern = /^Y\d{7}$/;
+const role =
+localStorage.getItem("neoRole");
 
-  if (!pattern.test(yInput)) {
-    errorDiv.textContent = "Invalid Y-Number format. Must be Y + 7 digits.";
-    return;
-  }
+const userName =
+localStorage.getItem("neoUser");
 
-  // If valid
-  errorDiv.textContent = "";
-  localStorage.setItem("pharmacistAccess", "granted");
+const sapcNumber =
+localStorage.getItem("neoAccessNumber");
 
-  window.location.href = "Pharmacist_Dashboard.html";
+
+/* =====================================================
+ACCESS CONTROL
+===================================================== */
+
+if(role !== "pharmacist"){
+
+    window.location.href =
+    "Login.html";
+
 }
+
+
+/* =====================================================
+DISPLAY USER
+===================================================== */
+
+document.getElementById(
+    "userName"
+).textContent =
+userName || "Pharmacist";
+
+
+document.getElementById(
+    "sapcNumber"
+).textContent =
+sapcNumber || "Not available";
+
+
+/* =====================================================
+REGISTERED PHARMACISTS
+===================================================== */
+
+/*
+
+Prototype pharmacy directory.
+
+Later this will come from the
+NeoPharmaBridge database.
+
+*/
+
+const pharmacists = [
+
+    {
+
+        sapc:"P72436",
+
+        name:"N.K KOALANE",
+
+        yNumber:"Y1234567",
+
+        pharmacy:"NeoPharmaCare"
+
+    }
+
+];
+
+
+/* =====================================================
+VALIDATE Y-NUMBER
+===================================================== */
+
+function validateY(){
+
+    const input =
+    document.getElementById(
+        "yNumber"
+    );
+
+    const error =
+    document.getElementById(
+        "error"
+    );
+
+    const button =
+    document.getElementById(
+        "accessButton"
+    );
+
+
+    const yNumber =
+    input.value
+    .trim()
+    .toUpperCase();
+
+
+    error.textContent = "";
+
+
+    /* ---------------------------------
+       FORMAT CHECK
+    --------------------------------- */
+
+    const pattern =
+    /^Y\d{7}$/;
+
+
+    if(!pattern.test(yNumber)){
+
+        error.textContent =
+        "Invalid Y-Number. Use the format Y1234567.";
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    /* ---------------------------------
+       FIND PHARMACIST
+    --------------------------------- */
+
+    const pharmacist =
+    pharmacists.find(
+        p =>
+        p.yNumber === yNumber
+    );
+
+
+    if(!pharmacist){
+
+        error.textContent =
+        "Y-Number not found in the NeoPharmaBridge pharmacy directory.";
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    /* ---------------------------------
+       VERIFY SAPC
+    --------------------------------- */
+
+    if(
+        sapcNumber &&
+        pharmacist.sapc !== sapcNumber
+    ){
+
+        error.textContent =
+        "This Y-Number is not registered to the logged-in pharmacist.";
+
+        return;
+
+    }
+
+
+    /* ---------------------------------
+       SUCCESS
+    --------------------------------- */
+
+    button.disabled = true;
+
+    button.textContent =
+    "Verifying...";
+
+
+    /* ---------------------------------
+       SAVE PHARMACIST ACCESS
+    --------------------------------- */
+
+    localStorage.setItem(
+        "pharmacistAccess",
+        "granted"
+    );
+
+
+    localStorage.setItem(
+        "pharmacistYNumber",
+        pharmacist.yNumber
+    );
+
+
+    localStorage.setItem(
+        "pharmacistPharmacy",
+        pharmacist.pharmacy
+    );
+
+
+    localStorage.setItem(
+        "pharmacistSAPC",
+        pharmacist.sapc
+    );
+
+
+    localStorage.setItem(
+        "pharmacistName",
+        pharmacist.name
+    );
+
+
+    /* ---------------------------------
+       REDIRECT
+    --------------------------------- */
+
+    setTimeout(function(){
+
+        window.location.href =
+        "Pharmacist_Dashboard.html";
+
+    },500);
+
+}
+
+
+/* =====================================================
+ENTER KEY
+===================================================== */
+
+document
+.getElementById("yNumber")
+.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            validateY();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+AUTO FORMAT
+===================================================== */
+
+document
+.getElementById("yNumber")
+.addEventListener(
+    "input",
+    function(){
+
+        this.value =
+        this.value
+        .toUpperCase()
+        .replace(/[^Y0-9]/g,"");
+
+    }
+);
 
 </script>
 
 </body>
+
 </html>
