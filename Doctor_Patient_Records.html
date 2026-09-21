@@ -1,617 +1,1714 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<title>NeoPharmaBridge | Patient Records</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+NeoPharmaBridge | Patient Records
+</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
 <style>
 
-body{
-font-family:Arial,sans-serif;
-background:#f2f9ff;
-padding:30px;
-margin:0;
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, Helvetica, sans-serif;
 }
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body{
+
+    min-height:100vh;
+
+    background:
+    linear-gradient(
+        135deg,
+        #cce7ff,
+        #f2f9ff
+    );
+
+    padding:30px;
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:25px;
+
+}
+
 
 h1{
-color:#0057b7;
-margin-bottom:20px;
+
+    color:#0057b7;
+
 }
 
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-box-shadow:0 6px 16px rgba(0,0,0,0.15);
-margin-bottom:20px;
+
+.subtitle{
+
+    color:#666;
+
+    margin-top:5px;
+
+    font-size:14px;
+
 }
 
-.patient-card{
-border-left:6px solid #0057b7;
-}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
 
 button{
-padding:10px 14px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-margin-top:10px;
-margin-right:5px;
+
+    padding:10px 14px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    margin-top:10px;
+
+    margin-right:5px;
+
+    font-weight:bold;
+
+    transition:0.2s;
+
 }
+
+
+button:hover{
+
+    opacity:0.88;
+
+    transform:translateY(-1px);
+
+}
+
 
 .open-btn{
-background:#0057b7;
-color:white;
+
+    background:#0057b7;
+
+    color:white;
+
 }
+
 
 .new-btn{
-background:#28a745;
-color:white;
+
+    background:#28a745;
+
+    color:white;
+
 }
+
 
 .update-btn{
-background:#ffc107;
-color:black;
+
+    background:#ffc107;
+
+    color:#111;
+
 }
+
 
 .save-btn{
-background:#dc3545;
-color:white;
+
+    background:#dc3545;
+
+    color:white;
+
 }
 
-textarea{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:1px solid #ccc;
-margin-top:10px;
-height:120px;
-resize:vertical;
-}
-
-.history-box{
-background:#f7f7f7;
-padding:12px;
-border-radius:8px;
-margin-top:10px;
-}
-
-.prescription-item{
-padding:10px;
-background:#f8fbff;
-border-radius:8px;
-margin-top:10px;
-border-left:4px solid #28a745;
-}
 
 .logout-btn{
-position:absolute;
-top:20px;
-right:30px;
-background:#dc3545;
-color:white;
+
+    background:#dc3545;
+
+    color:white;
+
+    margin:0;
+
 }
 
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
 .search-box{
-width:100%;
-padding:12px;
-border-radius:8px;
-border:1px solid #ccc;
-margin-bottom:20px;
+
+    width:100%;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    border:1px solid #ccc;
+
+    outline:none;
+
+    margin-bottom:20px;
+
+    box-shadow:
+    0 4px 12px rgba(0,0,0,0.08);
+
+}
+
+
+.search-box:focus{
+
+    border-color:#0057b7;
+
+}
+
+
+/* =========================================================
+   PATIENT CARD
+========================================================= */
+
+.card{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:14px;
+
+    box-shadow:
+    0 6px 16px rgba(0,0,0,0.12);
+
+    margin-bottom:20px;
+
+}
+
+
+.patient-card{
+
+    border-left:6px solid #0057b7;
+
+}
+
+
+.patient-header{
+
+    cursor:pointer;
+
+}
+
+
+.patient-header h2{
+
+    color:#0057b7;
+
+    margin-bottom:12px;
+
+}
+
+
+.patient-info{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(200px,1fr));
+
+    gap:8px;
+
+}
+
+
+.expand-text{
+
+    color:#0057b7;
+
+    font-weight:bold;
+
+    margin-top:15px;
+
+}
+
+
+/* =========================================================
+   EXPANDED RECORD
+========================================================= */
+
+.expand-section{
+
+    display:none;
+
+    margin-top:20px;
+
+    border-top:1px solid #ddd;
+
+    padding-top:20px;
+
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+.history-box{
+
+    background:#f7f7f7;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:25px;
+
+}
+
+
+.history-box h3{
+
+    color:#0057b7;
+
+    margin-bottom:10px;
+
+}
+
+
+textarea{
+
+    width:100%;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    border:1px solid #ccc;
+
+    margin-top:10px;
+
+    height:120px;
+
+    resize:vertical;
+
+    outline:none;
+
+}
+
+
+textarea:focus{
+
+    border-color:#0057b7;
+
+}
+
+
+/* =========================================================
+   PRESCRIPTIONS
+========================================================= */
+
+.prescription-item{
+
+    padding:15px;
+
+    background:#f8fbff;
+
+    border-radius:10px;
+
+    margin-top:12px;
+
+    border-left:5px solid #28a745;
+
+}
+
+
+.prescription-item p{
+
+    margin-bottom:7px;
+
+}
+
+
+.prescription-number{
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:#0057b7;
+
+}
+
+
+.status{
+
+    font-weight:bold;
+
+}
+
+
+.status-pending{
+
+    color:#ffc107;
+
+}
+
+
+.status-query{
+
+    color:#dc3545;
+
+}
+
+
+.status-verified{
+
+    color:#0057b7;
+
+}
+
+
+.status-dispensed{
+
+    color:#28a745;
+
+}
+
+
+.status-sent{
+
+    color:#0057b7;
+
+}
+
+
+.med-list{
+
+    margin:10px 0 10px 20px;
+
+}
+
+
+.med-list li{
+
+    margin-bottom:5px;
+
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty{
+
+    text-align:center;
+
+    padding:30px;
+
+    color:#666;
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    text-align:center;
+
+    margin-top:40px;
+
+    font-size:10px;
+
+    color:#999;
+
+    opacity:0.7;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:700px){
+
+    body{
+
+        padding:15px;
+
+    }
+
+    .header{
+
+        align-items:flex-start;
+
+    }
+
+    .patient-info{
+
+        grid-template-columns:1fr;
+
+    }
+
 }
 
 </style>
+<style>
+.records-toolbar{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+}
+.refresh-records-btn{
+    background:#28a745;
+    color:#fff;
+}
+.record-count{
+    margin-right:auto;
+    color:#666;
+    font-size:13px;
+    align-self:center;
+}
+</style>
+
+
 </head>
+
 
 <body>
 
-<h1>Patient Records</h1>
 
-<button
-onclick="logout()"
-class="logout-btn"
->
-Logout
-</button>
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<div class="header">
+
+    <div>
+
+        <h1>
+            Patient Records
+        </h1>
+
+        <p class="subtitle">
+            NeoPharmaBridge Patient Management
+        </p>
+
+    </div>
+
+
+    <button
+    onclick="logout()"
+    class="logout-btn"
+    >
+        Logout
+    </button>
+
+</div>
+
+
+<!-- =========================================================
+     SEARCH
+========================================================= -->
 
 <input
 id="searchPatient"
 class="search-box"
-placeholder="Search Patient Name or ICAM"
-onkeyup="searchPatients()"
+placeholder="Search Patient Name, Patient Number or ICAM..."
+oninput="searchPatients()"
 >
+
+
+<!-- =========================================================
+     RECORDS
+========================================================= -->
+
+
+<div class="records-toolbar">
+    <span id="recordCount" class="record-count"></span>
+    <button
+        type="button"
+        class="refresh-records-btn"
+        onclick="refreshRecords()"
+    >
+        ↻ Refresh Records
+    </button>
+</div>
 
 <div id="records"></div>
 
+
+
+<footer>
+
+    Jesus Christ
+
+</footer>
+
+
+
 <script>
+/* =========================================================
+   NEO PHARMABRIDGE — PATIENT RECORDS ENGINE
+   Fixed version:
+   - Deduplicates patient records
+   - Matches prescriptions by patient number, ICAM, ID and name
+   - Supports nested patient schemas used by the prototype
+   - Preserves medical history
+   - Shows prescription timelines reliably
+   - Safely handles special characters in patient identifiers
+   - Refreshes automatically
+========================================================= */
 
-/* =========================================
-LOAD DATA
-========================================= */
+/* =========================================================
+   ACCESS CONTROL
+========================================================= */
+const role = localStorage.getItem("neoRole");
 
-let patients =
-JSON.parse(
-localStorage.getItem("patients")
-) || [];
-
-let prescriptions =
-JSON.parse(
-localStorage.getItem("adminPrescriptions")
-) || [];
-
-const container =
-document.getElementById("records");
-
-/* =========================================
-RENDER PATIENTS
-========================================= */
-
-function renderPatients(list = patients){
-
-container.innerHTML = "";
-
-if(list.length === 0){
-
-container.innerHTML = `
-<div class="card">
-<h3>No patients found</h3>
-</div>
-`;
-
-return;
-
+if (
+    role !== "admin" &&
+    role !== "doctor" &&
+    role !== "pharmacist"
+) {
+    window.location.href = "Login.html";
 }
 
-list.forEach((patient,index)=>{
+/* =========================================================
+   STORAGE HELPERS
+========================================================= */
+function readArray(key) {
+    try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return [];
 
-const patientPrescriptions =
-prescriptions.filter(p =>
+        const parsed = JSON.parse(raw);
 
-p.icam === patient.icam
+        if (Array.isArray(parsed)) return parsed;
+        if (parsed && typeof parsed === "object") return [parsed];
 
+        return [];
+    } catch (error) {
+        console.error("NeoPharmaBridge storage error:", key, error);
+        return [];
+    }
+}
+
+function writeArray(key, data) {
+    try {
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+    } catch (error) {
+        console.error("NeoPharmaBridge write error:", key, error);
+        alert("The patient record could not be saved.");
+        return false;
+    }
+}
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function normalise(value) {
+    return String(value ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+}
+
+/* =========================================================
+   PATIENT DATA
+========================================================= */
+let patients = readArray("patients");
+
+function patientName(patient) {
+    return (
+        patient?.name ||
+        patient?.fullName ||
+        patient?.patientName ||
+        "Unknown Patient"
+    );
+}
+
+function patientNumber(patient) {
+    return (
+        patient?.patientNumber ||
+        patient?.patientNo ||
+        patient?.patientID ||
+        patient?.patientId ||
+        ""
+    );
+}
+
+function patientICAM(patient) {
+    return (
+        patient?.icam ||
+        patient?.icamNumber ||
+        patient?.ICAM ||
+        ""
+    );
+}
+
+function patientID(patient) {
+    return (
+        patient?.idNumber ||
+        patient?.identityNumber ||
+        patient?.nationalId ||
+        patient?.id ||
+        patient?.passport ||
+        patient?.passportNumber ||
+        ""
+    );
+}
+
+function patientContact(patient) {
+    return (
+        patient?.contact ||
+        patient?.contactNumber ||
+        patient?.phone ||
+        patient?.mobile ||
+        ""
+    );
+}
+
+function patientDOB(patient) {
+    return (
+        patient?.dob ||
+        patient?.dateOfBirth ||
+        patient?.DOB ||
+        ""
+    );
+}
+
+function patientAge(patient) {
+    return patient?.age ?? "";
+}
+
+function patientGender(patient) {
+    return patient?.gender || "";
+}
+
+function patientAllergies(patient) {
+    return (
+        patient?.allergies ||
+        patient?.allergy ||
+        patient?.knownAllergies ||
+        "None recorded"
+    );
+}
+
+function patientHistory(patient) {
+    return (
+        patient?.history ||
+        patient?.medicalHistory ||
+        patient?.medical_history ||
+        ""
+    );
+}
+
+/* =========================================================
+   PATIENT UNIQUE KEY
+========================================================= */
+function getPatientKey(patient) {
+    const key =
+        patientNumber(patient) ||
+        patientICAM(patient) ||
+        patientID(patient) ||
+        patient?.name ||
+        "unknown";
+
+    return String(key);
+}
+
+/* =========================================================
+   DEDUPLICATE PATIENTS
+   Prefer the newest record when duplicate identifiers exist.
+========================================================= */
+function deduplicatePatients(list) {
+    const map = new Map();
+
+    list.forEach((patient, index) => {
+        if (!patient || typeof patient !== "object") return;
+
+        const identifiers = [
+            patientNumber(patient),
+            patientICAM(patient),
+            patientID(patient)
+        ]
+            .map(normalise)
+            .filter(Boolean);
+
+        const fallback =
+            "name:" + normalise(patientName(patient)) +
+            "|dob:" + normalise(patientDOB(patient));
+
+        const key = identifiers[0] || fallback;
+
+        const existing = map.get(key);
+
+        if (!existing) {
+            map.set(key, {
+                ...patient,
+                _recordIndex: index
+            });
+            return;
+        }
+
+        // Merge missing information from duplicate records.
+        const merged = { ...existing };
+
+        Object.keys(patient).forEach(field => {
+            if (
+                merged[field] === undefined ||
+                merged[field] === null ||
+                merged[field] === ""
+            ) {
+                merged[field] = patient[field];
+            }
+        });
+
+        map.set(key, merged);
+    });
+
+    return Array.from(map.values()).map(patient => {
+        const clean = { ...patient };
+        delete clean._recordIndex;
+        return clean;
+    });
+}
+
+patients = deduplicatePatients(patients);
+
+/* =========================================================
+   PRESCRIPTIONS
+========================================================= */
+function getPrescriptions() {
+    const sourceKeys = [
+        "adminPrescriptions",
+        "neoPharmaBridgePrescriptions",
+        "neoPharmaBridgePrescription"
+    ];
+
+    const all = [];
+
+    sourceKeys.forEach(key => {
+        readArray(key).forEach(item => {
+            if (item) all.push(item);
+        });
+    });
+
+    const unique = new Map();
+
+    all.forEach(prescription => {
+        const id =
+            prescription.prescriptionNumber ||
+            prescription.prescriptionNo ||
+            prescription.rxNumber ||
+            prescription.rx ||
+            prescription.id;
+
+        // If no RX number exists, create a stable fallback from the
+        // prescription's patient + date rather than dropping the record.
+        const fallback =
+            normalise(getPrescriptionPatientName(prescription)) +
+            "|" +
+            normalise(
+                prescription.date ||
+                prescription.createdAt ||
+                prescription.timestamp ||
+                ""
+            );
+
+        const key = normalise(id || fallback);
+
+        if (!unique.has(key)) {
+            unique.set(key, prescription);
+        } else {
+            // Prefer the richer/newer object.
+            const existing = unique.get(key);
+            const existingScore = Object.keys(existing || {}).length;
+            const newScore = Object.keys(prescription || {}).length;
+
+            if (newScore >= existingScore) {
+                unique.set(key, prescription);
+            }
+        }
+    });
+
+    return Array.from(unique.values());
+}
+
+/* =========================================================
+   PRESCRIPTION PATIENT HELPERS
+========================================================= */
+function getPrescriptionPatientObject(prescription) {
+    if (
+        prescription?.patient &&
+        typeof prescription.patient === "object"
+    ) {
+        return prescription.patient;
+    }
+
+    if (
+        prescription?.patientDetails &&
+        typeof prescription.patientDetails === "object"
+    ) {
+        return prescription.patientDetails;
+    }
+
+    return null;
+}
+
+function getPrescriptionPatientName(prescription) {
+    const p = getPrescriptionPatientObject(prescription);
+
+    if (p) {
+        return (
+            p.name ||
+            p.fullName ||
+            p.patientName ||
+            "Unknown"
+        );
+    }
+
+    if (typeof prescription?.patient === "string") {
+        return prescription.patient;
+    }
+
+    return (
+        prescription?.patientName ||
+        prescription?.fullName ||
+        prescription?.name ||
+        "Unknown"
+    );
+}
+
+function getPrescriptionPatientNumber(prescription) {
+    const p = getPrescriptionPatientObject(prescription);
+
+    return (
+        p?.patientNumber ||
+        p?.patientNo ||
+        prescription?.patientNumber ||
+        prescription?.patientNo ||
+        prescription?.patientID ||
+        prescription?.patientId ||
+        ""
+    );
+}
+
+function getPrescriptionICAM(prescription) {
+    const p = getPrescriptionPatientObject(prescription);
+
+    return (
+        p?.icam ||
+        p?.icamNumber ||
+        prescription?.icam ||
+        prescription?.icamNumber ||
+        ""
+    );
+}
+
+function getPrescriptionID(prescription) {
+    const p = getPrescriptionPatientObject(prescription);
+
+    return (
+        p?.idNumber ||
+        p?.identityNumber ||
+        p?.nationalId ||
+        prescription?.idNumber ||
+        prescription?.identityNumber ||
+        prescription?.patientIdNumber ||
+        ""
+    );
+}
+
+/* =========================================================
+   MATCH PRESCRIPTION TO PATIENT
+   Priority:
+   1. Patient number
+   2. ICAM
+   3. ID/passport
+   4. Exact patient name
+========================================================= */
+function prescriptionBelongsToPatient(prescription, patient) {
+    const pNumber = normalise(patientNumber(patient));
+    const pICAM = normalise(patientICAM(patient));
+    const pID = normalise(patientID(patient));
+    const pName = normalise(patientName(patient));
+
+    const rxNumber = normalise(getPrescriptionPatientNumber(prescription));
+    const rxICAM = normalise(getPrescriptionICAM(prescription));
+    const rxID = normalise(getPrescriptionID(prescription));
+    const rxName = normalise(getPrescriptionPatientName(prescription));
+
+    if (pNumber && rxNumber && pNumber === rxNumber) return true;
+    if (pICAM && rxICAM && pICAM === rxICAM) return true;
+    if (pID && rxID && pID === rxID) return true;
+
+    if (pName && rxName && pName === rxName) {
+        // Name is the final fallback only.
+        return true;
+    }
+
+    return false;
+}
+
+/* =========================================================
+   MEDICATIONS
+========================================================= */
+function getMedications(prescription) {
+    if (Array.isArray(prescription?.medications)) {
+        return prescription.medications;
+    }
+
+    if (Array.isArray(prescription?.meds)) {
+        return prescription.meds;
+    }
+
+    if (Array.isArray(prescription?.medication)) {
+        return prescription.medication;
+    }
+
+    if (prescription?.medicine) {
+        return [prescription.medicine];
+    }
+
+    return [];
+}
+
+function formatMedication(medication) {
+    if (typeof medication === "string") {
+        return medication;
+    }
+
+    if (!medication || typeof medication !== "object") {
+        return "Unknown medication";
+    }
+
+    const name =
+        medication.name ||
+        medication.medicine ||
+        medication.drug ||
+        "Medicine";
+
+    const strength =
+        medication.strength ||
+        medication.strengthValue ||
+        "";
+
+    const dose =
+        medication.dose ||
+        medication.quantity ||
+        "";
+
+    const instructions =
+        medication.instructions ||
+        medication.instruction ||
+        medication.direction ||
+        medication.directions ||
+        medication.patientDirections ||
+        "";
+
+    return [
+        name,
+        strength,
+        dose,
+        instructions
+    ]
+        .filter(Boolean)
+        .join(" — ");
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+function getStatusInfo(status) {
+    const value = normalise(status || "Pending");
+
+    if (value.includes("query")) {
+        return {
+            className: "status-query",
+            text: "🔴 Query Raised"
+        };
+    }
+
+    if (
+        value.includes("dispensed") ||
+        value.includes("completed")
+    ) {
+        return {
+            className: "status-dispensed",
+            text: "🟢 Dispensed"
+        };
+    }
+
+    if (value.includes("verified")) {
+        return {
+            className: "status-verified",
+            text: "🔵 Verified"
+        };
+    }
+
+    if (
+        value.includes("sent") ||
+        value.includes("submitted")
+    ) {
+        return {
+            className: "status-sent",
+            text: "🔵 Sent to Pharmacy"
+        };
+    }
+
+    return {
+        className: "status-pending",
+        text: "🟡 Pending"
+    };
+}
+
+/* =========================================================
+   RECORD CONTAINER
+========================================================= */
+const container = document.getElementById("records");
+
+/* =========================================================
+   PATIENT CARD
+========================================================= */
+function renderPatients(list = patients) {
+    container.innerHTML = "";
+
+    const countElement =
+        document.getElementById("recordCount");
+
+    if (countElement) {
+        countElement.textContent =
+            `${deduplicatePatients(list).length} patient record(s)`;
+    }
+
+    const cleanList = deduplicatePatients(list);
+
+    if (cleanList.length === 0) {
+        container.innerHTML = `
+            <div class="card empty">
+                <h3>No patients found</h3>
+                <p style="margin-top:8px;">
+                    Register a patient before creating a prescription.
+                </p>
+            </div>
+        `;
+        return;
+    }
+
+    const allPrescriptions = getPrescriptions();
+
+    cleanList.forEach(patient => {
+        const patientKey = getPatientKey(patient);
+
+        const patientPrescriptions = allPrescriptions
+            .filter(rx => prescriptionBelongsToPatient(rx, patient))
+            .sort((a, b) => {
+                const dateA = new Date(
+                    a.date ||
+                    a.createdAt ||
+                    a.timestamp ||
+                    0
+                ).getTime();
+
+                const dateB = new Date(
+                    b.date ||
+                    b.createdAt ||
+                    b.timestamp ||
+                    0
+                ).getTime();
+
+                return dateB - dateA;
+            });
+
+        const card = document.createElement("div");
+        card.className = "card patient-card";
+
+        const expandId =
+            "expand_" +
+            Math.random().toString(36).slice(2) +
+            Date.now();
+
+        const historyId =
+            "history_" +
+            Math.random().toString(36).slice(2) +
+            Date.now();
+
+        card.innerHTML = `
+            <div
+                class="patient-header"
+                data-expand-id="${escapeHTML(expandId)}"
+            >
+                <h2>
+                    ${escapeHTML(patientName(patient))}
+                </h2>
+
+                <div class="patient-info">
+
+                    <p>
+                        <strong>Patient Number:</strong>
+                        ${escapeHTML(patientNumber(patient) || "N/A")}
+                    </p>
+
+                    <p>
+                        <strong>ICAM:</strong>
+                        ${escapeHTML(patientICAM(patient) || "N/A")}
+                    </p>
+
+                    <p>
+                        <strong>ID / Passport:</strong>
+                        ${escapeHTML(patientID(patient) || "N/A")}
+                    </p>
+
+                    <p>
+                        <strong>Phone:</strong>
+                        ${escapeHTML(patientContact(patient) || "N/A")}
+                    </p>
+
+                    <p>
+                        <strong>DOB:</strong>
+                        ${escapeHTML(patientDOB(patient) || "N/A")}
+                    </p>
+
+                    <p>
+                        <strong>Age:</strong>
+                        ${escapeHTML(patientAge(patient) || "N/A")}
+                    </p>
+
+                    <p>
+                        <strong>Gender:</strong>
+                        ${escapeHTML(patientGender(patient) || "N/A")}
+                    </p>
+
+                    <p>
+                        <strong>Allergies:</strong>
+                        ${escapeHTML(patientAllergies(patient))}
+                    </p>
+
+                </div>
+
+                <p class="expand-text">
+                    ▼ Click to expand record
+                </p>
+            </div>
+
+            <div
+                id="${escapeHTML(expandId)}"
+                class="expand-section"
+            >
+
+                <div class="history-box">
+                    <h3>Medical History</h3>
+
+                    <textarea
+                        id="${escapeHTML(historyId)}"
+                        placeholder="Enter relevant medical history..."
+                    >${escapeHTML(patientHistory(patient))}</textarea>
+
+                    <button
+                        class="save-btn save-history-btn"
+                    >
+                        Save History
+                    </button>
+                </div>
+
+                <h3 style="color:#0057b7;margin-bottom:10px;">
+                    Prescription Timeline
+                </h3>
+
+                <div>
+                    ${
+                        patientPrescriptions.length > 0
+                        ? patientPrescriptions
+                            .map((rx, index) =>
+                                buildPrescriptionHTML(
+                                    rx,
+                                    patient,
+                                    index
+                                )
+                            )
+                            .join("")
+                        : `
+                            <p style="color:#777;margin-top:10px;">
+                                No prescriptions available for this patient.
+                            </p>
+                        `
+                    }
+                </div>
+
+                <div style="margin-top:20px;">
+                    <button class="open-btn open-record-btn">
+                        Open Full Record
+                    </button>
+
+                    <button class="new-btn new-prescription-btn">
+                        Start New Prescription
+                    </button>
+                </div>
+
+            </div>
+        `;
+
+        card.querySelector(".patient-header")
+            .addEventListener("click", () => {
+                const section = card.querySelector("#" + CSS.escape(expandId));
+
+                if (!section) return;
+
+                section.style.display =
+                    section.style.display === "block"
+                    ? "none"
+                    : "block";
+            });
+
+        card.querySelector(".save-history-btn")
+            .addEventListener("click", () => {
+                saveHistory(
+                    patient,
+                    historyId
+                );
+            });
+
+        card.querySelector(".open-record-btn")
+            .addEventListener("click", () => {
+                viewPatient(patient);
+            });
+
+        card.querySelector(".new-prescription-btn")
+            .addEventListener("click", () => {
+                newPrescription(patient);
+            });
+
+        card.querySelectorAll(".update-prescription-btn")
+            .forEach(button => {
+                button.addEventListener("click", () => {
+                    const index = Number(
+                        button.dataset.rxIndex
+                    );
+
+                    const rx = patientPrescriptions[index];
+
+                    if (rx) {
+                        updatePrescription(rx, patient);
+                    }
+                });
+            });
+
+        container.appendChild(card);
+    });
+}
+
+/* =========================================================
+   PRESCRIPTION CARD
+========================================================= */
+function buildPrescriptionHTML(
+    prescription,
+    patient,
+    rxIndex = 0
+) {
+    const statusInfo =
+        getStatusInfo(prescription.status);
+
+    const prescriptionNumber =
+        prescription.prescriptionNumber ||
+        prescription.prescriptionNo ||
+        prescription.rxNumber ||
+        prescription.rx ||
+        "N/A";
+
+    const date =
+        prescription.date ||
+        prescription.createdAt ||
+        prescription.timestamp ||
+        "";
+
+    const doctor =
+        prescription.doctor?.name ||
+        prescription.doctorName ||
+        (
+            typeof prescription.doctor === "string"
+            ? prescription.doctor
+            : "N/A"
+        );
+
+    const pharmacy =
+        prescription.pharmacy?.name ||
+        prescription.pharmacyName ||
+        prescription.pharmacy ||
+        "Not selected";
+
+    const query =
+        prescription.query ||
+        prescription.pharmacistQuery ||
+        "";
+
+    const clinicalNotes =
+        prescription.history ||
+        prescription.clinicalNotes ||
+        prescription.notes ||
+        "None";
+
+    const medications =
+        getMedications(prescription);
+
+    const medicationHTML =
+        medications.length > 0
+        ? medications
+            .map(medication =>
+                `<li>${escapeHTML(
+                    formatMedication(medication)
+                )}</li>`
+            )
+            .join("")
+        : "<li>No medication recorded</li>";
+
+    const topLevelDirections =
+        prescription.patientDirections ||
+        prescription.directions ||
+        prescription.instructions ||
+        "";
+
+    return `
+        <div class="prescription-item">
+
+            <p class="prescription-number">
+                ${escapeHTML(prescriptionNumber)}
+            </p>
+
+            <p>
+                <strong>Date:</strong>
+                ${
+                    date
+                    ? escapeHTML(
+                        new Date(date).toLocaleString()
+                    )
+                    : "N/A"
+                }
+            </p>
+
+            <p>
+                <strong>Doctor:</strong>
+                ${escapeHTML(doctor)}
+            </p>
+
+            <p>
+                <strong>Pharmacy:</strong>
+                ${escapeHTML(
+                    typeof pharmacy === "object"
+                    ? pharmacy.name || "Not selected"
+                    : pharmacy
+                )}
+            </p>
+
+            <p class="status ${statusInfo.className}">
+                ${statusInfo.text}
+            </p>
+
+            ${
+                query
+                ? `
+                    <p style="color:#dc3545;margin-top:10px;">
+                        <strong>Pharmacist Query:</strong><br>
+                        ${escapeHTML(query)}
+                    </p>
+                `
+                : ""
+            }
+
+            <p>
+                <strong>Clinical Notes:</strong><br>
+                ${escapeHTML(clinicalNotes)}
+            </p>
+
+            <p style="margin-top:10px;">
+                <strong>Medication:</strong>
+            </p>
+
+            <ul class="med-list">
+                ${medicationHTML}
+            </ul>
+
+            ${
+                topLevelDirections
+                ? `
+                    <p>
+                        <strong>Instructions:</strong><br>
+                        ${escapeHTML(topLevelDirections)}
+                    </p>
+                `
+                : ""
+            }
+
+            <button
+                class="update-btn update-prescription-btn"
+                data-rx-index="${rxIndex}"
+            >
+                Update Prescription
+            </button>
+
+        </div>
+    `;
+}
+
+/* =========================================================
+   FIX RX BUTTON INDEXES
+========================================================= */
+function renderPrescriptionTimelineHTML(
+    prescriptions
+) {
+    return prescriptions
+        .map((rx, index) => {
+            return buildPrescriptionHTML(rx, {})
+                .replace(
+                    'data-rx-index="${rxIndex}"',
+                    `data-rx-index="${index}"`
+                );
+        })
+        .join("");
+}
+
+/* =========================================================
+   SAVE MEDICAL HISTORY
+========================================================= */
+function saveHistory(patient, historyId) {
+    const textarea =
+        document.getElementById(historyId);
+
+    if (!textarea) {
+        alert("History field not found.");
+        return;
+    }
+
+    patient.history = textarea.value.trim();
+
+    // Keep common legacy field in sync if it already exists.
+    if ("medicalHistory" in patient) {
+        patient.medicalHistory = patient.history;
+    }
+
+    const current = readArray("patients");
+
+    const targetKey = getPatientKey(patient);
+
+    let updated = false;
+
+    const merged = current.map(existing => {
+        if (
+            getPatientKey(existing) === targetKey
+        ) {
+            updated = true;
+
+            return {
+                ...existing,
+                ...patient,
+                history: patient.history
+            };
+        }
+
+        return existing;
+    });
+
+    if (!updated) {
+        merged.push(patient);
+    }
+
+    if (writeArray("patients", merged)) {
+        patients = deduplicatePatients(merged);
+        alert("Medical history updated successfully.");
+        renderPatients(patients);
+    }
+}
+
+/* =========================================================
+   NEW PRESCRIPTION
+========================================================= */
+function newPrescription(patient) {
+    localStorage.setItem(
+        "prescriptionPatient",
+        JSON.stringify(patient)
+    );
+
+    localStorage.removeItem(
+        "editPrescription"
+    );
+
+    window.location.href =
+        "Prescription.html";
+}
+
+/* =========================================================
+   VIEW FULL RECORD
+========================================================= */
+function viewPatient(patient) {
+    localStorage.setItem(
+        "selectedPatient",
+        JSON.stringify(patient)
+    );
+
+    window.location.href =
+        "Patient_Full_Record.html";
+}
+
+/* =========================================================
+   UPDATE PRESCRIPTION
+========================================================= */
+function updatePrescription(
+    prescription,
+    patient
+) {
+    if (!prescription) {
+        alert("Prescription not found.");
+        return;
+    }
+
+    localStorage.setItem(
+        "editPrescription",
+        JSON.stringify(prescription)
+    );
+
+    if (patient) {
+        localStorage.setItem(
+            "prescriptionPatient",
+            JSON.stringify(patient)
+        );
+    }
+
+    window.location.href =
+        "Prescription.html";
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+function searchPatients() {
+    const input =
+        document.getElementById("searchPatient");
+
+    const q =
+        normalise(input?.value || "");
+
+    if (!q) {
+        renderPatients(patients);
+        return;
+    }
+
+    const filtered =
+        patients.filter(patient => {
+            const searchable = [
+                patientName(patient),
+                patientNumber(patient),
+                patientICAM(patient),
+                patientID(patient),
+                patientContact(patient),
+                patientDOB(patient),
+                patientGender(patient),
+                patientAllergies(patient)
+            ]
+                .filter(Boolean)
+                .map(normalise)
+                .join(" ");
+
+            return searchable.includes(q);
+        });
+
+    renderPatients(filtered);
+}
+
+/* =========================================================
+   REFRESH
+========================================================= */
+function refreshRecords() {
+    const currentSearch =
+        document.getElementById("searchPatient")?.value || "";
+
+    patients = deduplicatePatients(
+        readArray("patients")
+    );
+
+    const search =
+        document.getElementById("searchPatient");
+
+    if (search) {
+        search.value = currentSearch;
+    }
+
+    if (currentSearch.trim()) {
+        searchPatients();
+    } else {
+        renderPatients(patients);
+    }
+}
+
+/* =========================================================
+   STORAGE EVENT
+========================================================= */
+window.addEventListener(
+    "storage",
+    refreshRecords
 );
 
-const card =
-document.createElement("div");
-
-card.className =
-"card patient-card";
-
-card.innerHTML = `
-
-<!-- CLICKABLE HEADER -->
-
-<div
-onclick="togglePatient(${index})"
-style="
-cursor:pointer;
-"
->
-
-<h2 style="
-color:#0057b7;
-margin-bottom:10px;
-">
-${patient.name || "Unknown"}
-</h2>
-
-<p>
-<strong>ICAM:</strong>
-${patient.icam || "N/A"}
-</p>
-
-<p>
-<strong>ID:</strong>
-${patient.id || "N/A"}
-</p>
-
-<p>
-<strong>Phone:</strong>
-${patient.contact || "N/A"}
-</p>
-
-<p>
-<strong>Gender:</strong>
-${patient.gender || "N/A"}
-</p>
-
-<p>
-<strong>Allergies:</strong>
-${patient.allergies || "None"}
-</p>
-
-<p style="
-color:#0057b7;
-font-weight:bold;
-margin-top:10px;
-">
-Click to expand record
-</p>
-
-</div>
-
-<!-- EXPANDABLE SECTION -->
-
-<div
-id="expand${index}"
-style="
-display:none;
-margin-top:20px;
-"
->
-
-<!-- HISTORY -->
-
-<div class="history-box">
-
-<h3>Medical History</h3>
-
-<textarea
-id="history${index}"
->${patient.history || ""}</textarea>
-
-<button
-class="save-btn"
-onclick="saveHistory(${index})"
->
-Save History
-</button>
-
-</div>
-
-<!-- PRESCRIPTION TIMELINE -->
-
-<h3 style="margin-top:20px;">
-Prescription Timeline
-</h3>
-
-${
-patientPrescriptions.length > 0
-
-?
-
-patientPrescriptions
-.slice()
-.reverse()
-
-.map(p => {
-
-let flagColor = "#ffc107";
-let flagText = "🟡 Pending";
-
-if(p.status === "Dispensed"){
-
-flagColor = "#28a745";
-flagText = "🟢 Dispensed";
-
-}
-
-if(p.status === "Query Raised"){
-
-flagColor = "#dc3545";
-flagText = "🔴 Query Raised";
-
-}
-
-return `
-
-<div
-class="prescription-item"
-style="
-border-left:5px solid ${flagColor};
-"
->
-
-<p>
-<strong>Date:</strong>
-${p.date
-?
-new Date(p.date).toLocaleString()
-:
-"N/A"}
-</p>
-
-<p style="
-font-weight:bold;
-color:${flagColor};
-">
-${flagText}
-</p>
-
-${
-p.query
-?
-`
-<p style="color:#dc3545;">
-<strong>Pharmacist Query:</strong><br>
-${p.query}
-</p>
-`
-:
-""
-}
-
-<p>
-<strong>Clinical Notes:</strong><br>
-${p.history || "None"}
-</p>
-
-<p>
-<strong>Medication:</strong>
-</p>
-
-<ul>
-${
-p.meds
-?
-p.meds
-.map(m => `<li>${m}</li>`)
-.join("")
-:
-"<li>No medication</li>"
-}
-</ul>
-
-<p>
-<strong>Instructions:</strong><br>
-${p.notes || "None"}
-</p>
-
-<button
-class="update-btn"
-onclick="updatePrescription('${p.date}')"
->
-Update Prescription
-</button>
-
-</div>
-
-`;
-
-}).join("")
-
-:
-
-"<p>No prescriptions available</p>"
-
-}
-
-<!-- ACTION BUTTONS -->
-
-<button
-class="open-btn"
-onclick="viewPatient(${index})"
->
-Open Full Record
-</button>
-
-<button
-class="new-btn"
-onclick="newPrescription(${index})"
->
-Start New Prescription
-</button>
-
-</div>
-
-`;
-
-container.appendChild(card);
-
-});
-
-}
-
-/* =========================================
-TOGGLE PATIENT CARD
-========================================= */
-
-function togglePatient(index){
-
-const section =
-document.getElementById(
-"expand" + index
+/* =========================================================
+   LIVE REFRESH
+========================================================= */
+setInterval(
+    refreshRecords,
+    3000
 );
 
-section.style.display =
-
-section.style.display === "block"
-
-?
-
-"none"
-
-:
-
-"block";
-
-}
-
-/* =========================================
-SEARCH
-========================================= */
-
-function searchPatients(){
-
-const q =
-document.getElementById(
-"searchPatient"
-).value
-.toLowerCase()
-.trim();
-
-if(q === ""){
-
-renderPatients();
-
-return;
-
-}
-
-const filtered =
-patients.filter(p =>
-
-(p.name || "")
-.toLowerCase()
-.includes(q)
-
-||
-
-(p.icam || "")
-.toLowerCase()
-.includes(q)
-
-);
-
-renderPatients(filtered);
-
-}
-
-/* =========================================
-SAVE HISTORY
-========================================= */
-
-function saveHistory(index){
-
-patients[index].history =
-
-document.getElementById(
-"history" + index
-).value;
-
-localStorage.setItem(
-"patients",
-JSON.stringify(patients)
-);
-
-alert(
-"History updated successfully"
-);
-
-}
-
-/* =========================================
-NEW PRESCRIPTION
-========================================= */
-
-function newPrescription(index){
-
-localStorage.setItem(
-"prescriptionPatient",
-JSON.stringify(patients[index])
-);
-
-localStorage.removeItem(
-"editPrescription"
-);
-
-window.location.href =
-"Prescription.html";
-
-}
-
-/* =========================================
-VIEW FULL RECORD
-========================================= */
-
-function viewPatient(index){
-
-localStorage.setItem(
-"selectedPatient",
-JSON.stringify(patients[index])
-);
-
-window.location.href =
-"Patient_Full_Record.html";
-
-}
-
-/* =========================================
-UPDATE PRESCRIPTION
-========================================= */
-
-function updatePrescription(date){
-
-const prescription =
-prescriptions.find(p =>
-
-p.date === date
-
-);
-
-if(!prescription){
-
-alert(
-"Prescription not found"
-);
-
-return;
-
-}
-
-/* SAVE PRESCRIPTION */
-
-localStorage.setItem(
-"editPrescription",
-JSON.stringify(prescription)
-);
-
-/* LOAD PATIENT */
-
-const patient =
-patients.find(pt =>
-
-pt.icam === prescription.icam
-
-);
-
-if(patient){
-
-localStorage.setItem(
-"prescriptionPatient",
-JSON.stringify(patient)
-);
-
-}
-
-window.location.href =
-"Prescription.html";
-
-}
-
-/* =========================================
-LOGOUT
-========================================= */
-
-function logout(){
-
-localStorage.removeItem(
-"doctorAccess"
-);
-
-window.location.href =
-"NeoPharmaBridge Homepage.html";
-
-}
-
-/* =========================================
-START
-========================================= */
-
-renderPatients();
+/* =========================================================
+   START
+========================================================= */
+refreshRecords();
 
 </script>
 
- <footer style="
-text-align:center;
-margin-top:40px;
-font-size:10px;
-color:#e5e5e5;
-opacity:0.6;
-">
-Jesus Christ
-</footer>
 
 </body>
+
 </html>
