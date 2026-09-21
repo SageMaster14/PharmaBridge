@@ -1,0 +1,2916 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>NeoPharmaBridge | Pharmacist Prescriptions</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f2f9ff;
+    color:#1d2939;
+}
+
+/* ================================
+   TOP BAR
+================================ */
+
+.topbar{
+    background:linear-gradient(
+        135deg,
+        #cce7ff,
+        #28a745
+    );
+
+    color:white;
+
+    padding:18px 30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:
+        0 3px 12px rgba(0,0,0,.15);
+}
+
+.logo{
+    width:48px;
+    height:48px;
+
+    border-radius:50%;
+
+    background:white;
+
+    color:#28a745;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:bold;
+
+    font-size:20px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand h2{
+    font-size:21px;
+}
+
+.brand small{
+    opacity:.9;
+}
+
+.user{
+    text-align:right;
+}
+
+.user small{
+    display:block;
+}
+
+.user strong{
+    font-size:15px;
+}
+
+/* ================================
+   CONTAINER
+================================ */
+
+.container{
+    width:94%;
+    max-width:1400px;
+    margin:25px auto;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.header h1{
+    font-size:28px;
+}
+
+.header p{
+    color:#667085;
+    margin-top:5px;
+}
+
+/* ================================
+   BUTTONS
+================================ */
+
+button{
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn{
+    padding:10px 15px;
+    border-radius:8px;
+}
+
+.green{
+    background:#28a745;
+    color:white;
+}
+
+.grey{
+    background:#eef2f6;
+    color:#344054;
+}
+
+.red{
+    background:#ffe1e1;
+    color:#b42318;
+}
+
+.blue{
+    background:#e0efff;
+    color:#175cd3;
+}
+
+.btn:hover{
+    opacity:.85;
+}
+
+/* ================================
+   STATS
+================================ */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+.stat{
+    background:white;
+
+    padding:20px;
+
+    border-radius:14px;
+
+    box-shadow:
+        0 3px 12px rgba(0,0,0,.07);
+
+    border-left:5px solid #28a745;
+}
+
+.stat h2{
+    font-size:28px;
+}
+
+.stat p{
+    color:#667085;
+    margin-top:4px;
+}
+
+/* ================================
+   SEARCH
+================================ */
+
+.toolbar{
+    background:white;
+
+    padding:18px;
+
+    border-radius:14px;
+
+    box-shadow:
+        0 3px 12px rgba(0,0,0,.07);
+
+    display:flex;
+
+    gap:12px;
+
+    margin-bottom:20px;
+}
+
+.search{
+    flex:1;
+
+    padding:13px;
+
+    border:
+        1px solid #d0d5dd;
+
+    border-radius:8px;
+
+    font-size:14px;
+}
+
+.filter{
+    padding:13px;
+
+    border:
+        1px solid #d0d5dd;
+
+    border-radius:8px;
+
+    background:white;
+}
+
+/* ================================
+   TABLE
+================================ */
+
+.card{
+    background:white;
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 3px 12px rgba(0,0,0,.07);
+}
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:15px;
+
+    border-bottom:
+        1px solid #eaecf0;
+
+    text-align:left;
+
+    font-size:14px;
+}
+
+th{
+    background:#f8fafc;
+
+    color:#475467;
+
+    font-size:13px;
+}
+
+.rx{
+    color:#28a745;
+    font-weight:bold;
+}
+
+.patient{
+    font-weight:bold;
+}
+
+.patient-number{
+    font-size:12px;
+    color:#667085;
+}
+
+/* ================================
+   STATUS
+================================ */
+
+.status{
+    display:inline-block;
+
+    padding:6px 10px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.pending{
+    background:#fff4cc;
+    color:#946200;
+}
+
+.verified{
+    background:#dff6e5;
+    color:#137333;
+}
+
+.query{
+    background:#ffe1e1;
+    color:#b42318;
+}
+
+.dispensed{
+    background:#dbeafe;
+    color:#175cd3;
+}
+
+/* ================================
+   EMPTY
+================================ */
+
+.empty{
+    text-align:center;
+
+    padding:60px 20px;
+
+    color:#667085;
+}
+
+.empty-icon{
+    font-size:50px;
+
+    margin-bottom:12px;
+}
+
+.empty h3{
+    color:#344054;
+
+    margin-bottom:6px;
+}
+
+/* ================================
+   MODAL
+================================ */
+
+.modal{
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.55);
+
+    z-index:9999;
+
+    padding:25px;
+
+    overflow-y:auto;
+}
+
+.modal-box{
+    width:100%;
+
+    max-width:950px;
+
+    margin:auto;
+
+    background:white;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.25);
+}
+
+.modal-header{
+    background:
+        linear-gradient(
+            135deg,
+            #cce7ff,
+            #28a745
+        );
+
+    color:white;
+
+    padding:20px 25px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.modal-header h2{
+    margin-bottom:5px;
+}
+
+.close{
+    font-size:30px;
+
+    cursor:pointer;
+}
+
+.modal-body{
+    padding:25px;
+}
+
+/* ================================
+   SECTIONS
+================================ */
+
+.section{
+    border:
+        1px solid #eaecf0;
+
+    border-radius:12px;
+
+    margin-bottom:18px;
+
+    overflow:hidden;
+}
+
+.section-title{
+    background:#f8fafc;
+
+    padding:13px 16px;
+
+    font-weight:bold;
+
+    border-bottom:
+        1px solid #eaecf0;
+}
+
+.section-body{
+    padding:18px;
+}
+
+.grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:15px;
+}
+
+.info{
+    background:#f8fafc;
+
+    padding:13px;
+
+    border-radius:8px;
+}
+
+.info label{
+    display:block;
+
+    color:#667085;
+
+    font-size:12px;
+
+    margin-bottom:5px;
+}
+
+.info strong{
+    font-size:14px;
+}
+
+/* ================================
+   MEDICATIONS
+================================ */
+
+.med-table{
+    width:100%;
+}
+
+.med-table th,
+.med-table td{
+    padding:11px;
+}
+
+/* ================================
+   CHECKLIST
+================================ */
+
+.checklist{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+}
+
+.check{
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:10px;
+
+    padding:12px;
+
+    background:#f8fafc;
+
+    border-radius:8px;
+}
+
+.check input{
+    width:18px;
+    height:18px;
+}
+
+/* ================================
+   QUERY
+================================ */
+
+.query-area{
+    display:none;
+
+    margin-top:15px;
+}
+
+.query-area textarea{
+    width:100%;
+
+    min-height:110px;
+
+    resize:vertical;
+
+    padding:12px;
+
+    border:
+        1px solid #d0d5dd;
+
+    border-radius:8px;
+
+    font-family:Arial;
+}
+
+/* ================================
+   FOOTER
+================================ */
+
+.modal-footer{
+    border-top:
+        1px solid #eaecf0;
+
+    padding:18px 25px;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media(max-width:900px){
+
+    .stats{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .topbar{
+        padding:15px;
+    }
+
+    .user{
+        display:none;
+    }
+
+    .header{
+        display:block;
+    }
+
+    .header button{
+        margin-top:15px;
+    }
+
+    .toolbar{
+        flex-direction:column;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .modal{
+        padding:10px;
+    }
+
+    .modal-footer{
+        flex-direction:column;
+    }
+
+    .modal-footer button{
+        width:100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+
+<div class="topbar">
+
+    <div class="brand">
+
+        <div class="logo">
+            NP
+        </div>
+
+        <div>
+
+            <h2>
+                NeoPharmaBridge
+            </h2>
+
+            <small>
+                Pharmacist Portal
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="user">
+
+        <small>
+            Logged in as
+        </small>
+
+        <strong id="userName">
+            Pharmacist
+        </strong>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="container">
+
+
+    <div class="header">
+
+        <div>
+
+            <h1>
+                Prescription Queue
+            </h1>
+
+            <p>
+                Review and verify prescriptions before dispensing.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn grey"
+            onclick="goDashboard()">
+
+            ← Pharmacist Dashboard
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =================================================
+         STATS
+    ================================================== -->
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <h2 id="pending">
+                0
+            </h2>
+
+            <p>
+                Pending
+            </p>
+
+        </div>
+
+
+        <div class="stat">
+
+            <h2 id="verified">
+                0
+            </h2>
+
+            <p>
+                Verified
+            </p>
+
+        </div>
+
+
+        <div class="stat">
+
+            <h2 id="queries">
+                0
+            </h2>
+
+            <p>
+                Queries
+            </p>
+
+        </div>
+
+
+        <div class="stat">
+
+            <h2 id="dispensed">
+                0
+            </h2>
+
+            <p>
+                Dispensed
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SEARCH
+    ================================================== -->
+
+    <div class="toolbar">
+
+        <input
+            id="search"
+            class="search"
+            placeholder="Search patient, prescription or doctor..."
+            oninput="render()"
+        >
+
+
+        <select
+            id="filter"
+            class="filter"
+            onchange="render()">
+
+            <option value="all">
+                All
+            </option>
+
+            <option value="pending">
+                Pending
+            </option>
+
+            <option value="verified">
+                Verified
+            </option>
+
+            <option value="query">
+                Query
+            </option>
+
+            <option value="dispensed">
+                Dispensed
+            </option>
+
+        </select>
+
+    </div>
+
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Prescription
+                        </th>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Doctor
+                        </th>
+
+                        <th>
+                            Medicines
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="tableBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     VERIFICATION MODAL
+===================================================== -->
+
+<div
+    id="modal"
+    class="modal">
+
+
+    <div class="modal-box">
+
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2>
+                    Prescription Verification
+                </h2>
+
+                <small id="rxTitle">
+                    —
+                </small>
+
+            </div>
+
+
+            <span
+                class="close"
+                onclick="closeModal()">
+
+                ×
+
+            </span>
+
+        </div>
+
+
+
+        <div class="modal-body">
+
+
+            <!-- PATIENT -->
+
+            <div class="section">
+
+                <div class="section-title">
+
+                    👤 Patient Information
+
+                </div>
+
+
+                <div class="section-body">
+
+                    <div class="grid">
+
+
+                        <div class="info">
+
+                            <label>
+                                Full Name
+                            </label>
+
+                            <strong id="pName">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <label>
+                                Patient Number
+                            </label>
+
+                            <strong id="pNumber">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <label>
+                                Contact
+                            </label>
+
+                            <strong id="pContact">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <label>
+                                Allergies
+                            </label>
+
+                            <strong id="pAllergies">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <label>
+                                Age
+                            </label>
+
+                            <strong id="pAge">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <label>
+                                Gender
+                            </label>
+
+                            <strong id="pGender">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HISTORY -->
+
+            <div class="section">
+
+                <div class="section-title">
+
+                    📋 Patient History
+
+                </div>
+
+                <div class="section-body">
+
+                    <p id="pHistory">
+                        —
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DOCTOR -->
+
+            <div class="section">
+
+                <div class="section-title">
+
+                    👨‍⚕️ Doctor / Pharmacy
+
+                </div>
+
+
+                <div class="section-body">
+
+                    <div class="grid">
+
+
+                        <div class="info">
+
+                            <label>
+                                Doctor
+                            </label>
+
+                            <strong id="dName">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <label>
+                                HPCSA Number
+                            </label>
+
+                            <strong id="dHpcsa">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <label>
+                                Pharmacy
+                            </label>
+
+                            <strong id="rxPharmacy">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <label>
+                                Date
+                            </label>
+
+                            <strong id="rxDate">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MEDICATIONS -->
+
+            <div class="section">
+
+                <div class="section-title">
+
+                    💊 Medicines
+
+                </div>
+
+
+                <div class="section-body">
+
+                    <table class="med-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Medicine
+                                </th>
+
+                                <th>
+                                    Strength
+                                </th>
+
+                                <th>
+                                    Form
+                                </th>
+
+                                <th>
+                                    Directions
+                                </th>
+
+                                <th>
+                                    Repeats
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="medBody">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CHECKLIST -->
+
+            <div class="section">
+
+                <div class="section-title">
+
+                    ✅ Pharmacist Verification
+
+                </div>
+
+
+                <div class="section-body">
+
+
+                    <div class="checklist">
+
+
+                        <label class="check">
+
+                            <input
+                                type="checkbox"
+                                class="verifyCheck">
+
+                            <span>
+                                Patient identity verified.
+                            </span>
+
+                        </label>
+
+
+                        <label class="check">
+
+                            <input
+                                type="checkbox"
+                                class="verifyCheck">
+
+                            <span>
+                                Allergies checked.
+                            </span>
+
+                        </label>
+
+
+                        <label class="check">
+
+                            <input
+                                type="checkbox"
+                                class="verifyCheck">
+
+                            <span>
+                                Medicine and strength checked.
+                            </span>
+
+                        </label>
+
+
+                        <label class="check">
+
+                            <input
+                                type="checkbox"
+                                class="verifyCheck">
+
+                            <span>
+                                Dose, frequency and directions checked.
+                            </span>
+
+                        </label>
+
+
+                        <label class="check">
+
+                            <input
+                                type="checkbox"
+                                class="verifyCheck">
+
+                            <span>
+                                Prescription is complete and ready for dispensing.
+                            </span>
+
+                        </label>
+
+
+                    </div>
+
+
+
+                    <div
+                        id="queryArea"
+                        class="query-area">
+
+                        <textarea
+                            id="queryText"
+                            placeholder="Enter the reason for querying this prescription..."></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="modal-footer">
+
+
+            <button
+                class="btn red"
+                onclick="queryPrescription()">
+
+                ⚠ Query Doctor
+
+            </button>
+
+
+            <button
+                class="btn grey"
+                onclick="closeModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                class="btn green"
+                onclick="verifyPrescription()">
+
+                ✓ Verify & Continue
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   PHARMACIST NAME
+========================================================= */
+
+const pharmacistName =
+    localStorage.getItem("neoUser")
+    || "Pharmacist";
+
+document.getElementById(
+    "userName"
+).textContent = pharmacistName;
+
+
+
+/* =========================================================
+   STORAGE KEYS
+========================================================= */
+
+const ARRAY_KEYS = [
+
+    "neoPharmaBridgePrescriptions",
+
+    "neoPharmaBridgePrescription",
+
+    "neoPharmaBridgePrescriptions",
+
+    "adminPrescriptions"
+
+];
+
+
+
+/* =========================================================
+   CURRENT RX
+========================================================= */
+
+let currentPrescription = null;
+
+
+
+/* =========================================================
+   SAFE JSON
+========================================================= */
+
+function readJSON(key){
+
+    try{
+
+        const value =
+            localStorage.getItem(key);
+
+        if(!value){
+
+            return null;
+
+        }
+
+        return JSON.parse(value);
+
+    }catch(error){
+
+        console.error(
+            "Could not read:",
+            key,
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   GET ALL PRESCRIPTIONS
+========================================================= */
+
+function getAllPrescriptions(){
+
+    const map = {};
+
+
+
+    ARRAY_KEYS.forEach(key => {
+
+        const data =
+            readJSON(key);
+
+
+        if(!data){
+
+            return;
+
+        }
+
+
+
+        /*
+           If storage contains an array
+        */
+
+        if(Array.isArray(data)){
+
+            data.forEach(rx => {
+
+                addPrescription(
+                    map,
+                    rx
+                );
+
+            });
+
+        }
+
+
+
+        /*
+           If storage contains a single object
+        */
+
+        else if(
+            typeof data === "object"
+        ){
+
+            addPrescription(
+                map,
+                data
+            );
+
+        }
+
+    });
+
+
+
+    return Object.values(map);
+
+}
+
+
+
+/* =========================================================
+   ADD UNIQUE PRESCRIPTION
+========================================================= */
+
+function addPrescription(map,rx){
+
+    if(
+        !rx ||
+        typeof rx !== "object"
+    ){
+
+        return;
+
+    }
+
+
+    const number =
+        rx.prescriptionNumber
+        || rx.rxNumber
+        || rx.id
+        || rx.prescriptionId;
+
+
+
+    /*
+       If no prescription number exists,
+       generate a temporary unique key.
+    */
+
+    const key =
+        number
+        || (
+            (rx.patientName || rx.patient || "patient")
+            + "_"
+            + (rx.date || rx.createdAt || Date.now())
+        );
+
+
+
+    /*
+       If duplicate exists, prefer the
+       latest version.
+    */
+
+    map[key] = rx;
+
+}
+
+
+
+/* =========================================================
+   PATIENT
+========================================================= */
+
+function patient(rx){
+
+    if(
+        rx.patient &&
+        typeof rx.patient === "object"
+    ){
+
+        return rx.patient;
+
+    }
+
+
+    return {
+
+        name:
+            rx.patientName
+            || rx.patient
+            || rx.fullName
+            || "Unknown Patient",
+
+        patientNumber:
+            rx.patientNumber
+            || rx.icam
+            || rx.icamNumber
+            || "—",
+
+        contact:
+            rx.contact
+            || rx.contactNumber
+            || "—",
+
+        allergies:
+            rx.allergies
+            || "None recorded",
+
+        age:
+            rx.age
+            || "—",
+
+        gender:
+            rx.gender
+            || "—",
+
+        history:
+            rx.history
+            || rx.patientHistory
+            || "No history recorded."
+
+    };
+
+}
+
+
+
+/* =========================================================
+   DOCTOR
+========================================================= */
+
+function doctor(rx){
+
+    if(
+        rx.doctor &&
+        typeof rx.doctor === "object"
+    ){
+
+        return rx.doctor;
+
+    }
+
+
+    return {
+
+        name:
+            rx.doctorName
+            || rx.doctor
+            || "Unknown Doctor",
+
+        hpcsa:
+            rx.hpcsa
+            || rx.doctorHpcsa
+            || rx.HPCSA
+            || "—"
+
+    };
+
+}
+
+
+
+/* =========================================================
+   MEDICATIONS
+========================================================= */
+
+function medications(rx){
+
+    if(
+        Array.isArray(
+            rx.medications
+        )
+    ){
+
+        return rx.medications;
+
+    }
+
+
+    if(
+        Array.isArray(
+            rx.meds
+        )
+    ){
+
+        return rx.meds;
+
+    }
+
+
+    /*
+       Support a single medication
+    */
+
+    if(
+        rx.medicine ||
+        rx.medication
+    ){
+
+        return [rx];
+
+    }
+
+
+    return [];
+
+}
+
+
+
+/* =========================================================
+   MEDICINE NAME
+========================================================= */
+
+function medName(med){
+
+    return (
+
+        med.name
+        || med.medicine
+        || med.medication
+        || med.drug
+        || "Unknown Medicine"
+
+    );
+
+}
+
+
+
+/* =========================================================
+   STRENGTH
+========================================================= */
+
+function medStrength(med){
+
+    return (
+
+        med.strength
+        || med.dose
+        || med.selectedDose
+        || "—"
+
+    );
+
+}
+
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+function medForm(med){
+
+    return (
+
+        med.form
+        || med.dosageForm
+        || med.type
+        || "—"
+
+    );
+
+}
+
+
+
+/* =========================================================
+   DIRECTIONS
+========================================================= */
+
+function medDirections(med){
+
+    return (
+
+        med.instructions
+        || med.directions
+        || med.frequency
+        || med.sig
+        || "—"
+
+    );
+
+}
+
+
+
+/* =========================================================
+   REPEATS
+========================================================= */
+
+function medRepeats(med){
+
+    return (
+
+        med.repeats
+        || med.repeat
+        || med.repeatPeriod
+        || "No repeats"
+
+    );
+
+}
+
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function safe(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function status(rx){
+
+    return (
+
+        rx.status
+        || "Pending"
+
+    );
+
+}
+
+
+
+/* =========================================================
+   NORMALIZED STATUS
+========================================================= */
+
+function normalizedStatus(rx){
+
+    const s =
+        status(rx)
+        .toLowerCase()
+        .trim();
+
+
+    if(
+        s.includes("dispens")
+    ){
+
+        return "dispensed";
+
+    }
+
+
+    if(
+        s.includes("query")
+    ){
+
+        return "query";
+
+    }
+
+
+    if(
+        s.includes("verif")
+    ){
+
+        return "verified";
+
+    }
+
+
+    /*
+       "Sent to Pharmacy",
+       "Submitted",
+       "Pending Pharmacy"
+       all count as pending.
+    */
+
+    return "pending";
+
+}
+
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function formatDate(value){
+
+    if(!value){
+
+        return "—";
+
+    }
+
+
+    const d =
+        new Date(value);
+
+
+    if(
+        isNaN(
+            d.getTime()
+        )
+    ){
+
+        return String(value);
+
+    }
+
+
+    return d.toLocaleDateString(
+        "en-ZA",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+    const prescriptions =
+        getAllPrescriptions();
+
+
+    const search =
+        document.getElementById(
+            "search"
+        )
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const filter =
+        document.getElementById(
+            "filter"
+        ).value;
+
+
+
+    /*
+       STATISTICS
+    */
+
+    let pending = 0;
+    let verified = 0;
+    let queries = 0;
+    let dispensed = 0;
+
+
+    prescriptions.forEach(rx => {
+
+        const s =
+            normalizedStatus(rx);
+
+
+        if(s === "pending")
+            pending++;
+
+        if(s === "verified")
+            verified++;
+
+        if(s === "query")
+            queries++;
+
+        if(s === "dispensed")
+            dispensed++;
+
+    });
+
+
+    document.getElementById(
+        "pending"
+    ).textContent = pending;
+
+
+    document.getElementById(
+        "verified"
+    ).textContent = verified;
+
+
+    document.getElementById(
+        "queries"
+    ).textContent = queries;
+
+
+    document.getElementById(
+        "dispensed"
+    ).textContent = dispensed;
+
+
+
+    /*
+       SEARCH
+    */
+
+    const filtered =
+        prescriptions.filter(rx => {
+
+            const p =
+                patient(rx);
+
+            const d =
+                doctor(rx);
+
+
+            const searchable = [
+
+                rx.prescriptionNumber,
+
+                rx.rxNumber,
+
+                p.name,
+
+                p.patientNumber,
+
+                d.name,
+
+                d.hpcsa
+
+            ]
+            .join(" ")
+            .toLowerCase();
+
+
+            const matchesSearch =
+                !search
+                || searchable.includes(search);
+
+
+            const matchesFilter =
+                filter === "all"
+                || normalizedStatus(rx)
+                    === filter;
+
+
+            return (
+                matchesSearch
+                &&
+                matchesFilter
+            );
+
+        });
+
+
+
+    const body =
+        document.getElementById(
+            "tableBody"
+        );
+
+
+
+    if(filtered.length === 0){
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td colspan="7">
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            📋
+                        </div>
+
+                        <h3>
+                            No prescriptions found
+                        </h3>
+
+                        <p>
+                            Once a prescription is sent
+                            to the pharmacy, it will appear here.
+                        </p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+
+    body.innerHTML =
+        filtered.map(rx => {
+
+            const p =
+                patient(rx);
+
+            const d =
+                doctor(rx);
+
+            const meds =
+                medications(rx);
+
+            const s =
+                normalizedStatus(rx);
+
+
+            const originalIndex =
+                prescriptions.indexOf(rx);
+
+
+            let statusText =
+                status(rx);
+
+
+            if(
+                s === "pending"
+            ){
+
+                statusText =
+                    "Pending";
+
+            }
+
+
+
+            return `
+
+                <tr>
+
+                    <td>
+
+                        <span class="rx">
+
+                            ${safe(
+                                rx.prescriptionNumber
+                                || rx.rxNumber
+                                || rx.id
+                                || "RX"
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="patient">
+
+                            ${safe(
+                                p.name
+                            )}
+
+                        </div>
+
+                        <div class="patient-number">
+
+                            ${safe(
+                                p.patientNumber
+                            )}
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        ${safe(
+                            d.name
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${meds.length}
+                        medicine(s)
+
+                    </td>
+
+
+                    <td>
+
+                        ${formatDate(
+                            rx.date
+                            || rx.createdAt
+                            || rx.prescriptionDate
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="status ${s}">
+
+                            ${safe(
+                                statusText
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+
+                            class="btn green"
+
+                            onclick="
+                                openPrescription(
+                                    ${originalIndex}
+                                )
+                            ">
+
+                            ${
+                                s === "pending"
+                                ? "Review"
+                                : "View"
+                            }
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+
+}
+
+
+
+/* =========================================================
+   OPEN PRESCRIPTION
+========================================================= */
+
+function openPrescription(index){
+
+    const prescriptions =
+        getAllPrescriptions();
+
+
+    const rx =
+        prescriptions[index];
+
+
+    if(!rx){
+
+        alert(
+            "Prescription could not be found."
+        );
+
+        return;
+
+    }
+
+
+    currentPrescription =
+        rx;
+
+
+    const p =
+        patient(rx);
+
+    const d =
+        doctor(rx);
+
+    const meds =
+        medications(rx);
+
+
+
+    document.getElementById(
+        "rxTitle"
+    ).textContent =
+
+        rx.prescriptionNumber
+        || rx.rxNumber
+        || rx.id
+        || "Prescription";
+
+
+
+    document.getElementById(
+        "pName"
+    ).textContent =
+        p.name || "—";
+
+
+    document.getElementById(
+        "pNumber"
+    ).textContent =
+        p.patientNumber || "—";
+
+
+    document.getElementById(
+        "pContact"
+    ).textContent =
+        p.contact || "—";
+
+
+    document.getElementById(
+        "pAllergies"
+    ).textContent =
+        p.allergies || "None recorded";
+
+
+    document.getElementById(
+        "pAge"
+    ).textContent =
+        p.age || "—";
+
+
+    document.getElementById(
+        "pGender"
+    ).textContent =
+        p.gender || "—";
+
+
+    document.getElementById(
+        "pHistory"
+    ).textContent =
+        p.history
+        || "No history recorded.";
+
+
+
+    document.getElementById(
+        "dName"
+    ).textContent =
+        d.name || "—";
+
+
+    document.getElementById(
+        "dHpcsa"
+    ).textContent =
+        d.hpcsa || "—";
+
+
+
+    let pharmacy =
+        rx.pharmacy;
+
+
+    if(
+        pharmacy &&
+        typeof pharmacy === "object"
+    ){
+
+        pharmacy =
+            pharmacy.name
+            || "Selected Pharmacy";
+
+    }
+
+
+    document.getElementById(
+        "rxPharmacy"
+    ).textContent =
+        pharmacy
+        || "Not selected";
+
+
+    document.getElementById(
+        "rxDate"
+    ).textContent =
+        formatDate(
+            rx.date
+            || rx.createdAt
+            || rx.prescriptionDate
+        );
+
+
+
+    /*
+       MEDICATION TABLE
+    */
+
+    const medBody =
+        document.getElementById(
+            "medBody"
+        );
+
+
+    if(meds.length === 0){
+
+        medBody.innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    No medicines found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+    else{
+
+        medBody.innerHTML =
+
+            meds.map(med => {
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <strong>
+
+                                ${safe(
+                                    medName(med)
+                                )}
+
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            ${safe(
+                                medStrength(med)
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            ${safe(
+                                medForm(med)
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            ${safe(
+                                medDirections(med)
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            ${safe(
+                                medRepeats(med)
+                            )}
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+
+    /*
+       RESET CHECKBOXES
+    */
+
+    document
+        .querySelectorAll(
+            ".verifyCheck"
+        )
+        .forEach(box => {
+
+            box.checked = false;
+
+        });
+
+
+    document.getElementById(
+        "queryArea"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "queryText"
+    ).value = "";
+
+
+
+    document.getElementById(
+        "modal"
+    ).style.display =
+        "block";
+
+}
+
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+function closeModal(){
+
+    document.getElementById(
+        "modal"
+    ).style.display =
+        "none";
+
+}
+
+
+
+/* =========================================================
+   VERIFY
+========================================================= */
+
+function verifyPrescription(){
+
+    if(!currentPrescription){
+
+        alert(
+            "No prescription selected."
+        );
+
+        return;
+
+    }
+
+
+
+    const checks =
+        document.querySelectorAll(
+            ".verifyCheck"
+        );
+
+
+    const complete =
+        Array.from(checks)
+        .every(
+            box =>
+                box.checked
+        );
+
+
+    if(!complete){
+
+        alert(
+            "Please complete all verification checks first."
+        );
+
+        return;
+
+    }
+
+
+
+    /*
+       IMPORTANT:
+       We do NOT dispense here.
+
+       We only verify.
+    */
+
+    currentPrescription.status =
+        "Verified";
+
+
+    currentPrescription.verifiedBy =
+        pharmacistName;
+
+
+    currentPrescription.verifiedAt =
+        new Date().toISOString();
+
+
+
+    savePrescription(
+        currentPrescription
+    );
+
+
+
+    /*
+       Send to inventory.
+    */
+
+    localStorage.setItem(
+
+        "neoPharmaBridgeDispensingPrescription",
+
+        JSON.stringify(
+            currentPrescription
+        )
+
+    );
+
+
+    localStorage.setItem(
+
+        "neoPharmaBridgeCurrentPrescription",
+
+        JSON.stringify(
+            currentPrescription
+        )
+
+    );
+
+
+
+    closeModal();
+
+    render();
+
+
+
+    const proceed =
+        confirm(
+
+            "Prescription verified successfully.\n\n" +
+            "Proceed to Pharmacy Inventory?"
+
+        );
+
+
+    if(proceed){
+
+        window.location.href =
+            "Pharmacy_Inventory.html";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   QUERY DOCTOR
+========================================================= */
+
+function queryPrescription(){
+
+    if(!currentPrescription){
+
+        return;
+
+    }
+
+
+
+    const area =
+        document.getElementById(
+            "queryArea"
+        );
+
+
+    /*
+       First click opens query box.
+    */
+
+    if(
+        area.style.display !==
+        "block"
+    ){
+
+        area.style.display =
+            "block";
+
+        document.getElementById(
+            "queryText"
+        ).focus();
+
+        return;
+
+    }
+
+
+
+    const message =
+        document.getElementById(
+            "queryText"
+        ).value.trim();
+
+
+    if(!message){
+
+        alert(
+            "Please enter the reason for the query."
+        );
+
+        return;
+
+    }
+
+
+
+    currentPrescription.status =
+        "Query";
+
+
+    currentPrescription.pharmacistQuery = {
+
+        message:
+
+            message,
+
+        pharmacist:
+
+            pharmacistName,
+
+        date:
+
+            new Date().toISOString(),
+
+        status:
+
+            "Awaiting Doctor Response"
+
+    };
+
+
+
+    savePrescription(
+        currentPrescription
+    );
+
+
+
+    closeModal();
+
+    render();
+
+
+
+    alert(
+        "Query sent to the doctor."
+    );
+
+}
+
+
+
+/* =========================================================
+   SAVE PRESCRIPTION EVERYWHERE
+========================================================= */
+
+function savePrescription(rx){
+
+    const number =
+
+        rx.prescriptionNumber
+        || rx.rxNumber
+        || rx.id
+        || rx.prescriptionId;
+
+
+
+    /*
+       UPDATE ARRAY
+    */
+
+    updateArrayStorage(
+        "neoPharmaBridgePrescriptions",
+        rx,
+        number
+    );
+
+
+    updateArrayStorage(
+        "adminPrescriptions",
+        rx,
+        number
+    );
+
+
+
+    /*
+       UPDATE SINGLE RX
+    */
+
+    localStorage.setItem(
+
+        "neoPharmaBridgePrescription",
+
+        JSON.stringify(rx)
+
+    );
+
+}
+
+
+
+/* =========================================================
+   UPDATE ARRAY STORAGE
+========================================================= */
+
+function updateArrayStorage(
+    key,
+    rx,
+    number
+){
+
+    let data =
+        readJSON(key);
+
+
+    if(!Array.isArray(data)){
+
+        data = [];
+
+    }
+
+
+
+    let found = false;
+
+
+    data =
+        data.map(item => {
+
+            const itemNumber =
+
+                item.prescriptionNumber
+                || item.rxNumber
+                || item.id
+                || item.prescriptionId;
+
+
+            if(
+                number &&
+                itemNumber === number
+            ){
+
+                found = true;
+
+                return rx;
+
+            }
+
+
+            return item;
+
+        });
+
+
+
+    if(!found){
+
+        data.push(rx);
+
+    }
+
+
+
+    localStorage.setItem(
+
+        key,
+
+        JSON.stringify(data)
+
+    );
+
+}
+
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function goDashboard(){
+
+    window.location.href =
+        "Pharmacist_Dashboard.html";
+
+}
+
+
+
+/* =========================================================
+   CLICK OUTSIDE MODAL
+========================================================= */
+
+window.addEventListener(
+    "click",
+    function(event){
+
+        const modal =
+            document.getElementById(
+                "modal"
+            );
+
+
+        if(
+            event.target === modal
+        ){
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   START
+========================================================= */
+
+render();
+
+</script>
+
+</body>
+
+</html>
