@@ -1,406 +1,1217 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeoPharmaBridge | Doctor Dashboard</title>
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial,sans-serif;
-    }
+<meta charset="UTF-8">
 
-    body{
-      min-height:100vh;
-      background:linear-gradient(135deg,#cce7ff,#28a745,#f2f9ff);
-      background-size:400% 400%;
-      animation:gradientMove 15s ease infinite;
-    }
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    @keyframes gradientMove{
-      0%{background-position:0% 50%;}
-      50%{background-position:100% 50%;}
-      100%{background-position:0% 50%;}
-    }
+<title>NeoPharmaBridge | Doctor Dashboard</title>
 
-    .topbar{
-      background:linear-gradient(135deg,#cce7ff,#28a745,#f2f9ff);
-      padding:15px 30px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1);
-    }
+<style>
 
-    .topbar img{
-      height:70px;
-    }
+/* =========================================
+GLOBAL
+========================================= */
 
-    .doctor-info{
-      text-align:right;
-      font-size:14px;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
-    .container{
-      max-width:1100px;
-      margin:40px auto;
-      padding:0 20px;
-    }
 
-    h1{
-      color:#0057b7;
-      margin-bottom:25px;
-    }
+/* =========================================
+BODY
+========================================= */
 
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:25px;
-    }
+body{
 
-    .card{
-      background:#fff;
-      border-radius:14px;
-      padding:25px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.15);
-    }
+min-height:100vh;
 
-    .card h3{
-      margin-bottom:15px;
-      color:#28a745;
-    }
+background:
+linear-gradient(
+135deg,
+#cce7ff,
+#28a745,
+#f2f9ff
+);
 
-    input,
-    select,
-    button{
-      width:100%;
-      padding:12px;
-      border-radius:6px;
-      border:1px solid #ccc;
-      font-size:14px;
-      margin-bottom:10px;
-    }
+background-size:400% 400%;
 
-    button{
-      background:#0057b7;
-      color:#fff;
-      border:none;
-      cursor:pointer;
-    }
+animation:
+gradientMove 15s ease infinite;
 
-    button:hover{
-      background:#004a9a;
-    }
+}
 
-    button:disabled{
-      background:#aaa;
-      cursor:not-allowed;
-    }
 
-    .note{
-      font-size:12px;
-      color:#777;
-    }
+@keyframes gradientMove{
 
-    #patientResult{
-      margin-top:10px;
-      padding:12px;
-      background:#f2f9ff;
-      border-radius:8px;
-      font-size:14px;
-      line-height:1.6;
-    }
+0%{
+background-position:0% 50%;
+}
 
-    footer{
-      text-align:center;
-      margin:40px 0 20px;
-      font-size:12px;
-      color:#fff;
-    }
-  </style>
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
+
+
+/* =========================================
+TOP BAR
+========================================= */
+
+.topbar{
+
+background:white;
+
+padding:15px 30px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+box-shadow:
+0 4px 12px
+rgba(0,0,0,0.1);
+
+}
+
+
+.topbar img{
+
+height:70px;
+
+max-width:250px;
+
+object-fit:contain;
+
+}
+
+
+.doctor-info{
+
+text-align:right;
+
+font-size:14px;
+
+}
+
+
+.doctor-info strong{
+
+color:#0057b7;
+
+font-size:16px;
+
+}
+
+
+.doctor-info p{
+
+color:#28a745;
+
+font-size:12px;
+
+font-weight:bold;
+
+margin-top:5px;
+
+}
+
+
+/* =========================================
+MAIN CONTAINER
+========================================= */
+
+.container{
+
+max-width:1100px;
+
+margin:40px auto;
+
+padding:0 20px;
+
+}
+
+
+h1{
+
+color:#0057b7;
+
+margin-bottom:25px;
+
+}
+
+
+/* =========================================
+CARDS
+========================================= */
+
+.cards{
+
+display:grid;
+
+grid-template-columns:
+repeat(
+auto-fit,
+minmax(280px,1fr)
+);
+
+gap:25px;
+
+}
+
+
+.card{
+
+background:white;
+
+border-radius:14px;
+
+padding:25px;
+
+box-shadow:
+0 8px 20px
+rgba(0,0,0,0.15);
+
+}
+
+
+.card h3{
+
+color:#28a745;
+
+margin-bottom:15px;
+
+}
+
+
+/* =========================================
+INPUTS
+========================================= */
+
+input,
+button{
+
+width:100%;
+
+padding:12px;
+
+border-radius:7px;
+
+font-size:14px;
+
+margin-bottom:10px;
+
+}
+
+
+input{
+
+border:
+1px solid #ccc;
+
+}
+
+
+input:focus{
+
+outline:none;
+
+border-color:#0057b7;
+
+box-shadow:
+0 0 0 3px
+rgba(0,87,183,0.1);
+
+}
+
+
+/* =========================================
+BUTTONS
+========================================= */
+
+button{
+
+background:#0057b7;
+
+color:white;
+
+border:none;
+
+cursor:pointer;
+
+font-weight:bold;
+
+}
+
+
+button:hover{
+
+background:#004a9a;
+
+}
+
+
+button.green{
+
+background:#28a745;
+
+}
+
+
+button.green:hover{
+
+background:#218838;
+
+}
+
+
+button.gray{
+
+background:#6c757d;
+
+}
+
+
+button.gray:hover{
+
+background:#5a6268;
+
+}
+
+
+button:disabled{
+
+background:#aaa;
+
+cursor:not-allowed;
+
+}
+
+
+/* =========================================
+NOTES
+========================================= */
+
+.note{
+
+font-size:12px;
+
+color:#777;
+
+line-height:1.5;
+
+}
+
+
+/* =========================================
+PATIENT RESULT
+========================================= */
+
+#patientResult{
+
+margin-top:10px;
+
+padding:15px;
+
+background:#f2f9ff;
+
+border-radius:8px;
+
+font-size:14px;
+
+line-height:1.7;
+
+}
+
+
+.patient-found{
+
+background:#d4edda;
+
+color:#155724;
+
+padding:15px;
+
+border-radius:8px;
+
+}
+
+
+.patient-error{
+
+background:#f8d7da;
+
+color:#721c24;
+
+padding:15px;
+
+border-radius:8px;
+
+}
+
+
+/* =========================================
+PATIENT NUMBER
+========================================= */
+
+.patient-number{
+
+font-size:18px;
+
+font-weight:bold;
+
+color:#0057b7;
+
+}
+
+
+/* =========================================
+WORKFLOW
+========================================= */
+
+.workflow{
+
+margin-top:25px;
+
+background:white;
+
+padding:25px;
+
+border-radius:14px;
+
+box-shadow:
+0 6px 16px
+rgba(0,0,0,0.12);
+
+}
+
+
+.workflow h3{
+
+color:#0057b7;
+
+margin-bottom:20px;
+
+}
+
+
+.steps{
+
+display:grid;
+
+grid-template-columns:
+repeat(
+auto-fit,
+minmax(160px,1fr)
+);
+
+gap:15px;
+
+}
+
+
+.step{
+
+padding:15px;
+
+background:#f8fbff;
+
+border-radius:10px;
+
+text-align:center;
+
+font-size:13px;
+
+}
+
+
+.number{
+
+width:30px;
+
+height:30px;
+
+border-radius:50%;
+
+background:#0057b7;
+
+color:white;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+margin:0 auto 8px;
+
+font-weight:bold;
+
+}
+
+
+/* =========================================
+FOOTER
+========================================= */
+
+footer{
+
+text-align:center;
+
+margin:40px 0 20px;
+
+font-size:12px;
+
+color:white;
+
+}
+
+
+/* =========================================
+MOBILE
+========================================= */
+
+@media(max-width:600px){
+
+.topbar{
+
+padding:12px 15px;
+
+}
+
+
+.topbar img{
+
+height:55px;
+
+max-width:180px;
+
+}
+
+
+.container{
+
+margin:25px auto;
+
+}
+
+
+h1{
+
+font-size:24px;
+
+}
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<!-- TOPBAR -->
+
+<!-- =========================================
+TOP BAR
+========================================= -->
+
 <div class="topbar">
 
-  <img src="NeoPharmaBridge Logo.jpeg"
-       alt="NeoPharmaBridge Logo">
+<img
+src="NeoPharmaBridge Logo.jpeg"
+alt="NeoPharmaBridge Logo"
+>
 
-  <div class="doctor-info">
-    <strong>Dr KOALANE</strong>
-    <p>SAHPRA Verified</p>
-  </div>
+<div class="doctor-info">
+
+<strong>
+Dr KOALANE
+</strong>
+
+<p>
+✔ SAHPRA Verified
+</p>
 
 </div>
 
-<!-- MAIN -->
+</div>
+
+
+<!-- =========================================
+MAIN
+========================================= -->
+
 <div class="container">
 
-  <h1>Doctor's Dashboard</h1>
 
-  <div class="cards">
+<h1>
+Doctor's Dashboard
+</h1>
 
-    <!-- PHARMACY -->
-    <div class="card">
 
-      <h3>Select Pharmacy</h3>
+<div class="cards">
 
-      <select id="pharmacySelect">
-        <option value="" selected disabled>
-          Select Linked Pharmacy
-        </option>
 
-        <option value="dischem">
-          Dis-Chem Pharmacy
-        </option>
+<!-- =========================================
+PATIENT LOOKUP
+========================================= -->
 
-        <option value="clicks">
-          Clicks Pharmacy
-        </option>
+<div class="card">
 
-        <option value="neo">
-          NeoPharmacare Pharmacy
-        </option>
-      </select>
+<h3>
+Patient Lookup
+</h3>
 
-      <p class="note">
-        Only SAHPRA-linked pharmacies are shown.
-      </p>
 
-    </div>
+<input
+type="text"
+id="patientNumberSearch"
+placeholder="Enter Patient File Number"
+autocomplete="off"
+>
 
-    <!-- PATIENT LOOKUP -->
-    <div class="card">
 
-      <h3>Patient Lookup</h3>
+<button
+class="green"
+id="searchButton"
+type="button"
+>
 
-      <input
-        id="icamSearch"
-        placeholder="Scan / Enter Patient ICAM"
-      >
+Search Patient
 
-      <button
-        onclick="searchPatient()"
-        style="background:#28a745;">
-        Search Patient
-      </button>
+</button>
 
-      <button
-        onclick="window.open('Patient_Register.html','_blank')">
-        Register New Patient
-      </button>
 
-      <div id="patientResult">
-        No patient selected.
-      </div>
+<button
+class="gray"
+id="registerButton"
+type="button"
+>
 
-    </div>
+Register New Patient
 
-    <!-- PRESCRIPTION -->
-    <div class="card">
+</button>
 
-      <h3>Create Prescription</h3>
 
-      <button
-        id="startPrescription"
-        disabled
-        onclick="openPrescription()">
-        Start New Prescription
-      </button>
+<div id="patientResult">
 
-      <p class="note">
-        Patient must be selected first.
-      </p>
-
-    </div>
-
-    <!-- RECORDS -->
-    <div class="card">
-
-      <h3>Patient Records</h3>
-
-      <button onclick="openRecords()">
-        View Patient Records
-      </button>
-
-    </div>
-
-  </div>
+No patient selected.
 
 </div>
 
+</div>
+
+
+<!-- =========================================
+PRESCRIPTION
+========================================= -->
+
+<div class="card">
+
+<h3>
+Create Prescription
+</h3>
+
+
+<p
+class="note"
+style="margin-bottom:15px;"
+>
+
+Select a patient before starting a prescription.
+
+</p>
+
+
+<button
+id="startPrescription"
+type="button"
+disabled
+>
+
+Start New Prescription
+
+</button>
+
+
+<p class="note">
+
+The doctor completes the prescription first.
+
+The patient will select their pharmacy afterwards.
+
+</p>
+
+</div>
+
+
+<!-- =========================================
+RECORDS
+========================================= -->
+
+<div class="card">
+
+<h3>
+Patient Records
+</h3>
+
+
+<p
+class="note"
+style="margin-bottom:15px;"
+>
+
+View previous patient prescriptions and records.
+
+</p>
+
+
+<button
+id="recordsButton"
+type="button"
+>
+
+View Patient Records
+
+</button>
+
+</div>
+
+
+<!-- =========================================
+DOCTOR INFORMATION
+========================================= -->
+
+<div class="card">
+
+<h3>
+Doctor Information
+</h3>
+
+
+<p>
+
+<strong>
+Doctor:
+</strong>
+
+Dr KOALANE
+
+</p>
+
+
+<p style="margin-top:10px;">
+
+<strong>
+HPCSA:
+</strong>
+
+MP123456
+
+</p>
+
+
+<p
+style="
+margin-top:10px;
+color:#28a745;
+font-weight:bold;
+"
+>
+
+✔ Authorized Prescriber
+
+</p>
+
+</div>
+
+
+</div>
+
+
+<!-- =========================================
+WORKFLOW
+========================================= -->
+
+<div class="workflow">
+
+<h3>
+NeoPharmaBridge Workflow
+</h3>
+
+
+<div class="steps">
+
+
+<div class="step">
+
+<div class="number">
+1
+</div>
+
+Doctor identifies patient
+
+</div>
+
+
+<div class="step">
+
+<div class="number">
+2
+</div>
+
+Doctor creates prescription
+
+</div>
+
+
+<div class="step">
+
+<div class="number">
+3
+</div>
+
+Doctor completes prescription
+
+</div>
+
+
+<div class="step">
+
+<div class="number">
+4
+</div>
+
+Patient receives prescription
+
+</div>
+
+
+<div class="step">
+
+<div class="number">
+5
+</div>
+
+Patient selects pharmacy
+
+</div>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- =========================================
+FOOTER
+========================================= -->
+
 <footer>
-  © 2026 NeoPharmaBridge · Doctor Access · Private & Secure
+
+© 2026 NeoPharmaBridge · Doctor Access · Private & Secure
+
+<br><br>
+
+<span
+style="
+font-size:10px;
+opacity:0.7;
+"
+>
+
+Jesus Christ
+
+</span>
+
 </footer>
+
 
 <script>
 
-/* =========================================
-   ACCESS CONTROL
-========================================= */
-
-const role = localStorage.getItem("neoRole");
-
-if(role !== "doctor"){
-  window.location.href = "Login.html";
-}
 
 /* =========================================
-   ELEMENTS
+CURRENT PATIENT
 ========================================= */
 
-const pharmacySelect =
-document.getElementById("pharmacySelect");
+let currentPatient = null;
 
-const startBtn =
-document.getElementById("startPrescription");
+
+/* =========================================
+ELEMENTS
+========================================= */
+
+const searchInput =
+document.getElementById(
+"patientNumberSearch"
+);
+
+
+const searchButton =
+document.getElementById(
+"searchButton"
+);
+
+
+const registerButton =
+document.getElementById(
+"registerButton"
+);
+
+
+const startButton =
+document.getElementById(
+"startPrescription"
+);
+
+
+const recordsButton =
+document.getElementById(
+"recordsButton"
+);
+
 
 const patientResult =
-document.getElementById("patientResult");
+document.getElementById(
+"patientResult"
+);
+
 
 /* =========================================
-   ENABLE PRESCRIPTION BUTTON
+GET REGISTERED PATIENTS
 ========================================= */
 
-pharmacySelect.addEventListener("change", validatePrescriptionAccess);
+function getPatients(){
 
-function validatePrescriptionAccess(){
+return JSON.parse(
+localStorage.getItem(
+"neoPatients"
+)
+) || [];
 
-  const currentPatient =
-  localStorage.getItem("currentPatient");
-
-  if(
-    pharmacySelect.value === "neo"
-    &&
-    currentPatient
-  ){
-    startBtn.disabled = false;
-  }
-  else{
-    startBtn.disabled = true;
-  }
 }
 
+
 /* =========================================
-   SEARCH PATIENT
+SEARCH PATIENT
 ========================================= */
 
 function searchPatient(){
 
-  const icam =
-  document.getElementById("icamSearch")
-  .value
-  .trim();
+const patientNumber =
+searchInput.value
+.trim()
+.toUpperCase();
 
-  const patients =
-  JSON.parse(localStorage.getItem("patients"))
-  || [];
-
-  const patient =
-  patients.find(p => p.icam === icam);
-
-  if(!patient){
-
-    patientResult.innerHTML =
-    "<span style='color:red;'>Patient not found</span>";
-
-    localStorage.removeItem("currentPatient");
-
-    validatePrescriptionAccess();
-
-    return;
-  }
-
-  /* SAVE CURRENT PATIENT */
-
-  localStorage.setItem(
-    "currentPatient",
-    JSON.stringify(patient)
-  );
-
-  /* DISPLAY PATIENT */
-
-  patientResult.innerHTML = `
-    <strong style="color:#0057b7;">
-      ${patient.name}
-    </strong><br>
-
-    ICAM: ${patient.icam}<br>
-
-    DOB: ${patient.dob || "N/A"}<br>
-
-    Allergies:
-    ${patient.allergies || "None"}
-  `;
-
-  validatePrescriptionAccess();
-}
 
 /* =========================================
-   OPEN PRESCRIPTION PAGE
+EMPTY SEARCH
 ========================================= */
 
-function openPrescription() {
+if(!patientNumber){
 
-  const icam =
-    document.getElementById("icamSearch")
-    .value
-    .trim();
+currentPatient = null;
 
-  let patients =
-    JSON.parse(localStorage.getItem("patients")) || [];
+startButton.disabled = true;
 
-  const patient =
-    patients.find(p => p.icam === icam);
+patientResult.innerHTML = `
 
-  if(!patient){
+<div class="patient-error">
 
-    alert("Please search and select a patient first.");
+Please enter a Patient File Number.
 
-    return;
+</div>
 
-  }
+`;
 
-  // SAVE PATIENT FOR PRESCRIPTION PAGE
-  localStorage.setItem(
-    "prescriptionPatient",
-    JSON.stringify(patient)
-  );
-
-  // OPEN PRESCRIPTION
-  window.open(
-    "prescription.html",
-    "_blank"
-  );
+return;
 
 }
+
 
 /* =========================================
-   OPEN RECORDS
+LOAD PATIENTS
 ========================================= */
 
-function openRecords(){
+const patients =
+getPatients();
 
-  window.location.href =
-  "Doctor_Patient_Records.html";
+
+/* =========================================
+FIND PATIENT
+========================================= */
+
+const patient =
+patients.find(
+p =>
+String(
+p.patientNumber
+).toUpperCase()
+===
+patientNumber
+);
+
+
+/* =========================================
+PATIENT NOT FOUND
+========================================= */
+
+if(!patient){
+
+currentPatient = null;
+
+startButton.disabled = true;
+
+patientResult.innerHTML = `
+
+<div class="patient-error">
+
+<strong>
+Patient Not Found
+</strong>
+
+<br><br>
+
+No patient record matches:
+
+<br>
+
+<strong>
+${patientNumber}
+</strong>
+
+<br><br>
+
+Please check the Patient File Number.
+
+</div>
+
+`;
+
+return;
+
 }
+
+
+/* =========================================
+PATIENT FOUND
+========================================= */
+
+currentPatient = patient;
+
+startButton.disabled = false;
+
+
+patientResult.innerHTML = `
+
+<div class="patient-found">
+
+<strong>
+✔ Patient Found
+</strong>
+
+<br><br>
+
+<strong>
+Patient File Number:
+</strong>
+
+<br>
+
+<span class="patient-number">
+
+${patient.patientNumber}
+
+</span>
+
+<br><br>
+
+<strong>
+Name:
+</strong>
+
+${patient.name}
+
+<br>
+
+<strong>
+ID / Passport:
+</strong>
+
+${patient.idNumber}
+
+<br>
+
+<strong>
+Date of Birth:
+</strong>
+
+${patient.dob}
+
+<br>
+
+<strong>
+Age:
+</strong>
+
+${patient.age}
+
+<br>
+
+<strong>
+Gender:
+</strong>
+
+${patient.gender}
+
+<br>
+
+<strong>
+Phone:
+</strong>
+
+${patient.phone}
+
+<br>
+
+<strong>
+Allergies / Conditions:
+</strong>
+
+${patient.allergies || "None recorded"}
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================
+SEARCH BUTTON
+========================================= */
+
+searchButton.addEventListener(
+"click",
+searchPatient
+);
+
+
+/* =========================================
+ENTER KEY
+========================================= */
+
+searchInput.addEventListener(
+"keydown",
+function(event){
+
+if(event.key === "Enter"){
+
+event.preventDefault();
+
+searchPatient();
+
+}
+
+});
+
+
+/* =========================================
+REGISTER NEW PATIENT
+========================================= */
+
+registerButton.addEventListener(
+"click",
+function(){
+
+window.open(
+"Patient_Register.html",
+"_blank"
+);
+
+});
+
+
+/* =========================================
+START PRESCRIPTION
+========================================= */
+
+startButton.addEventListener(
+"click",
+function(){
+
+if(!currentPatient){
+
+alert(
+"Please select a patient first."
+);
+
+return;
+
+}
+
+
+/* =========================================
+SEND PATIENT TO PRESCRIPTION
+========================================= */
+
+sessionStorage.setItem(
+
+"prescriptionPatient",
+
+JSON.stringify(
+currentPatient
+)
+
+);
+
+
+/* =========================================
+OPEN PRESCRIPTION
+========================================= */
+
+window.open(
+"Prescription.html",
+"_blank"
+);
+
+});
+
+
+/* =========================================
+PATIENT RECORDS
+========================================= */
+
+recordsButton.addEventListener(
+"click",
+function(){
+
+window.location.href =
+"Doctor_Patient_Records.html";
+
+});
+
 
 </script>
 
-<footer style="
-text-align:center;
-margin-top:40px;
-font-size:10px;
-color:#e5e5e5;
-opacity:0.6;
-">
-Jesus Christ
-</footer>
 
 </body>
+
 </html>
