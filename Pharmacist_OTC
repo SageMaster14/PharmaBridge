@@ -1,0 +1,4493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NeoPharmaBridge | OTC Pharmacy</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Poppins",Arial,sans-serif;
+    background:linear-gradient(135deg,#cce7ff,#f2f9ff,#dff7e8);
+    min-height:100vh;
+    color:#07111f;
+}
+
+button,input,select{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar{
+    height:78px;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    box-shadow:0 4px 20px rgba(0,0,0,.08);
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.logo{
+    width:48px;
+    height:48px;
+    object-fit:contain;
+    border-radius:12px;
+}
+
+.brand-text h2{
+    font-size:18px;
+    font-weight:800;
+}
+
+.brand-text span{
+    font-size:11px;
+    color:#64748b;
+}
+
+.user-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.user-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#087f5b,#1976d2);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+}
+
+.user-details{
+    text-align:right;
+}
+
+.user-details strong{
+    display:block;
+    font-size:13px;
+}
+
+.user-details span{
+    font-size:10px;
+    color:#64748b;
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.container{
+    width:min(1200px,94%);
+    margin:30px auto 60px;
+}
+
+.page-heading{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    margin-bottom:24px;
+}
+
+.page-heading h1{
+    font-size:30px;
+    font-weight:800;
+}
+
+.page-heading p{
+    color:#64748b;
+    font-size:13px;
+    margin-top:4px;
+}
+
+.back-btn{
+    border:none;
+    background:#fff;
+    padding:11px 17px;
+    border-radius:12px;
+    font-weight:700;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+/* =========================================================
+   STEPPER
+========================================================= */
+
+.stepper{
+    background:#fff;
+    border-radius:18px;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:22px;
+    box-shadow:0 5px 20px rgba(0,0,0,.07);
+}
+
+.step{
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    color:#94a3b8;
+    font-size:12px;
+    font-weight:700;
+}
+
+.step-number{
+    width:34px;
+    height:34px;
+    min-width:34px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#e2e8f0;
+    color:#64748b;
+}
+
+.step.active{
+    color:#087f5b;
+}
+
+.step.active .step-number{
+    background:#087f5b;
+    color:#fff;
+}
+
+.step.complete{
+    color:#1976d2;
+}
+
+.step.complete .step-number{
+    background:#1976d2;
+    color:#fff;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card{
+    background:#fff;
+    border-radius:20px;
+    padding:26px;
+    box-shadow:0 6px 25px rgba(0,0,0,.07);
+    margin-bottom:20px;
+}
+
+.card-header{
+    margin-bottom:22px;
+}
+
+.card-header h2{
+    font-size:20px;
+}
+
+.card-header p{
+    color:#64748b;
+    font-size:12px;
+    margin-top:4px;
+}
+
+/* =========================================================
+   FORMS
+========================================================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+label{
+    font-size:12px;
+    font-weight:700;
+}
+
+input,select{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid #dbe3ea;
+    border-radius:11px;
+    outline:none;
+    font-size:13px;
+    background:#fff;
+}
+
+input:focus,select:focus{
+    border-color:#1976d2;
+    box-shadow:0 0 0 3px rgba(25,118,210,.08);
+}
+
+/* =========================================================
+   MEDICINE
+========================================================= */
+
+.medicine-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+}
+
+.medicine-card{
+    border:2px solid #e2e8f0;
+    padding:17px;
+    border-radius:15px;
+    transition:.2s;
+    cursor:pointer;
+}
+
+.medicine-card:hover{
+    border-color:#1976d2;
+    transform:translateY(-2px);
+}
+
+.medicine-card.selected{
+    border-color:#087f5b;
+    background:#f0fdf7;
+}
+
+.medicine-card.not-allowed{
+    opacity:.55;
+    cursor:not-allowed;
+}
+
+.medicine-name{
+    font-weight:800;
+    font-size:14px;
+}
+
+.medicine-meta{
+    font-size:11px;
+    color:#64748b;
+    margin-top:5px;
+}
+
+.badge{
+    display:inline-block;
+    margin-top:9px;
+    padding:4px 8px;
+    border-radius:20px;
+    font-size:9px;
+    font-weight:800;
+}
+
+.badge.otc{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.badge.rx{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.selected-medicine{
+    background:#f8fafc;
+    border-radius:14px;
+    padding:18px;
+    margin-top:20px;
+    display:none;
+}
+
+/* =========================================================
+   PATIENT-FACING PREVIEW
+========================================================= */
+
+.patient-instruction-preview{
+    margin-top:16px;
+    padding:16px;
+    border:2px solid #bbf7d0;
+    background:#f0fdf4;
+    border-radius:14px;
+}
+
+.patient-instruction-preview .preview-title{
+    font-size:10px;
+    font-weight:800;
+    color:#166534;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin-bottom:6px;
+}
+
+.patient-instruction-preview .preview-text{
+    font-size:14px;
+    font-weight:700;
+    color:#14532d;
+    line-height:1.6;
+}
+
+.patient-instruction-preview .preview-note{
+    font-size:10px;
+    color:#64748b;
+    margin-top:6px;
+}
+
+/* =========================================================
+   COUNSELLING
+========================================================= */
+
+.counselling-box{
+    border:1px solid #dbe3ea;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:18px;
+}
+
+.instruction-display{
+    background:#07111f;
+    color:#fff;
+    padding:18px;
+    border-radius:14px;
+    margin-bottom:18px;
+}
+
+.instruction-display .raw{
+    color:#93c5fd;
+    font-size:10px;
+    text-transform:uppercase;
+    font-weight:700;
+}
+
+.instruction-display .meaning{
+    font-size:18px;
+    font-weight:800;
+    margin-top:5px;
+}
+
+.instruction-display .patient-version{
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px solid rgba(255,255,255,.15);
+    color:#bbf7d0;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.interpretation{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-top:15px;
+}
+
+.interpretation-item{
+    background:#f8fafc;
+    padding:12px;
+    border-radius:10px;
+    font-size:11px;
+}
+
+.interpretation-item strong{
+    display:block;
+    font-size:12px;
+    margin-bottom:3px;
+}
+
+.warning{
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    color:#9a3412;
+    padding:13px;
+    border-radius:11px;
+    font-size:11px;
+    margin-top:14px;
+    display:none;
+}
+
+.success-message{
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    color:#166534;
+    padding:13px;
+    border-radius:11px;
+    font-size:11px;
+    margin-top:14px;
+    display:none;
+}
+
+.counselling-checklist{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.check-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    border-radius:11px;
+    background:#f8fafc;
+    font-size:11px;
+}
+
+.check-item input{
+    width:auto;
+}
+
+/* =========================================================
+   LABELING
+========================================================= */
+
+.label-warning{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    color:#1e40af;
+    padding:14px;
+    border-radius:12px;
+    font-size:11px;
+    margin-bottom:20px;
+}
+
+.label-layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+    align-items:start;
+}
+
+.label-preview-wrapper{
+    background:#f8fafc;
+    padding:20px;
+    border-radius:15px;
+    border:1px solid #e2e8f0;
+}
+
+.label-preview-title{
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:12px;
+    color:#475569;
+}
+
+.pharmacy-label{
+    width:100%;
+    max-width:430px;
+    margin:auto;
+    background:#fff;
+    border:2px solid #07111f;
+    border-radius:4px;
+    padding:18px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.label-header{
+    text-align:center;
+    border-bottom:1px solid #cbd5e1;
+    padding-bottom:12px;
+    margin-bottom:12px;
+}
+
+.label-header h2{
+    font-size:17px;
+    font-weight:800;
+}
+
+.label-header p{
+    font-size:9px;
+    color:#64748b;
+}
+
+.label-patient{
+    background:#f1f5f9;
+    padding:10px;
+    border-radius:5px;
+    margin-bottom:12px;
+}
+
+.label-patient strong{
+    display:block;
+    font-size:13px;
+}
+
+.label-patient span{
+    font-size:10px;
+    color:#64748b;
+}
+
+.label-medicine{
+    text-align:center;
+    padding:10px 0;
+    border-bottom:1px dashed #94a3b8;
+    margin-bottom:10px;
+}
+
+.label-medicine .medicine-title{
+    font-size:16px;
+    font-weight:800;
+}
+
+.label-medicine .quantity{
+    font-size:11px;
+    color:#475569;
+    margin-top:4px;
+}
+
+.label-directions{
+    background:#07111f;
+    color:#fff;
+    padding:15px;
+    border-radius:5px;
+    text-align:center;
+    margin:12px 0;
+}
+
+.label-directions .small{
+    font-size:8px;
+    color:#93c5fd;
+    text-transform:uppercase;
+    font-weight:700;
+}
+
+.label-directions .main{
+    font-size:16px;
+    font-weight:800;
+    line-height:1.5;
+    margin-top:5px;
+}
+
+.label-directions .raw-pharmacist{
+    margin-top:9px;
+    padding-top:8px;
+    border-top:1px solid rgba(255,255,255,.15);
+    font-size:8px;
+    color:#94a3b8;
+}
+
+.label-info{
+    font-size:9px;
+    line-height:1.6;
+}
+
+.label-info strong{
+    font-weight:800;
+}
+
+.label-footer{
+    border-top:1px dashed #94a3b8;
+    margin-top:12px;
+    padding-top:10px;
+    text-align:center;
+    font-size:8px;
+    color:#64748b;
+}
+
+.label-checklist{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.label-check{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    background:#f8fafc;
+    padding:13px;
+    border-radius:10px;
+    font-size:11px;
+}
+
+.label-check input{
+    width:auto;
+    margin-top:2px;
+}
+
+.label-actions{
+    margin-top:18px;
+    display:flex;
+    gap:10px;
+}
+
+.label-actions button{
+    flex:1;
+}
+
+/* =========================================================
+   CHARGE
+========================================================= */
+
+.charge-summary{
+    background:#07111f;
+    color:#fff;
+    padding:22px;
+    border-radius:15px;
+}
+
+.charge-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    font-size:13px;
+}
+
+.charge-total{
+    border-top:1px solid rgba(255,255,255,.2);
+    margin-top:10px;
+    padding-top:15px;
+    font-size:22px;
+    font-weight:800;
+}
+
+.payment-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:20px;
+}
+
+.payment-option{
+    border:2px solid #e2e8f0;
+    border-radius:12px;
+    padding:14px;
+    text-align:center;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.payment-option.selected{
+    border-color:#087f5b;
+    background:#f0fdf7;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.action-row{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+    margin-top:25px;
+}
+
+.btn{
+    border:none;
+    padding:13px 20px;
+    border-radius:11px;
+    font-weight:800;
+    font-size:12px;
+}
+
+.btn-primary{
+    background:#087f5b;
+    color:#fff;
+}
+
+.btn-blue{
+    background:#1976d2;
+    color:#fff;
+}
+
+.btn-dark{
+    background:#07111f;
+    color:#fff;
+}
+
+.btn-light{
+    background:#e2e8f0;
+    color:#334155;
+}
+
+.btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+/* =========================================================
+   RECEIPT
+========================================================= */
+
+.receipt{
+    max-width:600px;
+    margin:auto;
+    border:1px dashed #94a3b8;
+    padding:25px;
+    background:#fff;
+}
+
+.receipt-header{
+    text-align:center;
+    border-bottom:1px dashed #94a3b8;
+    padding-bottom:15px;
+    margin-bottom:15px;
+}
+
+.receipt-header h2{
+    font-size:20px;
+}
+
+.receipt-row{
+    display:flex;
+    justify-content:space-between;
+    padding:7px 0;
+    font-size:12px;
+}
+
+.receipt-total{
+    border-top:1px dashed #94a3b8;
+    margin-top:10px;
+    padding-top:12px;
+    font-size:18px;
+    font-weight:800;
+}
+
+/* =========================================================
+   SUCCESS
+========================================================= */
+
+.success{
+    text-align:center;
+    padding:20px;
+}
+
+.success-icon{
+    width:65px;
+    height:65px;
+    margin:auto;
+    border-radius:50%;
+    background:#dcfce7;
+    color:#15803d;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    margin-bottom:12px;
+}
+
+/* =========================================================
+   HIDDEN
+========================================================= */
+
+.hidden{
+    display:none !important;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:750px){
+
+    .topbar{
+        padding:0 14px;
+    }
+
+    .user-details{
+        display:none;
+    }
+
+    .container{
+        width:94%;
+        margin-top:20px;
+    }
+
+    .page-heading{
+        align-items:flex-start;
+    }
+
+    .page-heading h1{
+        font-size:23px;
+    }
+
+    .stepper{
+        overflow-x:auto;
+        justify-content:flex-start;
+    }
+
+    .step{
+        min-width:130px;
+    }
+
+    .form-grid,
+    .medicine-grid,
+    .interpretation,
+    .counselling-checklist,
+    .label-layout{
+        grid-template-columns:1fr;
+    }
+
+    .payment-grid{
+        grid-template-columns:1fr;
+    }
+
+    .action-row{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+    .label-actions{
+        flex-direction:column;
+    }
+}
+
+/* =========================================================
+   PRINT LABEL
+========================================================= */
+
+@media print{
+
+    body{
+        background:#fff;
+    }
+
+    body *{
+        visibility:hidden;
+    }
+
+    #printLabelArea,
+    #printLabelArea *{
+        visibility:visible;
+    }
+
+    #printLabelArea{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+    }
+
+    .no-print{
+        display:none !important;
+    }
+
+    .raw-pharmacist{
+        display:none !important;
+    }
+}
+
+/* =========================================================
+   PRINT RECEIPT
+========================================================= */
+
+@media print{
+
+    body.print-receipt *{
+        visibility:hidden;
+    }
+
+    body.print-receipt #receiptArea,
+    body.print-receipt #receiptArea *{
+        visibility:visible;
+    }
+
+    body.print-receipt #receiptArea{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     TOPBAR
+========================================================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <img
+            src="NeoPharmaBridge Logo.jpeg"
+            class="logo"
+            alt="NeoPharmaBridge">
+
+        <div class="brand-text">
+
+            <h2>NeoPharmaBridge</h2>
+
+            <span>
+                Pharmacy • OTC Services
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="user-info">
+
+        <div class="user-details">
+
+            <strong id="pharmacistName">
+                N.K KOALANE
+            </strong>
+
+            <span id="pharmacistSAPC">
+                SAPC: P72436
+            </span>
+
+        </div>
+
+        <div class="user-avatar">
+            NK
+        </div>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+<!-- =========================================================
+     HEADING
+========================================================= -->
+
+<div class="page-heading">
+
+    <div>
+
+        <h1>OTC Pharmacy</h1>
+
+        <p>
+            Patient assessment, counselling, patient-friendly labeling,
+            charging and receipt
+        </p>
+
+    </div>
+
+    <button
+        class="back-btn"
+        onclick="goDashboard()">
+
+        ← Dashboard
+
+    </button>
+
+</div>
+
+<!-- =========================================================
+     STEPPER
+========================================================= -->
+
+<div class="stepper">
+
+    <div class="step active" id="stepIndicator1">
+        <div class="step-number">1</div>
+        <span>Patient</span>
+    </div>
+
+    <div class="step" id="stepIndicator2">
+        <div class="step-number">2</div>
+        <span>Medicine</span>
+    </div>
+
+    <div class="step" id="stepIndicator3">
+        <div class="step-number">3</div>
+        <span>Counselling</span>
+    </div>
+
+    <div class="step" id="stepIndicator4">
+        <div class="step-number">4</div>
+        <span>Labeling</span>
+    </div>
+
+    <div class="step" id="stepIndicator5">
+        <div class="step-number">5</div>
+        <span>Charge</span>
+    </div>
+
+    <div class="step" id="stepIndicator6">
+        <div class="step-number">6</div>
+        <span>Receipt</span>
+    </div>
+
+</div>
+
+<!-- =========================================================
+     STEP 1 — PATIENT
+========================================================= -->
+
+<section class="card step-panel" id="step1">
+
+    <div class="card-header">
+
+        <h2>Patient / Customer Details</h2>
+
+        <p>
+            Identify the person before processing the OTC request.
+        </p>
+
+    </div>
+
+    <div class="form-grid">
+
+        <div class="form-group">
+
+            <label>Patient / Customer Name *</label>
+
+            <input
+                type="text"
+                id="customerName"
+                placeholder="Enter full name">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Patient Number / ICAM</label>
+
+            <input
+                type="text"
+                id="patientNumber"
+                placeholder="Optional">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Age</label>
+
+            <input
+                type="number"
+                id="patientAge"
+                min="0"
+                placeholder="Age">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Contact Number</label>
+
+            <input
+                type="text"
+                id="customerContact"
+                placeholder="Optional">
+
+        </div>
+
+        <div class="form-group full">
+
+            <label>Reason / Symptoms</label>
+
+            <input
+                type="text"
+                id="symptoms"
+                placeholder="e.g. headache, heartburn, mild pain">
+
+        </div>
+
+        <div class="form-group full">
+
+            <label>Allergies / Important Information</label>
+
+            <input
+                type="text"
+                id="allergies"
+                placeholder="Enter allergies or relevant information">
+
+        </div>
+
+    </div>
+
+    <div class="action-row">
+
+        <button
+            class="btn btn-primary"
+            onclick="nextFromPatient()">
+
+            Continue to Medicine →
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     STEP 2 — MEDICINE
+========================================================= -->
+
+<section
+    class="card step-panel hidden"
+    id="step2">
+
+    <div class="card-header">
+
+        <h2>Select OTC Medicine</h2>
+
+        <p>
+            Only medicines marked as OTC eligible can continue through
+            this workflow.
+        </p>
+
+    </div>
+
+    <div
+        class="medicine-grid"
+        id="medicineGrid">
+    </div>
+
+    <div
+        class="selected-medicine"
+        id="selectedMedicine">
+
+        <strong id="selectedMedicineName">
+            Medicine
+        </strong>
+
+        <div
+            class="form-grid"
+            style="margin-top:15px;">
+
+            <div class="form-group">
+
+                <label>Quantity *</label>
+
+                <input
+                    type="number"
+                    id="medicineQuantity"
+                    min="1"
+                    value="1">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Directions / Abbreviation</label>
+
+                <input
+                    type="text"
+                    id="directions"
+                    placeholder="e.g. 1 TAB PO BD"
+                    oninput="liveInterpretDirections()">
+
+            </div>
+
+        </div>
+
+        <!-- PATIENT-FACING LIVE PREVIEW -->
+
+        <div class="patient-instruction-preview">
+
+            <div class="preview-title">
+                Patient-facing label instruction
+            </div>
+
+            <div
+                class="preview-text"
+                id="patientDirectionsPreview">
+
+                Enter the directions to generate
+                a patient-friendly instruction.
+
+            </div>
+
+            <div class="preview-note">
+
+                This is the wording that will appear on the printed
+                medicine label after pharmacist verification.
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="action-row">
+
+        <button
+            class="btn btn-light"
+            onclick="showStep(1)">
+
+            ← Back
+
+        </button>
+
+        <button
+            class="btn btn-primary"
+            id="continueMedicineBtn"
+            disabled
+            onclick="nextFromMedicine()">
+
+            Continue to Counselling →
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     STEP 3 — COUNSELLING
+========================================================= -->
+
+<section
+    class="card step-panel hidden"
+    id="step3">
+
+    <div class="card-header">
+
+        <h2>OTC Counselling</h2>
+
+        <p>
+            Review the original instruction, its patient-friendly
+            interpretation and complete counselling.
+        </p>
+
+    </div>
+
+    <div class="counselling-box">
+
+        <div class="instruction-display">
+
+            <div class="raw">
+                Original pharmacist instruction
+            </div>
+
+            <div
+                class="meaning"
+                id="instructionMeaning">
+
+                No instruction entered
+
+            </div>
+
+            <div class="patient-version">
+
+                <strong>Patient-facing instruction:</strong>
+
+                <br>
+
+                <span id="counsellingPatientDirections">
+                    Enter an instruction.
+                </span>
+
+            </div>
+
+        </div>
+
+        <div
+            class="interpretation"
+            id="interpretationList">
+        </div>
+
+        <div
+            class="warning"
+            id="interpretationWarning">
+        </div>
+
+        <div
+            class="success-message"
+            id="interpretationSuccess">
+        </div>
+
+    </div>
+
+    <div class="counselling-box">
+
+        <h3 style="font-size:15px;margin-bottom:12px;">
+            Counselling Checklist
+        </h3>
+
+        <div class="counselling-checklist">
+
+            <label class="check-item">
+
+                <input
+                    type="checkbox"
+                    class="counsellingCheck">
+
+                Medicine and purpose explained
+
+            </label>
+
+            <label class="check-item">
+
+                <input
+                    type="checkbox"
+                    class="counsellingCheck">
+
+                Dose / directions explained
+
+            </label>
+
+            <label class="check-item">
+
+                <input
+                    type="checkbox"
+                    class="counsellingCheck">
+
+                Frequency / timing explained
+
+            </label>
+
+            <label class="check-item">
+
+                <input
+                    type="checkbox"
+                    class="counsellingCheck">
+
+                Duration / quantity explained
+
+            </label>
+
+            <label class="check-item">
+
+                <input
+                    type="checkbox"
+                    class="counsellingCheck">
+
+                Important side effects discussed
+
+            </label>
+
+            <label class="check-item">
+
+                <input
+                    type="checkbox"
+                    class="counsellingCheck">
+
+                Patient had opportunity to ask questions
+
+            </label>
+
+        </div>
+
+    </div>
+
+    <div class="action-row">
+
+        <button
+            class="btn btn-light"
+            onclick="showStep(2)">
+
+            ← Back
+
+        </button>
+
+        <button
+            class="btn btn-primary"
+            id="confirmCounsellingBtn"
+            onclick="confirmCounselling()">
+
+            ✓ Confirm Counselling
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     STEP 4 — LABELING
+========================================================= -->
+
+<section
+    class="card step-panel hidden"
+    id="step4">
+
+    <div class="card-header">
+
+        <h2>Medicine Labeling</h2>
+
+        <p>
+            The printed label uses patient-friendly directions rather
+            than pharmacy abbreviations.
+        </p>
+
+    </div>
+
+    <div class="label-warning">
+
+        <strong>⚠ Pharmacist verification required</strong>
+
+        <br><br>
+
+        Check the patient, medicine, quantity and directions against
+        the medicine being supplied before the label is attached.
+
+    </div>
+
+    <div class="label-layout">
+
+        <!-- LABEL -->
+
+        <div class="label-preview-wrapper">
+
+            <div class="label-preview-title">
+                PATIENT LABEL PREVIEW
+            </div>
+
+            <div id="printLabelArea">
+
+                <div class="pharmacy-label">
+
+                    <div class="label-header">
+
+                        <h2>
+                            NeoPharmaCare
+                        </h2>
+
+                        <p>
+                            NeoPharmaBridge Pharmacy Label
+                        </p>
+
+                    </div>
+
+                    <div class="label-patient">
+
+                        <strong id="labelPatient">
+                            Patient
+                        </strong>
+
+                        <span id="labelPatientNumber">
+                            Patient Number
+                        </span>
+
+                    </div>
+
+                    <div class="label-medicine">
+
+                        <div
+                            class="medicine-title"
+                            id="labelMedicine">
+
+                            Medicine
+
+                        </div>
+
+                        <div
+                            class="quantity"
+                            id="labelQuantity">
+
+                            Quantity: 1
+
+                        </div>
+
+                    </div>
+
+                    <div class="label-directions">
+
+                        <div class="small">
+                            PATIENT DIRECTIONS
+                        </div>
+
+                        <div
+                            class="main"
+                            id="labelDirections">
+
+                            Use as directed by the pharmacist.
+
+                        </div>
+
+                        <div
+                            class="raw-pharmacist"
+                            id="labelRawDirections">
+
+                            Pharmacist instruction: —
+
+                        </div>
+
+                    </div>
+
+                    <div class="label-info">
+
+                        <div>
+                            <strong>Reason / Symptoms:</strong>
+                            <span id="labelSymptoms">—</span>
+                        </div>
+
+                        <div>
+                            <strong>Important information:</strong>
+                            <span id="labelAllergies">—</span>
+                        </div>
+
+                        <div>
+                            <strong>Date:</strong>
+                            <span id="labelDate">—</span>
+                        </div>
+
+                        <div>
+                            <strong>Pharmacist:</strong>
+                            <span id="labelPharmacist">—</span>
+                        </div>
+
+                    </div>
+
+                    <div class="label-footer">
+
+                        For use by the named patient only where applicable.
+                        Follow the pharmacist's instructions.
+
+                        <br>
+
+                        Transaction:
+
+                        <span id="labelTransaction">
+                            OTC
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="label-actions no-print">
+
+                <button
+                    class="btn btn-dark"
+                    onclick="printLabel()">
+
+                    🖨 Print Label
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- LABEL CHECKLIST -->
+
+        <div>
+
+            <h3 style="font-size:15px;margin-bottom:12px;">
+                Label Verification
+            </h3>
+
+            <div class="label-checklist">
+
+                <label class="label-check">
+
+                    <input
+                        type="checkbox"
+                        class="labelCheck">
+
+                    <span>
+                        Patient / customer name is correct.
+                    </span>
+
+                </label>
+
+                <label class="label-check">
+
+                    <input
+                        type="checkbox"
+                        class="labelCheck">
+
+                    <span>
+                        Medicine and strength are correct.
+                    </span>
+
+                </label>
+
+                <label class="label-check">
+
+                    <input
+                        type="checkbox"
+                        class="labelCheck">
+
+                    <span>
+                        Quantity is correct.
+                    </span>
+
+                </label>
+
+                <label class="label-check">
+
+                    <input
+                        type="checkbox"
+                        class="labelCheck">
+
+                    <span>
+                        Patient-friendly directions are correct
+                        and understandable.
+                    </span>
+
+                </label>
+
+                <label class="label-check">
+
+                    <input
+                        type="checkbox"
+                        class="labelCheck">
+
+                    <span>
+                        Important warnings / information have been checked.
+                    </span>
+
+                </label>
+
+                <label class="label-check">
+
+                    <input
+                        type="checkbox"
+                        class="labelCheck">
+
+                    <span>
+                        Label has been checked against the medicine supplied.
+                    </span>
+
+                </label>
+
+            </div>
+
+            <div class="action-row">
+
+                <button
+                    class="btn btn-light"
+                    onclick="showStep(3)">
+
+                    ← Back
+
+                </button>
+
+                <button
+                    class="btn btn-primary"
+                    id="confirmLabelBtn"
+                    disabled
+                    onclick="confirmLabel()">
+
+                    ✓ Confirm Labeling
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     STEP 5 — CHARGE
+========================================================= -->
+
+<section
+    class="card step-panel hidden"
+    id="step5">
+
+    <div class="card-header">
+
+        <h2>Charge Transaction</h2>
+
+        <p>
+            Labeling has been verified. Review the transaction before charging.
+        </p>
+
+    </div>
+
+    <div class="charge-summary">
+
+        <div class="charge-row">
+            <span>Patient</span>
+            <strong id="chargePatient">—</strong>
+        </div>
+
+        <div class="charge-row">
+            <span>Medicine</span>
+            <strong id="chargeMedicine">—</strong>
+        </div>
+
+        <div class="charge-row">
+            <span>Quantity</span>
+            <strong id="chargeQuantity">—</strong>
+        </div>
+
+        <div class="charge-row">
+            <span>Unit Price</span>
+            <strong id="chargeUnitPrice">R0.00</strong>
+        </div>
+
+        <div class="charge-total">
+
+            <div class="charge-row">
+
+                <span>Total</span>
+
+                <strong id="chargeTotal">
+                    R0.00
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div style="margin-top:25px;">
+
+        <strong style="font-size:13px;">
+            Payment Method
+        </strong>
+
+        <div class="payment-grid">
+
+            <div
+                class="payment-option"
+                onclick="selectPayment(this,'Cash')">
+
+                💵 Cash
+
+            </div>
+
+            <div
+                class="payment-option"
+                onclick="selectPayment(this,'Card')">
+
+                💳 Card
+
+            </div>
+
+            <div
+                class="payment-option"
+                onclick="selectPayment(this,'EFT')">
+
+                🏦 EFT
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="action-row">
+
+        <button
+            class="btn btn-light"
+            onclick="showStep(4)">
+
+            ← Back
+
+        </button>
+
+        <button
+            class="btn btn-primary"
+            id="chargeBtn"
+            disabled
+            onclick="completeCharge()">
+
+            Charge & Complete
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     STEP 6 — RECEIPT
+========================================================= -->
+
+<section
+    class="card step-panel hidden"
+    id="step6">
+
+    <div class="success">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h2>
+            OTC Transaction Complete
+        </h2>
+
+        <p style="font-size:12px;color:#64748b;margin-top:5px;">
+
+            The transaction, patient-friendly label verification
+            and payment have been recorded successfully.
+
+        </p>
+
+    </div>
+
+    <div id="receiptArea">
+
+        <div class="receipt">
+
+            <div class="receipt-header">
+
+                <h2>
+                    NeoPharmaCare
+                </h2>
+
+                <p style="font-size:11px;color:#64748b;">
+                    NeoPharmaBridge OTC Receipt
+                </p>
+
+                <p
+                    id="receiptNumber"
+                    style="font-size:11px;margin-top:5px;">
+                </p>
+
+            </div>
+
+            <div class="receipt-row">
+                <span>Date</span>
+                <strong id="receiptDate"></strong>
+            </div>
+
+            <div class="receipt-row">
+                <span>Patient / Customer</span>
+                <strong id="receiptPatient"></strong>
+            </div>
+
+            <div class="receipt-row">
+                <span>Medicine</span>
+                <strong id="receiptMedicine"></strong>
+            </div>
+
+            <div class="receipt-row">
+                <span>Quantity</span>
+                <strong id="receiptQuantity"></strong>
+            </div>
+
+            <div class="receipt-row">
+                <span>Payment</span>
+                <strong id="receiptPayment"></strong>
+            </div>
+
+            <div class="receipt-row">
+                <span>Pharmacist</span>
+                <strong id="receiptPharmacist"></strong>
+            </div>
+
+            <div class="receipt-total">
+
+                <div class="receipt-row">
+
+                    <span>Total</span>
+
+                    <strong id="receiptTotal">
+                        R0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div style="
+                text-align:center;
+                margin-top:20px;
+                font-size:9px;
+                color:#64748b;
+            ">
+
+                Thank you for using NeoPharmaCare
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="action-row no-print">
+
+        <button
+            class="btn btn-dark"
+            onclick="printReceipt()">
+
+            🖨 Print Receipt
+
+        </button>
+
+        <button
+            class="btn btn-blue"
+            onclick="showStep(4)">
+
+            View Label
+
+        </button>
+
+        <button
+            class="btn btn-primary"
+            onclick="newTransaction()">
+
+            + New OTC Transaction
+
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+<script>
+
+/* =========================================================
+   PHARMACIST
+========================================================= */
+
+const pharmacistName =
+    localStorage.getItem("pharmacistName") ||
+    localStorage.getItem("neoUser") ||
+    "N.K KOALANE";
+
+const pharmacistSAPC =
+    localStorage.getItem("pharmacistSAPC") ||
+    localStorage.getItem("neoAccessNumber") ||
+    localStorage.getItem("pharmacistYNumber") ||
+    "P72436";
+
+const pharmacistPharmacy =
+    localStorage.getItem("pharmacistPharmacy") ||
+    "NeoPharmaCare";
+
+document.getElementById("pharmacistName").textContent =
+    pharmacistName;
+
+document.getElementById("pharmacistSAPC").textContent =
+    "SAPC: " + pharmacistSAPC;
+
+
+/* =========================================================
+   MEDICINE MASTER
+========================================================= */
+
+const medicines = [
+
+    {
+        id:"PCM500",
+        name:"Paracetamol 500 mg tablet",
+        schedule:"Unscheduled",
+        otc:true,
+        price:12.50
+    },
+
+    {
+        id:"IBU200",
+        name:"Ibuprofen 200 mg tablet",
+        schedule:"Unscheduled",
+        otc:true,
+        price:15.00
+    },
+
+    {
+        id:"OME20",
+        name:"Omeprazole 20 mg capsule",
+        schedule:"Unscheduled",
+        otc:true,
+        price:25.00
+    },
+
+    {
+        id:"ANTACID",
+        name:"Antacid suspension",
+        schedule:"Unscheduled",
+        otc:true,
+        price:22.00
+    },
+
+    {
+        id:"AMOX500",
+        name:"Amoxicillin 500 mg capsule",
+        schedule:"Prescription",
+        otc:false,
+        price:35.00
+    },
+
+    {
+        id:"MET500",
+        name:"Metformin 500 mg tablet",
+        schedule:"Prescription",
+        otc:false,
+        price:20.00
+    },
+
+    {
+        id:"AML5",
+        name:"Amlodipine 5 mg tablet",
+        schedule:"Prescription",
+        otc:false,
+        price:18.00
+    },
+
+    {
+        id:"SCH5",
+        name:"Controlled Medicine Example",
+        schedule:"Schedule 5",
+        otc:false,
+        price:50.00
+    },
+
+    {
+        id:"SCH6",
+        name:"Controlled Medicine Example",
+        schedule:"Schedule 6",
+        otc:false,
+        price:75.00
+    }
+
+];
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentStep = 1;
+
+let selectedMedicine = null;
+
+let counsellingConfirmed = false;
+
+let labelConfirmed = false;
+
+let selectedPayment = null;
+
+let patientDirections = "";
+
+let directionsRequireVerification = false;
+
+
+/* =========================================================
+   SAFE STORAGE
+========================================================= */
+
+function readArray(key){
+
+    try{
+
+        const raw =
+            localStorage.getItem(key);
+
+        if(!raw){
+            return [];
+        }
+
+        const parsed =
+            JSON.parse(raw);
+
+        return Array.isArray(parsed)
+            ? parsed
+            : [];
+
+    }catch(error){
+
+        console.warn(
+            "Storage read error:",
+            key,
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+function writeArray(key,data){
+
+    try{
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(data)
+        );
+
+        return true;
+
+    }catch(error){
+
+        console.error(
+            "Storage write error:",
+            key,
+            error
+        );
+
+        alert(
+            "The transaction could not be saved locally."
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   RENDER MEDICINES
+========================================================= */
+
+function renderMedicines(){
+
+    const grid =
+        document.getElementById("medicineGrid");
+
+    grid.innerHTML = "";
+
+    medicines.forEach(medicine => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "medicine-card" +
+            (!medicine.otc
+                ? " not-allowed"
+                : "");
+
+        card.innerHTML = `
+
+            <div class="medicine-name">
+                ${escapeHTML(medicine.name)}
+            </div>
+
+            <div class="medicine-meta">
+                ${escapeHTML(medicine.schedule)}
+                • R${medicine.price.toFixed(2)} each
+            </div>
+
+            <span class="badge ${medicine.otc ? "otc" : "rx"}">
+                ${medicine.otc
+                    ? "OTC ELIGIBLE"
+                    : "PRESCRIPTION ONLY"}
+            </span>
+
+        `;
+
+        if(medicine.otc){
+
+            card.addEventListener(
+                "click",
+                () => selectMedicine(medicine,card)
+            );
+
+        }else{
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    alert(
+                        "This medicine cannot be processed through the OTC workflow.\n\n" +
+                        "Schedule: " +
+                        medicine.schedule +
+                        "\n\nA valid prescription workflow must be used."
+                    );
+
+                }
+            );
+
+        }
+
+        grid.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================================
+   PATIENT
+========================================================= */
+
+function nextFromPatient(){
+
+    const name =
+        document
+        .getElementById("customerName")
+        .value
+        .trim();
+
+    if(!name){
+
+        alert(
+            "Please enter the patient / customer name."
+        );
+
+        return;
+
+    }
+
+    savePending();
+
+    showStep(2);
+
+}
+
+
+/* =========================================================
+   MEDICINE
+========================================================= */
+
+function selectMedicine(medicine,card){
+
+    selectedMedicine = medicine;
+
+    document
+        .querySelectorAll(".medicine-card")
+        .forEach(item =>
+            item.classList.remove("selected")
+        );
+
+    card.classList.add("selected");
+
+    document
+        .getElementById("selectedMedicine")
+        .style.display = "block";
+
+    document
+        .getElementById("selectedMedicineName")
+        .textContent =
+        medicine.name;
+
+    document
+        .getElementById("continueMedicineBtn")
+        .disabled = false;
+
+    liveInterpretDirections();
+
+    savePending();
+
+}
+
+
+function nextFromMedicine(){
+
+    if(!selectedMedicine){
+
+        alert(
+            "Please select an OTC medicine."
+        );
+
+        return;
+
+    }
+
+    const quantity =
+        Number(
+            document
+            .getElementById("medicineQuantity")
+            .value
+        );
+
+    if(!quantity || quantity < 1){
+
+        alert(
+            "Please enter a valid quantity."
+        );
+
+        return;
+
+    }
+
+    interpretDirections();
+
+    if(directionsRequireVerification){
+
+        const proceed =
+            confirm(
+                "The directions require pharmacist verification.\n\n" +
+                "Do you want to continue to counselling and manually verify the instruction?"
+            );
+
+        if(!proceed){
+            return;
+        }
+
+    }
+
+    showStep(3);
+
+    interpretDirections();
+
+    savePending();
+
+}
+
+
+/* =========================================================
+   ABBREVIATION MAP
+========================================================= */
+
+const abbreviationMap = {
+
+    "PRN":{
+        meaning:"When required / as needed",
+        counselling:
+            "Use only when needed and do not exceed the recommended dose.",
+        phrase:
+            "when needed",
+        warning:false
+    },
+
+    "SOS":{
+        meaning:"If needed / when necessary",
+        counselling:
+            "Use only when necessary and follow the maximum recommended dose.",
+        phrase:
+            "when necessary",
+        warning:false
+    },
+
+    "STAT":{
+        meaning:"Immediately",
+        counselling:
+            "Use immediately as instructed.",
+        phrase:
+            "immediately",
+        warning:false
+    },
+
+    "MANE":{
+        meaning:"In the morning",
+        counselling:
+            "Take in the morning.",
+        phrase:
+            "in the morning",
+        warning:false
+    },
+
+    "NOCTE":{
+        meaning:"At night / bedtime",
+        counselling:
+            "Take at night or at bedtime.",
+        phrase:
+            "at night, preferably at bedtime",
+        warning:false
+    },
+
+    "BD":{
+        meaning:"Twice daily",
+        counselling:
+            "Use twice during the day, approximately evenly spaced.",
+        phrase:
+            "twice daily, preferably about 12 hours apart",
+        warning:false
+    },
+
+    "TDS":{
+        meaning:"Three times daily",
+        counselling:
+            "Use three times during the day, approximately evenly spaced.",
+        phrase:
+            "three times daily, preferably about 8 hours apart",
+        warning:false
+    },
+
+    "QDS":{
+        meaning:"Four times daily",
+        counselling:
+            "Use four times during the day, approximately evenly spaced.",
+        phrase:
+            "four times daily, preferably about 6 hours apart",
+        warning:false
+    },
+
+    "OD":{
+        meaning:"Once daily — VERIFY CONTEXT",
+        counselling:
+            "Verify the intended meaning and route before counselling.",
+        phrase:
+            "once daily — pharmacist verification required",
+        warning:true
+    },
+
+    "AC":{
+        meaning:"Before meals",
+        counselling:
+            "Use before meals as directed.",
+        phrase:
+            "before meals",
+        warning:false
+    },
+
+    "PC":{
+        meaning:"After meals",
+        counselling:
+            "Use after meals as directed.",
+        phrase:
+            "after meals",
+        warning:false
+    },
+
+    "PO":{
+        meaning:"By mouth / oral",
+        counselling:
+            "Take orally.",
+        phrase:
+            "by mouth",
+        warning:false
+    },
+
+    "SL":{
+        meaning:"Under the tongue",
+        counselling:
+            "Place under the tongue and allow to dissolve.",
+        phrase:
+            "under the tongue and allow to dissolve",
+        warning:false
+    },
+
+    "IM":{
+        meaning:"Intramuscular",
+        counselling:
+            "Injection route — verify before administration.",
+        phrase:
+            "by intramuscular injection — pharmacist verification required",
+        warning:true
+    },
+
+    "IV":{
+        meaning:"Intravenous",
+        counselling:
+            "Injection route — verify before administration.",
+        phrase:
+            "by intravenous injection — pharmacist verification required",
+        warning:true
+    },
+
+    "Q4H":{
+        meaning:"Every 4 hours",
+        counselling:
+            "Use every four hours as directed.",
+        phrase:
+            "every 4 hours",
+        warning:false
+    },
+
+    "Q6H":{
+        meaning:"Every 6 hours",
+        counselling:
+            "Use every six hours as directed.",
+        phrase:
+            "every 6 hours",
+        warning:false
+    },
+
+    "Q8H":{
+        meaning:"Every 8 hours",
+        counselling:
+            "Use every eight hours as directed.",
+        phrase:
+            "every 8 hours",
+        warning:false
+    },
+
+    "Q12H":{
+        meaning:"Every 12 hours",
+        counselling:
+            "Use every twelve hours as directed.",
+        phrase:
+            "every 12 hours",
+        warning:false
+    },
+
+    "GTT":{
+        meaning:"Drops",
+        counselling:
+            "Use the specified number of drops.",
+        phrase:
+            "use the specified number of drops",
+        warning:false
+    },
+
+    "TAB":{
+        meaning:"Tablet",
+        counselling:
+            "Take the specified number of tablets.",
+        phrase:
+            "tablet",
+        warning:false
+    },
+
+    "CAP":{
+        meaning:"Capsule",
+        counselling:
+            "Take the specified number of capsules.",
+        phrase:
+            "capsule",
+        warning:false
+    },
+
+    "SUSP":{
+        meaning:"Suspension",
+        counselling:
+            "Shake the suspension well before use.",
+        phrase:
+            "suspension — shake well before use",
+        warning:false
+    },
+
+    "UNG":{
+        meaning:"Ointment",
+        counselling:
+            "Apply the ointment as directed.",
+        phrase:
+            "ointment — apply as directed",
+        warning:false
+    }
+
+};
+
+
+/* =========================================================
+   TOKENIZER
+========================================================= */
+
+function tokenizeDirections(raw){
+
+    return raw
+        .toUpperCase()
+        .replace(/[(),;]/g," ")
+        .replace(/\s+/g," ")
+        .trim()
+        .split(" ")
+        .filter(Boolean);
+
+}
+
+
+/* =========================================================
+   PARSE DOSE
+========================================================= */
+
+function parseDose(tokens){
+
+    if(!tokens.length){
+        return null;
+    }
+
+    const dosePattern =
+        /^(\d+(?:\.\d+)?|\d+\/\d+)(?:\s*)(MG|MCG|G|ML|L|TAB|TABS|CAP|CAPS)?$/i;
+
+    const first =
+        tokens[0];
+
+    const match =
+        first.match(dosePattern);
+
+    if(match){
+
+        return {
+            raw:first,
+            amount:match[1],
+            unit:match[2] || ""
+        };
+
+    }
+
+    return null;
+
+}
+
+
+/* =========================================================
+   BUILD PATIENT-FRIENDLY DIRECTIONS
+========================================================= */
+
+function buildPatientDirections(raw){
+
+    directionsRequireVerification = false;
+
+    const original =
+        String(raw || "").trim();
+
+    if(!original){
+
+        return "Use as directed by the pharmacist.";
+
+    }
+
+    const tokens =
+        tokenizeDirections(original);
+
+    if(!tokens.length){
+
+        return "Use as directed by the pharmacist.";
+
+    }
+
+    let remaining = [...tokens];
+
+    let dose = null;
+    let dosageForm = "";
+    let route = "";
+    let frequency = "";
+    let timing = "";
+    let asNeeded = false;
+    let immediate = false;
+    let specialInstruction = "";
+
+    const unknownTokens = [];
+
+    /* -----------------------------------------------------
+       DOSE
+    ----------------------------------------------------- */
+
+    dose = parseDose(remaining);
+
+    if(dose){
+
+        remaining.shift();
+
+    }
+
+    /* -----------------------------------------------------
+       DOSAGE FORM
+    ----------------------------------------------------- */
+
+    const formMap = {
+
+        "TAB":"tablet",
+        "TABS":"tablets",
+        "CAP":"capsule",
+        "CAPS":"capsules",
+        "GTT":"drops",
+        "SUSP":"suspension",
+        "UNG":"ointment"
+
+    };
+
+    for(const token of [...remaining]){
+
+        if(formMap[token]){
+
+            dosageForm =
+                formMap[token];
+
+            remaining =
+                remaining.filter(
+                    item => item !== token
+                );
+
+            break;
+
+        }
+
+    }
+
+    /* -----------------------------------------------------
+       ROUTE
+    ----------------------------------------------------- */
+
+    if(remaining.includes("PO")){
+
+        route = "orally";
+
+        remaining =
+            remaining.filter(
+                item => item !== "PO"
+            );
+
+    }
+
+    if(remaining.includes("SL")){
+
+        route =
+            "under the tongue and allow to dissolve";
+
+        remaining =
+            remaining.filter(
+                item => item !== "SL"
+            );
+
+    }
+
+    if(remaining.includes("IM")){
+
+        route =
+            "by intramuscular injection";
+
+        directionsRequireVerification = true;
+
+        remaining =
+            remaining.filter(
+                item => item !== "IM"
+            );
+
+    }
+
+    if(remaining.includes("IV")){
+
+        route =
+            "by intravenous injection";
+
+        directionsRequireVerification = true;
+
+        remaining =
+            remaining.filter(
+                item => item !== "IV"
+            );
+
+    }
+
+    /* -----------------------------------------------------
+       FREQUENCY
+    ----------------------------------------------------- */
+
+    const frequencyMap = {
+
+        "BD":
+            "twice daily, preferably about 12 hours apart",
+
+        "TDS":
+            "three times daily, preferably about 8 hours apart",
+
+        "QDS":
+            "four times daily, preferably about 6 hours apart",
+
+        "Q4H":
+            "every 4 hours",
+
+        "Q6H":
+            "every 6 hours",
+
+        "Q8H":
+            "every 8 hours",
+
+        "Q12H":
+            "every 12 hours"
+
+    };
+
+    for(const code of Object.keys(frequencyMap)){
+
+        if(remaining.includes(code)){
+
+            frequency =
+                frequencyMap[code];
+
+            remaining =
+                remaining.filter(
+                    item => item !== code
+                );
+
+            break;
+
+        }
+
+    }
+
+    /* -----------------------------------------------------
+       OD
+    ----------------------------------------------------- */
+
+    if(remaining.includes("OD")){
+
+        frequency =
+            "once daily";
+
+        directionsRequireVerification = true;
+
+        remaining =
+            remaining.filter(
+                item => item !== "OD"
+            );
+
+    }
+
+    /* -----------------------------------------------------
+       PRN / SOS
+    ----------------------------------------------------- */
+
+    if(remaining.includes("PRN")){
+
+        asNeeded = true;
+
+        remaining =
+            remaining.filter(
+                item => item !== "PRN"
+            );
+
+    }
+
+    if(remaining.includes("SOS")){
+
+        asNeeded = true;
+
+        remaining =
+            remaining.filter(
+                item => item !== "SOS"
+            );
+
+    }
+
+    /* -----------------------------------------------------
+       STAT
+    ----------------------------------------------------- */
+
+    if(remaining.includes("STAT")){
+
+        immediate = true;
+
+        remaining =
+            remaining.filter(
+                item => item !== "STAT"
+            );
+
+    }
+
+    /* -----------------------------------------------------
+       TIMING
+    ----------------------------------------------------- */
+
+    if(remaining.includes("MANE")){
+
+        timing =
+            "in the morning";
+
+        remaining =
+            remaining.filter(
+                item => item !== "MANE"
+            );
+
+    }
+
+    if(remaining.includes("NOCTE")){
+
+        timing =
+            "at night, preferably at bedtime";
+
+        remaining =
+            remaining.filter(
+                item => item !== "NOCTE"
+            );
+
+    }
+
+    if(remaining.includes("AC")){
+
+        timing =
+            "before meals";
+
+        remaining =
+            remaining.filter(
+                item => item !== "AC"
+            );
+
+    }
+
+    if(remaining.includes("PC")){
+
+        timing =
+            "after meals";
+
+        remaining =
+            remaining.filter(
+                item => item !== "PC"
+            );
+
+    }
+
+    /* -----------------------------------------------------
+       SPECIAL DOSAGE FORM INSTRUCTIONS
+    ----------------------------------------------------- */
+
+    if(dosageForm === "suspension"){
+
+        specialInstruction =
+            "Shake well before use.";
+
+    }
+
+    if(dosageForm === "ointment"){
+
+        specialInstruction =
+            "Apply as directed.";
+
+    }
+
+    if(dosageForm === "drops"){
+
+        specialInstruction =
+            "Use the specified number of drops.";
+
+    }
+
+    /* -----------------------------------------------------
+       UNKNOWN TOKENS
+    ----------------------------------------------------- */
+
+    remaining.forEach(token => {
+
+        if(!/^\d+(?:\.\d+)?$/.test(token)){
+
+            unknownTokens.push(token);
+
+        }
+
+    });
+
+    if(unknownTokens.length){
+
+        directionsRequireVerification = true;
+
+    }
+
+    /* -----------------------------------------------------
+       BUILD SENTENCE
+    ----------------------------------------------------- */
+
+    let sentence = "";
+
+    if(immediate){
+
+        sentence += "Use immediately";
+
+    }else{
+
+        sentence += "Take";
+
+    }
+
+    /* -----------------------------------------------------
+       DOSE + FORM
+    ----------------------------------------------------- */
+
+    if(dose){
+
+        sentence +=
+            " " +
+            dose.amount;
+
+        if(dose.unit){
+
+            const unit =
+                dose.unit.toUpperCase();
+
+            const unitMap = {
+
+                "MG":"mg",
+                "MCG":"micrograms",
+                "G":"g",
+                "ML":"mL",
+                "L":"L"
+
+            };
+
+            sentence +=
+                " " +
+                (unitMap[unit] || unit.toLowerCase());
+
+        }
+
+    }
+
+    if(dosageForm){
+
+        if(dose){
+
+            sentence +=
+                " " +
+                dosageForm;
+
+        }else{
+
+            sentence +=
+                " the " +
+                dosageForm;
+
+        }
+
+    }
+
+    /* -----------------------------------------------------
+       ROUTE
+    ----------------------------------------------------- */
+
+    if(route){
+
+        sentence +=
+            " " +
+            route;
+
+    }
+
+    /* -----------------------------------------------------
+       FREQUENCY
+    ----------------------------------------------------- */
+
+    if(frequency){
+
+        sentence +=
+            " " +
+            frequency;
+
+    }
+
+    /* -----------------------------------------------------
+       TIMING
+    ----------------------------------------------------- */
+
+    if(timing){
+
+        sentence +=
+            ", " +
+            timing;
+
+    }
+
+    /* -----------------------------------------------------
+       AS NEEDED
+    ----------------------------------------------------- */
+
+    if(asNeeded){
+
+        if(sentence === "Take"){
+
+            sentence =
+                "Take when needed";
+
+        }else{
+
+            sentence +=
+                " when needed";
+
+        }
+
+    }
+
+    /* -----------------------------------------------------
+       SPECIAL
+    ----------------------------------------------------- */
+
+    if(specialInstruction){
+
+        if(sentence === "Take"){
+
+            sentence =
+                specialInstruction;
+
+        }else{
+
+            sentence +=
+                ". " +
+                specialInstruction;
+
+        }
+
+    }
+
+    /* -----------------------------------------------------
+       EMPTY / FALLBACK
+    ----------------------------------------------------- */
+
+    if(
+        sentence === "Take" ||
+        sentence === "Use immediately"
+    ){
+
+        sentence =
+            "Use as directed by the pharmacist.";
+
+        directionsRequireVerification = true;
+
+    }
+
+    /* -----------------------------------------------------
+       PRN SAFETY MESSAGE
+    ----------------------------------------------------- */
+
+    if(asNeeded){
+
+        sentence +=
+            " Do not exceed the recommended dose.";
+
+    }
+
+    /* -----------------------------------------------------
+       UNKNOWN / VERIFY
+    ----------------------------------------------------- */
+
+    if(directionsRequireVerification){
+
+        sentence +=
+            " Pharmacist verification required.";
+
+    }
+
+    /* -----------------------------------------------------
+       CLEAN PUNCTUATION
+    ----------------------------------------------------- */
+
+    sentence =
+        sentence
+        .replace(/\.\s*\./g,".")
+        .trim();
+
+    if(
+        !sentence.endsWith(".")
+    ){
+
+        sentence += ".";
+
+    }
+
+    return sentence;
+
+}
+
+
+/* =========================================================
+   LIVE PATIENT PREVIEW
+========================================================= */
+
+function liveInterpretDirections(){
+
+    const raw =
+        document
+        .getElementById("directions")
+        .value
+        .trim();
+
+    patientDirections =
+        buildPatientDirections(raw);
+
+    document.getElementById(
+        "patientDirectionsPreview"
+    ).textContent =
+        patientDirections;
+
+}
+
+
+/* =========================================================
+   INTERPRET DIRECTIONS
+========================================================= */
+
+function interpretDirections(){
+
+    const raw =
+        document
+        .getElementById("directions")
+        .value
+        .trim();
+
+    const meaning =
+        document
+        .getElementById("instructionMeaning");
+
+    const list =
+        document
+        .getElementById("interpretationList");
+
+    const warning =
+        document
+        .getElementById("interpretationWarning");
+
+    const success =
+        document
+        .getElementById("interpretationSuccess");
+
+    list.innerHTML = "";
+
+    warning.style.display = "none";
+
+    success.style.display = "none";
+
+    counsellingConfirmed = false;
+
+    patientDirections =
+        buildPatientDirections(raw);
+
+    document.getElementById(
+        "counsellingPatientDirections"
+    ).textContent =
+        patientDirections;
+
+    document.getElementById(
+        "patientDirectionsPreview"
+    ).textContent =
+        patientDirections;
+
+    if(!raw){
+
+        meaning.textContent =
+            "No instruction entered";
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "interpretation-item";
+
+        item.innerHTML = `
+
+            <strong>
+                Pharmacist instruction
+            </strong>
+
+            Enter the intended directions and verify them
+            during counselling.
+
+        `;
+
+        list.appendChild(item);
+
+        warning.textContent =
+            "No directions were entered. Patient-specific directions must be verified before the label is printed.";
+
+        warning.style.display =
+            "block";
+
+        directionsRequireVerification = true;
+
+        return;
+
+    }
+
+    meaning.textContent =
+        raw;
+
+    const tokens =
+        tokenizeDirections(raw);
+
+    const found = [];
+
+    tokens.forEach(token => {
+
+        if(abbreviationMap[token]){
+
+            found.push({
+                code:token,
+                ...abbreviationMap[token]
+            });
+
+        }
+
+    });
+
+    if(found.length === 0){
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "interpretation-item";
+
+        item.innerHTML = `
+
+            <strong>
+                Manual pharmacist interpretation
+            </strong>
+
+            No recognised abbreviation was detected.
+            Verify the intended directions before counselling.
+
+        `;
+
+        list.appendChild(item);
+
+        warning.textContent =
+            "The instruction could not be automatically interpreted. Pharmacist verification is required before counselling is confirmed.";
+
+        warning.style.display =
+            "block";
+
+        directionsRequireVerification = true;
+
+        return;
+
+    }
+
+    found.forEach(itemData => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "interpretation-item";
+
+        item.innerHTML = `
+
+            <strong>
+                ${escapeHTML(itemData.code)}
+            </strong>
+
+            ${escapeHTML(itemData.meaning)}
+
+            <br>
+
+            <span style="color:#64748b;">
+                ${escapeHTML(itemData.counselling)}
+            </span>
+
+        `;
+
+        list.appendChild(item);
+
+    });
+
+    const patientItem =
+        document.createElement("div");
+
+    patientItem.className =
+        "interpretation-item";
+
+    patientItem.style.gridColumn =
+        "1 / -1";
+
+    patientItem.innerHTML = `
+
+        <strong>
+            Patient-facing label
+        </strong>
+
+        <span style="
+            color:#166534;
+            font-weight:700;
+            line-height:1.6;
+        ">
+            ${escapeHTML(patientDirections)}
+        </span>
+
+    `;
+
+    list.appendChild(patientItem);
+
+    if(directionsRequireVerification){
+
+        warning.textContent =
+            "This instruction contains an abbreviation or route that requires pharmacist verification. Do not rely on automatic interpretation alone.";
+
+        warning.style.display =
+            "block";
+
+    }else{
+
+        success.textContent =
+            "✓ Patient-friendly directions generated successfully. The pharmacist must still verify the final label before printing.";
+
+        success.style.display =
+            "block";
+
+    }
+
+}
+
+
+/* =========================================================
+   COUNSELLING
+========================================================= */
+
+function confirmCounselling(){
+
+    interpretDirections();
+
+    const checks =
+        document.querySelectorAll(
+            ".counsellingCheck"
+        );
+
+    const allChecked =
+        [...checks].every(
+            check => check.checked
+        );
+
+    if(!allChecked){
+
+        alert(
+            "Please complete all counselling checklist items before continuing."
+        );
+
+        return;
+
+    }
+
+    if(directionsRequireVerification){
+
+        const proceed =
+            confirm(
+                "The directions require pharmacist verification.\n\n" +
+                "Please verify the patient-friendly instruction against the intended directions.\n\n" +
+                "Continue to labeling?"
+            );
+
+        if(!proceed){
+
+            return;
+
+        }
+
+    }
+
+    counsellingConfirmed = true;
+
+    generateLabel();
+
+    showStep(4);
+
+}
+
+
+/* =========================================================
+   GENERATE LABEL
+========================================================= */
+
+function generateLabel(){
+
+    if(!selectedMedicine){
+        return;
+    }
+
+    const name =
+        document
+        .getElementById("customerName")
+        .value
+        .trim();
+
+    const patientNumber =
+        document
+        .getElementById("patientNumber")
+        .value
+        .trim();
+
+    const age =
+        document
+        .getElementById("patientAge")
+        .value
+        .trim();
+
+    const symptoms =
+        document
+        .getElementById("symptoms")
+        .value
+        .trim();
+
+    const allergies =
+        document
+        .getElementById("allergies")
+        .value
+        .trim();
+
+    const quantity =
+        Number(
+            document
+            .getElementById("medicineQuantity")
+            .value
+        ) || 1;
+
+    const rawDirections =
+        document
+        .getElementById("directions")
+        .value
+        .trim();
+
+    patientDirections =
+        buildPatientDirections(
+            rawDirections
+        );
+
+    document.getElementById(
+        "labelPatient"
+    ).textContent =
+        name || "Patient";
+
+    document.getElementById(
+        "labelPatientNumber"
+    ).textContent =
+        patientNumber
+            ? "Patient Number: " + patientNumber
+            : age
+                ? "Age: " + age
+                : "Patient details recorded";
+
+    document.getElementById(
+        "labelMedicine"
+    ).textContent =
+        selectedMedicine.name;
+
+    document.getElementById(
+        "labelQuantity"
+    ).textContent =
+        "Quantity: " + quantity;
+
+    /* =====================================================
+       IMPORTANT:
+       PATIENT-FRIENDLY TEXT GOES ON THE LABEL
+    ===================================================== */
+
+    document.getElementById(
+        "labelDirections"
+    ).textContent =
+        patientDirections;
+
+    /* Original instruction remains available for pharmacist
+       verification on screen but is hidden during printing. */
+
+    document.getElementById(
+        "labelRawDirections"
+    ).textContent =
+        "Pharmacist instruction: " +
+        (rawDirections || "Not entered");
+
+    document.getElementById(
+        "labelSymptoms"
+    ).textContent =
+        symptoms || "Not recorded";
+
+    document.getElementById(
+        "labelAllergies"
+    ).textContent =
+        allergies || "None recorded";
+
+    document.getElementById(
+        "labelDate"
+    ).textContent =
+        new Date().toLocaleDateString();
+
+    document.getElementById(
+        "labelPharmacist"
+    ).textContent =
+        pharmacistName +
+        " (" +
+        pharmacistSAPC +
+        ")";
+
+    document.getElementById(
+        "labelTransaction"
+    ).textContent =
+        "Pending";
+
+    document
+        .querySelectorAll(".labelCheck")
+        .forEach(check => {
+            check.checked = false;
+        });
+
+    document.getElementById(
+        "confirmLabelBtn"
+    ).disabled = true;
+
+    labelConfirmed = false;
+
+}
+
+
+/* =========================================================
+   LABEL CHECKLIST
+========================================================= */
+
+document
+    .querySelectorAll(".labelCheck")
+    .forEach(check => {
+
+        check.addEventListener(
+            "change",
+            updateLabelButton
+        );
+
+    });
+
+
+function updateLabelButton(){
+
+    const checks =
+        document.querySelectorAll(
+            ".labelCheck"
+        );
+
+    const allChecked =
+        [...checks].every(
+            check => check.checked
+        );
+
+    document.getElementById(
+        "confirmLabelBtn"
+    ).disabled =
+        !allChecked;
+
+}
+
+
+/* =========================================================
+   CONFIRM LABEL
+========================================================= */
+
+function confirmLabel(){
+
+    const checks =
+        document.querySelectorAll(
+            ".labelCheck"
+        );
+
+    const allChecked =
+        [...checks].every(
+            check => check.checked
+        );
+
+    if(!allChecked){
+
+        alert(
+            "Please complete all label verification items."
+        );
+
+        return;
+
+    }
+
+    /* Extra verification for automatically interpreted directions */
+
+    if(
+        directionsRequireVerification
+    ){
+
+        const proceed =
+            confirm(
+                "The directions have been flagged for pharmacist verification.\n\n" +
+                "Have you personally verified the patient-friendly label wording?"
+            );
+
+        if(!proceed){
+
+            return;
+
+        }
+
+    }
+
+    labelConfirmed = true;
+
+    updateChargeScreen();
+
+    showStep(5);
+
+}
+
+
+/* =========================================================
+   CHARGE SCREEN
+========================================================= */
+
+function updateChargeScreen(){
+
+    if(!selectedMedicine){
+        return;
+    }
+
+    const quantity =
+        Number(
+            document
+            .getElementById("medicineQuantity")
+            .value
+        ) || 1;
+
+    const total =
+        selectedMedicine.price *
+        quantity;
+
+    document.getElementById(
+        "chargePatient"
+    ).textContent =
+        document
+        .getElementById("customerName")
+        .value
+        .trim();
+
+    document.getElementById(
+        "chargeMedicine"
+    ).textContent =
+        selectedMedicine.name;
+
+    document.getElementById(
+        "chargeQuantity"
+    ).textContent =
+        quantity;
+
+    document.getElementById(
+        "chargeUnitPrice"
+    ).textContent =
+        "R" +
+        selectedMedicine.price.toFixed(2);
+
+    document.getElementById(
+        "chargeTotal"
+    ).textContent =
+        "R" +
+        total.toFixed(2);
+
+}
+
+
+/* =========================================================
+   PAYMENT
+========================================================= */
+
+function selectPayment(element,payment){
+
+    document
+        .querySelectorAll(".payment-option")
+        .forEach(option =>
+            option.classList.remove("selected")
+        );
+
+    element.classList.add("selected");
+
+    selectedPayment =
+        payment;
+
+    document.getElementById(
+        "chargeBtn"
+    ).disabled = false;
+
+}
+
+
+/* =========================================================
+   COMPLETE TRANSACTION
+========================================================= */
+
+function completeCharge(){
+
+    if(!counsellingConfirmed){
+
+        alert(
+            "Counselling must be confirmed before charging."
+        );
+
+        return;
+
+    }
+
+    if(!labelConfirmed){
+
+        alert(
+            "The medicine label must be verified before charging."
+        );
+
+        return;
+
+    }
+
+    if(!selectedPayment){
+
+        alert(
+            "Please select a payment method."
+        );
+
+        return;
+
+    }
+
+    if(!selectedMedicine){
+
+        alert(
+            "No medicine selected."
+        );
+
+        return;
+
+    }
+
+    const quantity =
+        Number(
+            document
+            .getElementById("medicineQuantity")
+            .value
+        ) || 1;
+
+    const total =
+        selectedMedicine.price *
+        quantity;
+
+    const now =
+        new Date();
+
+    const transactionNumber =
+        "OTC-" +
+        now.getTime();
+
+    const rawDirections =
+        document
+        .getElementById("directions")
+        .value
+        .trim();
+
+    const finalPatientDirections =
+        buildPatientDirections(
+            rawDirections
+        );
+
+    const transaction = {
+
+        transactionNumber,
+
+        date:
+            now.toISOString(),
+
+        createdAt:
+            now.toISOString(),
+
+        pharmacy:
+            pharmacistPharmacy,
+
+        patient:{
+
+            name:
+                document
+                .getElementById("customerName")
+                .value
+                .trim(),
+
+            patientNumber:
+                document
+                .getElementById("patientNumber")
+                .value
+                .trim(),
+
+            age:
+                document
+                .getElementById("patientAge")
+                .value,
+
+            contact:
+                document
+                .getElementById("customerContact")
+                .value
+                .trim()
+
+        },
+
+        symptoms:
+            document
+            .getElementById("symptoms")
+            .value
+            .trim(),
+
+        allergies:
+            document
+            .getElementById("allergies")
+            .value
+            .trim(),
+
+        medicine:{
+
+            id:
+                selectedMedicine.id,
+
+            name:
+                selectedMedicine.name,
+
+            quantity,
+
+            unitPrice:
+                selectedMedicine.price,
+
+            total,
+
+            /* ORIGINAL PHARMACIST INSTRUCTION */
+
+            directions:
+                rawDirections,
+
+            /* PATIENT-FACING INSTRUCTION */
+
+            patientDirections:
+                finalPatientDirections
+
+        },
+
+        counselling:{
+
+            confirmed:true,
+
+            confirmedAt:
+                now.toISOString(),
+
+            patientDirectionsReviewed:
+                finalPatientDirections,
+
+            pharmacistVerificationRequired:
+                directionsRequireVerification
+
+        },
+
+        labeling:{
+
+            confirmed:true,
+
+            confirmedAt:
+                now.toISOString(),
+
+            pharmacist:
+                pharmacistName,
+
+            SAPC:
+                pharmacistSAPC,
+
+            patientFriendlyLabel:
+                finalPatientDirections
+
+        },
+
+        payment:{
+
+            method:
+                selectedPayment,
+
+            amount:
+                total,
+
+            status:
+                "PAID"
+
+        },
+
+        pharmacist:{
+
+            name:
+                pharmacistName,
+
+            SAPC:
+                pharmacistSAPC
+
+        },
+
+        status:
+            "COMPLETED"
+
+    };
+
+
+    /* =====================================================
+       SAVE OTC TRANSACTION
+    ===================================================== */
+
+    const transactions =
+        readArray(
+            "neoPharmaBridgeOTCTransactions"
+        );
+
+    transactions.unshift(
+        transaction
+    );
+
+    const saved =
+        writeArray(
+            "neoPharmaBridgeOTCTransactions",
+            transactions
+        );
+
+    if(!saved){
+        return;
+    }
+
+
+    /* =====================================================
+       INVENTORY MOVEMENT
+    ===================================================== */
+
+    const movements =
+        readArray(
+            "neoPharmaBridgeInventoryMovements"
+        );
+
+    movements.unshift({
+
+        movementId:
+            "MOV-" + now.getTime(),
+
+        type:
+            "OTC SALE",
+
+        transactionNumber,
+
+        medicineId:
+            selectedMedicine.id,
+
+        medicine:
+            selectedMedicine.name,
+
+        quantity,
+
+        pharmacist:
+            pharmacistName,
+
+        pharmacy:
+            pharmacistPharmacy,
+
+        date:
+            now.toISOString()
+
+    });
+
+    writeArray(
+        "neoPharmaBridgeInventoryMovements",
+        movements
+    );
+
+
+    /* =====================================================
+       UPDATE LABEL
+    ===================================================== */
+
+    document.getElementById(
+        "labelTransaction"
+    ).textContent =
+        transactionNumber;
+
+
+    /* =====================================================
+       RECEIPT
+    ===================================================== */
+
+    document.getElementById(
+        "receiptNumber"
+    ).textContent =
+        transactionNumber;
+
+    document.getElementById(
+        "receiptDate"
+    ).textContent =
+        now.toLocaleString();
+
+    document.getElementById(
+        "receiptPatient"
+    ).textContent =
+        transaction.patient.name;
+
+    document.getElementById(
+        "receiptMedicine"
+    ).textContent =
+        selectedMedicine.name;
+
+    document.getElementById(
+        "receiptQuantity"
+    ).textContent =
+        quantity;
+
+    document.getElementById(
+        "receiptPayment"
+    ).textContent =
+        selectedPayment;
+
+    document.getElementById(
+        "receiptPharmacist"
+    ).textContent =
+        pharmacistName;
+
+    document.getElementById(
+        "receiptTotal"
+    ).textContent =
+        "R" +
+        total.toFixed(2);
+
+
+    /* =====================================================
+       CLEAR PENDING
+    ===================================================== */
+
+    localStorage.removeItem(
+        "neoPharmaBridgePendingOTC"
+    );
+
+
+    showStep(6);
+
+}
+
+
+/* =========================================================
+   SAVE PENDING
+========================================================= */
+
+function savePending(){
+
+    try{
+
+        const pending = {
+
+            patient:{
+
+                name:
+                    document
+                    .getElementById("customerName")
+                    .value,
+
+                patientNumber:
+                    document
+                    .getElementById("patientNumber")
+                    .value,
+
+                age:
+                    document
+                    .getElementById("patientAge")
+                    .value,
+
+                contact:
+                    document
+                    .getElementById("customerContact")
+                    .value
+
+            },
+
+            symptoms:
+                document
+                .getElementById("symptoms")
+                .value,
+
+            allergies:
+                document
+                .getElementById("allergies")
+                .value,
+
+            medicine:
+                selectedMedicine,
+
+            quantity:
+                document
+                .getElementById("medicineQuantity")
+                .value,
+
+            directions:
+                document
+                .getElementById("directions")
+                .value,
+
+            patientDirections:
+                patientDirections
+
+        };
+
+        localStorage.setItem(
+            "neoPharmaBridgePendingOTC",
+            JSON.stringify(pending)
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Could not save pending OTC transaction.",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD PENDING
+========================================================= */
+
+function loadPending(){
+
+    try{
+
+        const raw =
+            localStorage.getItem(
+                "neoPharmaBridgePendingOTC"
+            );
+
+        if(!raw){
+            return;
+        }
+
+        const pending =
+            JSON.parse(raw);
+
+        document.getElementById(
+            "customerName"
+        ).value =
+            pending.patient?.name || "";
+
+        document.getElementById(
+            "patientNumber"
+        ).value =
+            pending.patient?.patientNumber || "";
+
+        document.getElementById(
+            "patientAge"
+        ).value =
+            pending.patient?.age || "";
+
+        document.getElementById(
+            "customerContact"
+        ).value =
+            pending.patient?.contact || "";
+
+        document.getElementById(
+            "symptoms"
+        ).value =
+            pending.symptoms || "";
+
+        document.getElementById(
+            "allergies"
+        ).value =
+            pending.allergies || "";
+
+        document.getElementById(
+            "medicineQuantity"
+        ).value =
+            pending.quantity || 1;
+
+        document.getElementById(
+            "directions"
+        ).value =
+            pending.directions || "";
+
+        if(pending.medicine){
+
+            const found =
+                medicines.find(
+                    medicine =>
+                        medicine.id ===
+                        pending.medicine.id
+                );
+
+            if(found){
+
+                selectedMedicine =
+                    found;
+
+                document.getElementById(
+                    "selectedMedicine"
+                ).style.display =
+                    "block";
+
+                document.getElementById(
+                    "selectedMedicineName"
+                ).textContent =
+                    found.name;
+
+                document.getElementById(
+                    "continueMedicineBtn"
+                ).disabled =
+                    false;
+
+            }
+
+        }
+
+        patientDirections =
+            pending.patientDirections ||
+            buildPatientDirections(
+                pending.directions || ""
+            );
+
+        document.getElementById(
+            "patientDirectionsPreview"
+        ).textContent =
+            patientDirections;
+
+    }catch(error){
+
+        console.warn(
+            "Could not load pending OTC transaction.",
+            error
+        );
+
+        localStorage.removeItem(
+            "neoPharmaBridgePendingOTC"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PRINT LABEL
+========================================================= */
+
+function printLabel(){
+
+    document.body.classList.remove(
+        "print-receipt"
+    );
+
+    window.print();
+
+}
+
+
+/* =========================================================
+   PRINT RECEIPT
+========================================================= */
+
+function printReceipt(){
+
+    document.body.classList.add(
+        "print-receipt"
+    );
+
+    window.print();
+
+    setTimeout(() => {
+
+        document.body.classList.remove(
+            "print-receipt"
+        );
+
+    },500);
+
+}
+
+
+/* =========================================================
+   NEW TRANSACTION
+========================================================= */
+
+function newTransaction(){
+
+    localStorage.removeItem(
+        "neoPharmaBridgePendingOTC"
+    );
+
+    location.reload();
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function goDashboard(){
+
+    window.location.href =
+        "Pharmacist_Dashboard.html";
+
+}
+
+
+/* =========================================================
+   STEP NAVIGATION
+========================================================= */
+
+function showStep(step){
+
+    currentStep =
+        step;
+
+    document
+        .querySelectorAll(".step-panel")
+        .forEach(panel =>
+            panel.classList.add("hidden")
+        );
+
+    const target =
+        document.getElementById(
+            "step" + step
+        );
+
+    if(target){
+
+        target.classList.remove(
+            "hidden"
+        );
+
+    }
+
+    for(let i = 1; i <= 6; i++){
+
+        const indicator =
+            document.getElementById(
+                "stepIndicator" + i
+            );
+
+        indicator.classList.remove(
+            "active",
+            "complete"
+        );
+
+        if(i < step){
+
+            indicator.classList.add(
+                "complete"
+            );
+
+        }
+
+        if(i === step){
+
+            indicator.classList.add(
+                "active"
+            );
+
+        }
+
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+renderMedicines();
+
+loadPending();
+
+showStep(1);
+
+</script>
+
+</body>
+</html>
