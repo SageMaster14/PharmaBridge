@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<title>NeoPharmaBridge | Prescription</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>NeoPharmaBridge | New Prescription</title>
 
 <style>
+
+*{
+box-sizing:border-box;
+}
 
 body{
 font-family:Arial,sans-serif;
@@ -42,12 +50,17 @@ padding:12px;
 margin-bottom:10px;
 border-radius:8px;
 border:1px solid #ccc;
-box-sizing:border-box;
 font-size:14px;
 }
 
 textarea{
 resize:vertical;
+}
+
+input:read-only,
+select:disabled{
+background:#f3f3f3;
+cursor:not-allowed;
 }
 
 button{
@@ -62,6 +75,11 @@ button:hover{
 background:#004a9a;
 }
 
+button:disabled{
+background:#aaa;
+cursor:not-allowed;
+}
+
 ul{
 list-style:none;
 padding:0;
@@ -73,9 +91,9 @@ display:none;
 max-height:180px;
 overflow-y:auto;
 background:white;
-border-radius:10px;
 border:1px solid #dce6f2;
-margin-top:10px;
+border-radius:10px;
+margin-top:5px;
 }
 
 #medicineResults li{
@@ -93,16 +111,22 @@ background:#f8fbff;
 padding:14px;
 border-radius:10px;
 margin-bottom:10px;
+
 display:flex;
 justify-content:space-between;
 align-items:center;
 gap:10px;
 }
 
+.med-text{
+line-height:1.5;
+}
+
 .remove-btn{
 background:#dc3545;
 width:auto;
 padding:8px 12px;
+margin:0;
 }
 
 .remove-btn:hover{
@@ -111,8 +135,21 @@ background:#bb2d3b;
 
 .info-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+grid-template-columns:
+repeat(auto-fit,minmax(240px,1fr));
 gap:10px;
+}
+
+.patient-banner{
+background:#e8f4ff;
+border-left:5px solid #0057b7;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+.patient-banner strong{
+color:#0057b7;
 }
 
 .signature-box{
@@ -141,6 +178,16 @@ font-size:13px;
 color:#666;
 }
 
+.workflow-note{
+background:#fff8e1;
+border-left:5px solid #ffc107;
+padding:15px;
+border-radius:10px;
+font-size:14px;
+line-height:1.6;
+color:#6b5200;
+}
+
 #message{
 margin-top:10px;
 font-weight:bold;
@@ -158,15 +205,47 @@ color:#bfbfbf;
 
 </head>
 
+
 <body>
 
-<h1>New Prescription</h1>
 
-<!-- PATIENT HISTORY -->
+<h1>
+New Prescription
+</h1>
+
+
+<!-- =========================================
+PATIENT IDENTIFICATION
+========================================= -->
+
+<div class="patient-banner">
+
+<strong>Patient File Number:</strong>
+
+<span id="patientFileNumber">
+Loading...
+</span>
+
+<br>
+
+<strong>Patient:</strong>
+
+<span id="patientDisplayName">
+Loading...
+</span>
+
+</div>
+
+
+<!-- =========================================
+PATIENT HISTORY
+========================================= -->
 
 <div class="card">
 
-<h3>Patient History</h3>
+<h3>
+Patient History
+</h3>
 
 <textarea
 id="patientHistory"
@@ -176,29 +255,61 @@ style="height:180px;"
 
 </div>
 
-<!-- PATIENT DETAILS -->
+
+<!-- =========================================
+PATIENT DETAILS
+========================================= -->
 
 <div class="card">
 
-<h3>Patient Details</h3>
+<h3>
+Patient Details
+</h3>
 
 <div class="info-grid">
 
-<input id="patientName" placeholder="Full Name" readonly>
+<input
+id="patientName"
+placeholder="Full Name"
+readonly
+>
 
-<input id="patientICAM" placeholder="ICAM Number" readonly>
+<input
+id="patientFile"
+placeholder="Patient File Number"
+readonly
+>
 
-<input id="patientID" placeholder="ID / Passport">
+<input
+id="patientID"
+placeholder="ID / Passport"
+readonly
+>
 
-<input id="patientAge" placeholder="Age">
+<input
+id="patientAge"
+placeholder="Age"
+readonly
+>
 
-<input id="patientDOB" placeholder="Date of Birth" readonly>
+<input
+id="patientDOB"
+placeholder="Date of Birth"
+readonly
+>
 
-<input id="patientContact" placeholder="Contact Number" readonly>
+<input
+id="patientContact"
+placeholder="Contact Number"
+readonly
+>
 
-<select id="patientGender">
+<select
+id="patientGender"
+disabled
+>
 
-<option disabled selected>
+<option>
 Gender
 </option>
 
@@ -210,6 +321,7 @@ Gender
 
 </div>
 
+
 <textarea
 id="patientAllergies"
 placeholder="Allergies"
@@ -218,43 +330,70 @@ readonly
 
 </div>
 
-<!-- PHARMACY -->
+
+<!-- =========================================
+PHARMACY WORKFLOW
+========================================= -->
 
 <div class="card">
 
-<h3>Pharmacy Information</h3>
+<h3>
+Pharmacy Selection
+</h3>
 
-<input
-id="pharmacyName"
-value="NeoPharmaCare"
->
+<div class="workflow-note">
 
-<input
-id="pharmacyYNumber"
-value="Y1234567"
->
+<strong>No pharmacy is selected by the doctor.</strong>
+
+<br><br>
+
+The doctor completes and submits the prescription first.
+
+<br><br>
+
+Once the prescription is completed, the patient will receive it through the Patient Portal and select their preferred pharmacy.
+
+<br><br>
+
+<strong>
+Doctor → Prescription → Patient → Pharmacy
+</strong>
 
 </div>
 
-<!-- MEDICATION -->
+</div>
+
+
+<!-- =========================================
+MEDICATION
+========================================= -->
 
 <div class="card">
 
-<h3>Add Medication</h3>
+<h3>
+Add Medication
+</h3>
+
 
 <input
 id="medicineSearch"
 placeholder="Search medicine..."
+autocomplete="off"
 >
+
 
 <button
 type="button"
-onclick="openMedicationList()"
+id="browseMedication"
 >
+
 Browse Medication List
+
 </button>
 
+
 <ul id="medicineResults"></ul>
+
 
 <select id="dose">
 
@@ -263,6 +402,7 @@ Select Dose
 </option>
 
 </select>
+
 
 <select id="instructions">
 
@@ -279,6 +419,7 @@ Instructions
 
 </select>
 
+
 <select id="repeats">
 
 <option disabled selected>
@@ -292,25 +433,49 @@ Repeats
 
 </select>
 
-<button id="addMedication">
+
+<button
+id="addMedication"
+type="button"
+>
+
 Add Medication
+
 </button>
 
 </div>
 
-<!-- DOCTOR AUTH -->
+
+<!-- =========================================
+DOCTOR AUTHENTICATION
+========================================= -->
 
 <div class="card">
 
-<h3>Doctor Authentication</h3>
+<h3>
+Doctor Authentication
+</h3>
+
 
 <select id="doctorSelect">
 
-<option disabled selected>
+<option
+value=""
+disabled
+selected
+>
 Select Doctor
 </option>
 
+<option
+value="DR KOALANE"
+data-hpcsa="MP123456"
+>
+DR KOALANE
+</option>
+
 </select>
+
 
 <input
 id="doctorHPCSA"
@@ -318,11 +483,13 @@ placeholder="HPCSA Number"
 readonly
 >
 
+
 <input
 id="doctorSignature"
 placeholder="Digital Signature"
 readonly
 >
+
 
 <div class="signature-box">
 
@@ -347,11 +514,16 @@ Digital prescription signed and approved
 
 </div>
 
-<!-- SPECIAL NOTES -->
+
+<!-- =========================================
+SPECIAL INSTRUCTIONS
+========================================= -->
 
 <div class="card">
 
-<h3>Special Instructions</h3>
+<h3>
+Special Instructions
+</h3>
 
 <textarea
 id="specialInstructions"
@@ -361,136 +533,218 @@ style="height:120px;"
 
 </div>
 
-<!-- PRESCRIPTION ITEMS -->
+
+<!-- =========================================
+PRESCRIPTION ITEMS
+========================================= -->
 
 <div class="card">
 
-<h3>Prescription Items</h3>
+<h3>
+Prescription Items
+</h3>
+
 
 <ul id="prescriptionList"></ul>
 
-<button id="submitPrescription">
-Submit Prescription
+
+<button
+id="submitPrescription"
+type="button"
+>
+
+Complete Prescription
+
 </button>
+
 
 <div id="message"></div>
 
 </div>
 
+
 <script>
 
-/* =========================================
-REGISTERED DOCTORS
-========================================= */
-
-const doctors = [
-
-{
-name:"DR KOALANE",
-hpcsa:"MP123456",
-signature:"Dr_Koalane_Signature"
-}
-
-];
 
 /* =========================================
-REGISTERED PHARMACISTS
-========================================= */
-
-const pharmacists = [
-
-{
-name:"N.K KOALANE",
-pnumber:"P72436",
-dispenserID:"DSP-72436",
-signature:"NK_Koalane_Signature"
-}
-
-];
-
-/* =========================================
-MEDICATION DATABASE
+SAMPLE MEDICATION DATABASE
 ========================================= */
 
 const medicines = [
 
 {
+name:"Paracetamol",
+doses:[
+"500 mg",
+"1 g"
+]
+},
+
+{
 name:"Amoxicillin",
-doses:["250 mg","500 mg"]
+doses:[
+"250 mg",
+"500 mg"
+]
 },
 
 {
 name:"Metformin",
-doses:["500 mg","850 mg"]
+doses:[
+"500 mg",
+"850 mg",
+"1000 mg"
+]
 },
 
 {
-name:"Paracetamol",
-doses:["500 mg","1 g"]
+name:"Amlodipine",
+doses:[
+"5 mg",
+"10 mg"
+]
 },
 
 {
 name:"Ibuprofen",
-doses:["200 mg","400 mg"]
+doses:[
+"200 mg",
+"400 mg",
+"600 mg"
+]
 },
 
 {
-name:"Atorvastatin",
-doses:["10 mg","20 mg"]
+name:"Omeprazole",
+doses:[
+"20 mg",
+"40 mg"
+]
 }
 
 ];
 
+
 let selectedMedicine = null;
+
+
+/* =========================================
+GET PATIENT FROM DOCTOR DASHBOARD
+========================================= */
+
+const patientData =
+sessionStorage.getItem(
+"prescriptionPatient"
+);
+
+
+if(!patientData){
+
+alert(
+"No patient selected."
+);
+
+window.location.href =
+"Doctor-Dashboard.html";
+
+}
+
 
 /* =========================================
 LOAD PATIENT
 ========================================= */
 
 const patient =
-JSON.parse(
-localStorage.getItem(
-"prescriptionPatient"
-)
-);
+JSON.parse(patientData);
 
-if(patient){
 
-document.getElementById("patientName").value =
+document.getElementById(
+"patientName"
+).value =
 patient.name || "";
 
-document.getElementById("patientICAM").value =
-patient.icam || "";
 
-document.getElementById("patientID").value =
+document.getElementById(
+"patientFile"
+).value =
+patient.fileNumber ||
+patient.patientNumber ||
+patient.file ||
+"";
+
+
+document.getElementById(
+"patientID"
+).value =
 patient.id || "";
 
-document.getElementById("patientAge").value =
+
+document.getElementById(
+"patientAge"
+).value =
 patient.age || "";
 
-document.getElementById("patientDOB").value =
+
+document.getElementById(
+"patientDOB"
+).value =
 patient.dob || "";
 
-document.getElementById("patientContact").value =
-patient.contact || "";
 
-document.getElementById("patientAllergies").value =
+document.getElementById(
+"patientContact"
+).value =
+patient.contact ||
+patient.phone ||
+"";
+
+
+document.getElementById(
+"patientAllergies"
+).value =
 patient.allergies || "";
 
-document.getElementById("patientHistory").value =
+
+document.getElementById(
+"patientHistory"
+).value =
 patient.history || "";
+
 
 if(patient.gender){
 
-document.getElementById("patientGender").value =
+document.getElementById(
+"patientGender"
+).value =
 patient.gender;
 
 }
 
-}
 
 /* =========================================
-LOAD DOCTORS
+PATIENT BANNER
+========================================= */
+
+document.getElementById(
+"patientFileNumber"
+).textContent =
+
+patient.fileNumber ||
+patient.patientNumber ||
+patient.file ||
+"Not available";
+
+
+document.getElementById(
+"patientDisplayName"
+).textContent =
+
+patient.name ||
+"Unknown Patient";
+
+
+/* =========================================
+DOCTOR SELECTION
 ========================================= */
 
 const doctorSelect =
@@ -498,42 +752,33 @@ document.getElementById(
 "doctorSelect"
 );
 
-doctors.forEach(doc => {
-
-const option =
-document.createElement("option");
-
-option.value = doc.name;
-option.textContent = doc.name;
-
-doctorSelect.appendChild(option);
-
-});
 
 doctorSelect.addEventListener(
 "change",
-() => {
+function(){
 
-const selected =
-doctors.find(d =>
-d.name === doctorSelect.value
-);
+const option =
+this.options[
+this.selectedIndex
+];
+
 
 document.getElementById(
 "doctorHPCSA"
 ).value =
-selected.hpcsa;
+option.dataset.hpcsa || "";
+
 
 document.getElementById(
 "doctorSignature"
 ).value =
-selected.signature;
+option.dataset.hpcsa || "";
 
-}
-);
+});
+
 
 /* =========================================
-MED SEARCH
+MEDICATION SEARCH
 ========================================= */
 
 const search =
@@ -551,121 +796,231 @@ document.getElementById(
 "dose"
 );
 
+
 search.addEventListener(
 "input",
-() => {
+function(){
 
-const q =
-search.value.toLowerCase();
+const query =
+this.value
+.toLowerCase()
+.trim();
+
 
 results.innerHTML = "";
 
-if(!q){
 
-results.style.display = "none";
+if(!query){
+
+results.style.display =
+"none";
+
 return;
 
 }
 
+
 const filtered =
-medicines.filter(m =>
-m.name.toLowerCase()
-.includes(q)
+medicines.filter(
+medicine =>
+medicine.name
+.toLowerCase()
+.includes(query)
 );
 
-filtered.forEach(m => {
+
+if(filtered.length === 0){
 
 const li =
 document.createElement("li");
 
-li.innerText = m.name;
+li.textContent =
+"No medicine found";
 
-li.onclick = () =>
-selectMedicine(m);
+results.appendChild(li);
+
+results.style.display =
+"block";
+
+return;
+
+}
+
+
+filtered.forEach(
+medicine => {
+
+const li =
+document.createElement("li");
+
+li.textContent =
+medicine.name;
+
+
+li.addEventListener(
+"click",
+function(){
+
+selectMedicine(
+medicine
+);
+
+});
+
 
 results.appendChild(li);
 
 });
 
-results.style.display = "block";
 
-}
-);
+results.style.display =
+"block";
 
-function selectMedicine(med){
+});
 
-selectedMedicine = med;
 
-search.value = med.name;
+/* =========================================
+SELECT MEDICINE
+========================================= */
 
-results.style.display = "none";
+function selectMedicine(
+medicine
+){
+
+selectedMedicine =
+medicine;
+
+
+search.value =
+medicine.name;
+
+
+results.style.display =
+"none";
+
 
 doseSelect.innerHTML = `
+
 <option disabled selected>
 Select Dose
 </option>
+
 `;
 
-med.doses.forEach(d => {
+
+medicine.doses.forEach(
+dose => {
 
 const option =
 document.createElement("option");
 
-option.value = d;
-option.textContent = d;
+option.value =
+dose;
 
-doseSelect.appendChild(option);
+option.textContent =
+dose;
+
+doseSelect.appendChild(
+option
+);
 
 });
 
 }
 
+
 /* =========================================
-OPEN MED LIST
+BROWSE MEDICATION LIST
 ========================================= */
 
-function openMedicationList(){
+document.getElementById(
+"browseMedication"
+).addEventListener(
+"click",
+function(){
 
 window.open(
 "Medication_List.html",
 "_blank"
 );
 
+});
+
+
+/* =========================================
+ADD MEDICATION TO LIST
+========================================= */
+
+function addMedicationToList(
+medication
+){
+
+const li =
+document.createElement("li");
+
+
+const span =
+document.createElement("span");
+
+
+span.className =
+"med-text";
+
+
+span.textContent =
+medication;
+
+
+const removeButton =
+document.createElement("button");
+
+
+removeButton.className =
+"remove-btn";
+
+
+removeButton.type =
+"button";
+
+
+removeButton.textContent =
+"Remove";
+
+
+removeButton.addEventListener(
+"click",
+function(){
+
+li.remove();
+
+});
+
+
+li.appendChild(span);
+
+li.appendChild(
+removeButton
+);
+
+
+document.getElementById(
+"prescriptionList"
+).appendChild(
+li
+);
+
 }
+
 
 /* =========================================
 ADD MEDICATION
 ========================================= */
 
-function addMedicationToList(text){
-
-const li =
-document.createElement("li");
-
-li.innerHTML = `
-
-<span class="med-text">
-${text}
-</span>
-
-<button
-class="remove-btn"
-onclick="this.parentElement.remove()"
->
-X
-</button>
-
-`;
-
-document.getElementById(
-"prescriptionList"
-).appendChild(li);
-
-}
-
 document.getElementById(
 "addMedication"
-).onclick = () => {
+).addEventListener(
+"click",
+function(){
 
 const instructions =
 document.getElementById(
@@ -677,6 +1032,7 @@ document.getElementById(
 "repeats"
 );
 
+
 if(
 !selectedMedicine ||
 doseSelect.selectedIndex === 0 ||
@@ -685,341 +1041,288 @@ repeats.selectedIndex === 0
 ){
 
 alert(
-"Complete all medication fields"
+"Please complete all medication fields."
 );
 
 return;
 
 }
 
-const medText =
 
-`${selectedMedicine.name}
- - ${doseSelect.value}
- - ${instructions.value}
- - ${repeats.value}`;
+const medicationText =
 
-addMedicationToList(medText);
+`${selectedMedicine.name} - ${doseSelect.value} - ${instructions.value} - ${repeats.value}`;
+
+
+addMedicationToList(
+medicationText
+);
+
+
+/* RESET */
 
 search.value = "";
 
+
 doseSelect.innerHTML = `
+
 <option disabled selected>
 Select Dose
 </option>
+
 `;
 
-instructions.selectedIndex = 0;
-repeats.selectedIndex = 0;
 
-selectedMedicine = null;
+instructions.selectedIndex =
+0;
 
-};
+
+repeats.selectedIndex =
+0;
+
+
+selectedMedicine =
+null;
+
+});
+
 
 /* =========================================
-SUBMIT PRESCRIPTION
+COMPLETE PRESCRIPTION
 ========================================= */
 
 document.getElementById(
 "submitPrescription"
-).onclick = () => {
+).addEventListener(
+"click",
+function(){
 
-const prescriptionList =
-document.getElementById(
-"prescriptionList"
+const medications =
+[
+...document.querySelectorAll(
+".med-text"
+)
+]
+.map(
+element =>
+element.textContent
 );
 
+
 if(
-prescriptionList.children.length === 0
+medications.length === 0
 ){
 
-alert("No medication added");
+alert(
+"Please add at least one medication."
+);
 
 return;
 
 }
+
 
 if(
 doctorSelect.selectedIndex === 0
 ){
 
-alert("Select doctor");
+alert(
+"Please select the prescribing doctor."
+);
 
 return;
 
 }
 
-let adminPrescriptions =
-JSON.parse(
-localStorage.getItem(
-"adminPrescriptions"
-)
-) || [];
-
-let archive =
-JSON.parse(
-localStorage.getItem(
-"prescriptionArchive"
-)
-) || [];
-
-let doctorRegister =
-JSON.parse(
-localStorage.getItem(
-"doctorRegister"
-)
-) || [];
-
-let pharmacistRegister =
-JSON.parse(
-localStorage.getItem(
-"pharmacistRegister"
-)
-) || [];
 
 /* =========================================
-SAVE DOCTOR REGISTER
+GENERATE PRESCRIPTION NUMBER
 ========================================= */
-
-const doctorExists =
-doctorRegister.some(d =>
-d.hpcsa ===
-document.getElementById(
-"doctorHPCSA"
-).value
-);
-
-if(!doctorExists){
-
-doctorRegister.push({
-
-name:
-doctorSelect.value,
-
-hpcsa:
-document.getElementById(
-"doctorHPCSA"
-).value,
-
-signature:
-document.getElementById(
-"doctorSignature"
-).value
-
-});
-
-localStorage.setItem(
-"doctorRegister",
-JSON.stringify(doctorRegister)
-);
-
-}
-
-/* =========================================
-SAVE PHARMACIST REGISTER
-========================================= */
-
-const pharmExists =
-pharmacistRegister.some(p =>
-p.pnumber === "P72436"
-);
-
-if(!pharmExists){
-
-pharmacistRegister.push({
-
-name:"N.K KOALANE",
-pnumber:"P72436",
-dispenserID:"DSP-72436",
-signature:"NK_Koalane_Signature"
-
-});
-
-localStorage.setItem(
-"pharmacistRegister",
-JSON.stringify(pharmacistRegister)
-);
-
-}
-
-/* =========================================
-DATE
-========================================= */
-
-const now =
-new Date();
 
 const prescriptionNumber =
 "RX-" +
 Date.now();
 
+
 /* =========================================
-PRESCRIPTION OBJECT
+CREATE PRESCRIPTION
 ========================================= */
 
 const prescriptionData = {
 
 prescriptionNumber:
+
 prescriptionNumber,
 
-patient:
-document.getElementById(
-"patientName"
-).value,
 
-icam:
-document.getElementById(
-"patientICAM"
-).value,
+patient:{
 
-patientID:
-document.getElementById(
-"patientID"
-).value,
+fileNumber:
+
+patient.fileNumber ||
+patient.patientNumber ||
+patient.file ||
+"",
+
+name:
+
+patient.name || "",
+
+
+id:
+
+patient.id || "",
+
 
 age:
-document.getElementById(
-"patientAge"
-).value,
+
+patient.age || "",
+
 
 dob:
-document.getElementById(
-"patientDOB"
-).value,
+
+patient.dob || "",
+
 
 contact:
-document.getElementById(
-"patientContact"
-).value,
+
+patient.contact ||
+patient.phone ||
+"",
+
 
 gender:
-document.getElementById(
-"patientGender"
-).value,
+
+patient.gender || "",
+
 
 allergies:
-document.getElementById(
-"patientAllergies"
-).value,
+
+patient.allergies || ""
+
+},
+
 
 history:
+
 document.getElementById(
 "patientHistory"
 ).value,
 
-meds:
-[...document.querySelectorAll(".med-text")]
-.map(el => el.innerText),
 
-notes:
+medications:
+
+medications,
+
+
+specialInstructions:
+
 document.getElementById(
 "specialInstructions"
 ).value,
 
-status:"Pending",
 
-date:
-now.toISOString(),
+doctor:{
 
-timestamp:
-now.toLocaleString(),
+name:
 
-archivedYear:
-now.getFullYear(),
-
-archivedMonth:
-now.toLocaleString(
-"default",
-{month:"long"}
-),
-
-archivedDate:
-now.toLocaleDateString(),
-
-archivedTime:
-now.toLocaleTimeString(),
-
-doctorName:
 doctorSelect.value,
 
-doctorHPCSA:
+
+hpcsa:
+
 document.getElementById(
 "doctorHPCSA"
 ).value,
 
-doctorSignature:
+
+signature:
+
 document.getElementById(
 "doctorSignature"
-).value,
-
-/* PHARMACIST EMPTY
-UNTIL DISPENSE */
-
-pharmacistName:"",
-pharmacistPNumber:"",
-dispenserID:"",
-pharmacistSignature:"",
-dispensedDate:"",
-
-pharmacyName:
-document.getElementById(
-"pharmacyName"
-).value,
-
-pharmacyYNumber:
-document.getElementById(
-"pharmacyYNumber"
 ).value
+
+},
+
+
+/* =========================================
+PHARMACY EMPTY
+PATIENT SELECTS LATER
+========================================= */
+
+pharmacy:{
+
+name:"",
+
+yNumber:"",
+
+selected:false
+
+},
+
+
+status:
+"Awaiting Pharmacy Selection",
+
+
+createdAt:
+new Date().toISOString(),
+
+
+timestamp:
+new Date().toLocaleString()
 
 };
 
-/* =========================================
-SAVE
-========================================= */
-
-adminPrescriptions.push(
-prescriptionData
-);
-
-archive.push(
-prescriptionData
-);
 
 /* =========================================
-KEEP 10 YEARS
-========================================= */
-
-const tenYearsAgo =
-new Date();
-
-tenYearsAgo.setFullYear(
-tenYearsAgo.getFullYear() - 10
-);
-
-archive = archive.filter(item => {
-
-return new Date(item.date)
-> tenYearsAgo;
-
-});
-
-/* =========================================
-STORE
+SAVE CURRENT PRESCRIPTION
+FOR PATIENT PORTAL
 ========================================= */
 
 localStorage.setItem(
-"adminPrescriptions",
+
+"neoPharmaBridgePrescription",
+
 JSON.stringify(
-adminPrescriptions
+prescriptionData
 )
+
 );
 
-localStorage.setItem(
-"prescriptionArchive",
-JSON.stringify(
-archive
+
+/* =========================================
+SAVE PRESCRIPTION HISTORY
+========================================= */
+
+let prescriptions =
+
+JSON.parse(
+
+localStorage.getItem(
+
+"neoPharmaBridgePrescriptions"
+
 )
+
+) || [];
+
+
+prescriptions.push(
+prescriptionData
 );
+
+
+localStorage.setItem(
+
+"neoPharmaBridgePrescriptions",
+
+JSON.stringify(
+prescriptions
+)
+
+);
+
 
 /* =========================================
 SUCCESS
@@ -1027,24 +1330,60 @@ SUCCESS
 
 document.getElementById(
 "message"
-).innerText =
-"Prescription saved successfully";
+).innerHTML = `
 
-setTimeout(() => {
+Prescription
+
+<strong>
+${prescriptionNumber}
+</strong>
+
+completed successfully.
+
+<br><br>
+
+The prescription is now waiting for the patient to select a pharmacy.
+
+`;
+
+
+document.getElementById(
+"submitPrescription"
+).disabled =
+true;
+
+
+/* =========================================
+RETURN TO DOCTOR RECORDS
+========================================= */
+
+setTimeout(
+function(){
 
 window.location.href =
 "Doctor_Patient_Records.html";
 
-},2000);
+},
+2500
+);
 
-};
+});
+
 
 </script>
 
+
 <footer class="footer">
+
 NeoPharmaBridge
-<p>Jesus Christ</p>
+
+<p>
+Jesus Christ
+</p>
+
 </footer>
 
+
 </body>
+
 </html>
