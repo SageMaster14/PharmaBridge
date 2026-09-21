@@ -1,211 +1,812 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeoPharmaBridge Login</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
 
-    body {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      /* Ambient gradient background matching logo colors */
-      background: linear-gradient(135deg, #cce7ff, #28a745, #f2f9ff);
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
-    }
+<meta charset="UTF-8">
 
-    @keyframes gradientMove {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-	
-	@media (max-width: 400px) {
-      .logo img {
-          width: 80%;
-      }
-      .login-container {
-          width: 90%;
-          padding: 30px 20px;
-      }
-  }
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-  body:hover {
-      animation-play-state: paused;
-  }
-    .logo {
-      margin-bottom: 30px;
-    }
+>
 
-    .logo img {
-      width: 350px;
-	  padding: 12px;
-	   border-radius: 6px;
-      height: auto;
-    }
+<title>NeoPharmaBridge Login</title>
 
-    .login-container {
-      background-color: rgba(255, 255, 255, 0.95); /* slightly transparent to blend with background */
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      width: 360px;
-      text-align: center;
-    }
+<style>
 
-    h2 {
-      margin-bottom: 20px;
-      font-size: 20px;
-      color: #333;
-    }
+/* =========================================
+GLOBAL
+========================================= */
 
-    input[type="text"], input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      font-size: 13px;
-      margin: 10px 0;
-    }
 
-    .checkbox-container input {
-      margin-right: 8px;
-    }
+/* =========================================
+BODY
+========================================= */
 
-    .login-btn {
-      width: 100%;
-      padding: 12px;
-      margin-top: 15px;
-      background-color: #0057b7;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+body{
 
-    .login-btn:hover {
-      background-color: #004a9a;
-    }
+min-height:100vh;
 
-    .links {
-      margin-top: 15px;
-      font-size: 13px;
-    }
+display:flex;
 
-    .links a {
-      color: #0057b7;
-      text-decoration: none;
-      margin: 0 5px;
-    }
+flex-direction:column;
 
-    .links a:hover {
-      text-decoration: underline;
-    }
+justify-content:center;
 
-    .footer {
-      margin-top: 25px;
-      font-size: 11px;
-      color: #fff;
-      text-align: center;
-    }
+align-items:center;
 
-    .verified {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #28a745;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+padding:20px;
 
-    .verified::before {
-      content: "✔";
-      margin-right: 6px;
-    }
+background:
+linear-gradient(
+135deg,
+#cce7ff,
+#28a745,
+#f2f9ff
+);
 
-  </style>
+background-size:400% 400%;
+
+animation:
+gradientMove 15s ease infinite;
+
+}
+
+
+/* =========================================
+BACKGROUND ANIMATION
+========================================= */
+
+@keyframes gradientMove{
+
+0%{
+background-position:0% 50%;
+}
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
+
+
+/* =========================================
+LOGO
+========================================= */
+
+.logo{
+
+margin-bottom:25px;
+
+text-align:center;
+
+}
+
+.logo img{
+
+width:350px;
+
+max-width:90%;
+
+height:auto;
+
+padding:12px;
+
+border-radius:8px;
+
+}
+
+
+/* =========================================
+LOGIN CONTAINER
+========================================= */
+
+.login-container{
+
+width:360px;
+
+max-width:100%;
+
+padding:40px 30px;
+
+background:
+rgba(
+255,
+255,
+255,
+0.96
+);
+
+border-radius:15px;
+
+box-shadow:
+0 10px 30px
+rgba(
+0,
+0,
+0,
+0.18
+);
+
+text-align:center;
+
+}
+
+
+/* =========================================
+TITLE
+========================================= */
+
+h2{
+
+margin-bottom:8px;
+
+font-size:22px;
+
+color:#333;
+
+}
+
+.subtitle{
+
+font-size:13px;
+
+color:#777;
+
+margin-bottom:22px;
+
+}
+
+
+/* =========================================
+INPUTS
+========================================= */
+
+input[type="text"],
+input[type="password"]{
+
+width:100%;
+
+padding:13px;
+
+margin:8px 0;
+
+border:
+1px solid #ccc;
+
+border-radius:7px;
+
+font-size:14px;
+
+outline:none;
+
+transition:
+border 0.2s,
+box-shadow 0.2s;
+
+}
+
+
+input[type="text"]:focus,
+input[type="password"]:focus{
+
+border-color:#0057b7;
+
+box-shadow:
+0 0 0 3px
+rgba(
+0,
+87,
+183,
+0.1
+);
+
+}
+
+
+/* =========================================
+REMEMBER ME
+========================================= */
+
+.checkbox-container{
+
+display:flex;
+
+align-items:center;
+
+justify-content:flex-start;
+
+font-size:13px;
+
+margin:
+10px 0;
+
+color:#555;
+
+}
+
+.checkbox-container input{
+
+margin-right:8px;
+
+}
+
+
+/* =========================================
+LOGIN BUTTON
+========================================= */
+
+.login-btn{
+
+width:100%;
+
+padding:13px;
+
+margin-top:12px;
+
+background:#0057b7;
+
+color:white;
+
+border:none;
+
+border-radius:7px;
+
+font-size:16px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+transition:
+background 0.3s,
+transform 0.1s;
+
+}
+
+.login-btn:hover{
+
+background:#004a9a;
+
+}
+
+.login-btn:active{
+
+transform:scale(0.98);
+
+}
+
+
+/* =========================================
+ERROR
+========================================= */
+
+#error-msg{
+
+min-height:20px;
+
+margin-top:10px;
+
+font-size:13px;
+
+color:#dc3545;
+
+}
+
+
+/* =========================================
+LINKS
+========================================= */
+
+.links{
+
+margin-top:18px;
+
+font-size:13px;
+
+}
+
+.links a{
+
+color:#0057b7;
+
+text-decoration:none;
+
+margin:0 5px;
+
+}
+
+.links a:hover{
+
+text-decoration:underline;
+
+}
+
+
+/* =========================================
+VERIFIED
+========================================= */
+
+.verified{
+
+margin-top:18px;
+
+font-size:12px;
+
+color:#28a745;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+.verified::before{
+
+content:"✔";
+
+margin-right:6px;
+
+font-weight:bold;
+
+}
+
+
+/* =========================================
+FOOTER
+========================================= */
+
+.footer{
+
+margin-top:25px;
+
+font-size:11px;
+
+color:white;
+
+text-align:center;
+
+}
+
+
+/* =========================================
+MOBILE
+========================================= */
+
+@media(
+max-width:400px
+){
+
+body{
+
+padding:15px;
+
+}
+
+.logo img{
+
+width:280px;
+
+}
+
+.login-container{
+
+padding:
+30px 20px;
+
+}
+
+}
+
+</style>
+
 </head>
+
 <body>
-  <!-- Logo placed above the login container -->
-  <div class="logo">
-    <img src="NeoPharmaBridge Logo.jpeg" alt="NeoPharmaBridge Logo.jpeg">
-  </div>
 
-  <div class="login-container">
-    <h2>Secure Login</h2>
-	
-</select>
-   <form id="loginForm">
-  <input
-  type="text"
-  id="accessNumber"
-  placeholder="HPCSA / SAPC Number" required
-/>
-         
-  <input
-  type="password"
-  id="password"
-  placeholder="Password" required
-/>
+<!-- =========================================
+LOGO
+========================================= -->
 
-  <div class="checkbox-container">
-    <input type="checkbox" id="remember">
-    <label for="remember">Remember Me</label>
-  </div>
+<div class="logo">
 
-  <button type="submit" class="login-btn">Login</button>
+<img
+src="NeoPharmaBridge Logo.jpeg"
+alt="NeoPharmaBridge Logo"
+
+>
+
+</div>
+
+<!-- =========================================
+LOGIN CARD
+========================================= -->
+
+<div class="login-container">
+
+<h2>
+Secure Login
+</h2>
+
+<div class="subtitle">
+
+NeoPharmaBridge Professional Access
+
+</div>
+
+<!-- =========================================
+LOGIN FORM
+========================================= -->
+
+<form id="loginForm">
+
+<input
+type="text"
+id="accessNumber"
+placeholder="HPCSA / SAPC Number"
+autocomplete="username"
+required
+
+>
+
+<input
+type="password"
+id="password"
+placeholder="Password"
+autocomplete="current-password"
+required
+
+>
+
+<!-- =========================================
+REMEMBER ME
+========================================= -->
+
+<div class="checkbox-container">
+
+<input
+type="checkbox"
+id="remember"
+
+>
+
+<label for="remember">
+Remember Me
+</label>
+
+</div>
+
+<!-- =========================================
+LOGIN
+========================================= -->
+
+<button
+type="submit"
+class="login-btn"
+
+>
+
+Login
+
+</button>
+
 </form>
 
-<div id="error-msg" style="color:red; margin-top:10px;"></div>
+<!-- =========================================
+ERROR MESSAGE
+========================================= -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div id="error-msg"></div>
 
+<!-- =========================================
+LINKS
+========================================= -->
+
+<div class="links">
+
+<a href="#">
+Forgot Password?
+</a>
+
+|
+
+<a href="#">
+Need Help?
+</a>
+
+</div>
+
+<!-- =========================================
+VERIFICATION
+========================================= -->
+
+<div class="verified">
+
+SAHPRA Verified Access
+
+</div>
+
+</div>
+
+<!-- =========================================
+FOOTER
+========================================= -->
+
+<div class="footer">
+
+© 2026 NeoPharmaBridge -
+Private Access Only
+
+</div>
 <script src="authscript.js" type="module">
+</script>
+<footer
+style="
+text-align:center;
+margin-top:20px;
+font-size:10px;
+color:#ffffff;
+opacity:0.7;
+"
+>
+
+Jesus Christ
+
+</footer>
+
+<script>
 
 
+/* =========================================
+LOGIN FORM
+========================================= */
+
+const loginForm =
+document.getElementById(
+"loginForm"
+);
+
+const errorMsg =
+document.getElementById(
+"error-msg"
+);
 
 
+/* =========================================
+TEMPORARY PROTOTYPE USERS
+=========================================
+
+THIS IS ONLY FOR TESTING.
+
+NO DATABASE YET.
+
+========================================= */
+
+const users = [
+
+{
+
+accessNumber:
+"MP123456",
+
+password:
+"doctor123",
+
+name:
+"DR KOALANE",
+
+role:
+"doctor",
+
+redirect:
+"Doctor-Dashboard.html"
+
+},
+
+{
+
+accessNumber:
+"P72436",
+
+password:
+"pharmacist123",
+
+name:
+"N.K KOALANE",
+
+role:
+"pharmacist",
+
+redirect:
+"Pharmacist_Dashboard.html"
+
+},
+
+{
+
+accessNumber:
+"ADMIN001",
+
+password:
+"admin123",
+
+name:
+"NeoPharmaBridge Admin",
+
+role:
+"admin",
+
+redirect:
+"Admin-Dashboard.html"
+
+}
+
+];
+
+
+/* =========================================
+LOGIN
+========================================= */
+
+loginForm.addEventListener(
+"submit",
+function(event){
+
+event.preventDefault();
+
+
+/* CLEAR ERROR */
+
+errorMsg.textContent="";
+
+
+/* =========================================
+GET INPUT
+========================================= */
+
+const accessNumber =
+document
+.getElementById(
+"accessNumber"
+)
+.value
+.trim()
+.toUpperCase();
+
+
+const password =
+document
+.getElementById(
+"password"
+)
+.value
+.trim();
+
+
+/* =========================================
+FIND USER
+========================================= */
+
+const user =
+users.find(
+u =>
+
+u.accessNumber ===
+accessNumber &&
+
+u.password ===
+password
+
+);
+
+
+/* =========================================
+INVALID LOGIN
+========================================= */
+
+if(!user){
+
+errorMsg.textContent =
+"Invalid login credentials.";
+
+return;
+
+}
+
+
+/* =========================================
+SAVE SESSION
+========================================= */
+
+localStorage.setItem(
+"neoRole",
+user.role
+);
+
+
+localStorage.setItem(
+"neoUser",
+user.name
+);
+
+
+localStorage.setItem(
+"userAccessNumber",
+user.accessNumber
+);
+
+
+/* =========================================
+REMEMBER ME
+========================================= */
+
+const remember =
+document.getElementById(
+"remember"
+).checked;
+
+
+if(remember){
+
+localStorage.setItem(
+"neoRemember",
+"true"
+);
+
+}else{
+
+localStorage.removeItem(
+"neoRemember"
+);
+
+}
+
+
+/* =========================================
+SUCCESS
+========================================= */
+
+errorMsg.style.color =
+"#28a745";
+
+errorMsg.textContent =
+"Login successful. Redirecting...";
+
+
+/* =========================================
+REDIRECT
+========================================= */
+
+setTimeout(
+function(){
+
+window.location.href =
+user.redirect;
+
+},
+500
+);
+
+});
 
 
 </script>
-    <div class="links">
-      <a href="#">Forgot Password?</a> |
-      <a href="#">Need Help?</a>
-    </div>
-    <div class="verified">SAHPRA Verified Access</div>
-  </div>
 
-  <div class="footer">© 2026 NeoPharmaBridge - Private Access Only</div>
-  <footer style="
-text-align:center;
-margin-top:40px;
-font-size:10px;
-color:#e5e5e5;
-opacity:0.6;
-">
-Jesus Christ
-</footer>
 </body>
+
 </html>
-
-
