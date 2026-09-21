@@ -4,1047 +4,590 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeoPharmaBridge | Admin Dashboard</title>
-
 <style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+body{min-height:100vh;display:flex;background:linear-gradient(135deg,#cce7ff,#28a745,#f2f9ff);color:#172033}
+.sidebar{width:260px;min-height:100vh;background:#0b1f3a;color:#fff;padding:22px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.logo{text-align:center;margin-bottom:18px}.logo img{width:170px;max-width:100%;height:auto}.admin-title{text-align:center;color:#9ecbff;font-size:13px;margin-bottom:20px;font-weight:700;letter-spacing:.6px}
+.menu{display:flex;flex-direction:column;gap:9px}.menu button{width:100%;background:#112b4a;color:#fff;border:0;padding:13px 14px;border-radius:11px;cursor:pointer;text-align:left;font-size:14px;transition:.2s}.menu button:hover{background:#0057b7;transform:translateX(3px)}.menu button.active{background:#0057b7;box-shadow:0 5px 15px rgba(0,87,183,.35)}
+.main{flex:1;padding:24px;min-width:0;overflow-y:auto}.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:20px}.search{width:390px;max-width:100%;padding:13px 15px;border:0;outline:0;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.12)}.clock{font-size:16px;font-weight:700;color:#0057b7;background:#fff;padding:10px 14px;border-radius:10px}
+.page-section{display:none}.page-section.active{display:block}.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px}.section-title h2{font-size:25px;color:#0b1f3a}.section-title p{color:#667085;font-size:13px}
+.cards,.report-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}.card,.report-box,.activity{background:#fff;border-radius:17px;box-shadow:0 9px 24px rgba(0,0,0,.11)}.card{padding:22px}.card h2{font-size:31px;color:#0057b7;margin-bottom:6px}.card p{color:#667085;font-size:14px}
+.activity{margin-top:20px;padding:22px}.activity h3{color:#28a745;margin-bottom:9px}.muted{color:#667085;font-size:13px;margin-bottom:14px;line-height:1.5}
+.table-wrapper{overflow-x:auto}table{width:100%;border-collapse:collapse;margin-top:10px;background:#fff;min-width:720px}th{background:#0057b7;color:#fff;padding:11px;text-align:left;font-size:13px;white-space:nowrap}td{padding:11px;border-bottom:1px solid #e5e7eb;font-size:13px;vertical-align:middle}tr:hover td{background:#f5faff}
+.btn{border:0;padding:9px 13px;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px}.btn:hover{opacity:.88}.btn-blue{background:#0057b7;color:#fff}.btn-green{background:#28a745;color:#fff}.btn-red{background:#dc3545;color:#fff}.btn-yellow{background:#ffc107;color:#111}.btn-gray{background:#e9ecef;color:#111}.form-actions{margin-top:14px;display:flex;gap:9px;flex-wrap:wrap}
+.stock-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.stock-form input{width:100%;padding:11px;border:1px solid #d8dee8;border-radius:8px;outline:0}.stock-form input:focus{border-color:#0057b7}
+.stock-good{color:#28a745;font-weight:700}.stock-low{color:#b77900;font-weight:700}.stock-out{color:#dc3545;font-weight:700}.stock-expired{color:#6c757d;font-weight:700}
+.report-box{padding:18px}.report-box h4{color:#0057b7;margin-bottom:7px;font-size:13px}.report-box strong{font-size:28px;color:#0b1f3a}.report-box.alert strong{color:#dc3545}.report-box.fast strong{color:#28a745}.report-box.slow strong{color:#b77900}
+.badge{display:inline-block;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:700;background:#eef2f7}.badge-red{background:#fde7e9;color:#b42318}.badge-green{background:#e5f6eb;color:#16733a}.badge-blue{background:#e5f0ff;color:#0057b7}.badge-yellow{background:#fff4cc;color:#8a6100}
+.alert-banner{padding:13px 15px;border-radius:11px;background:#fff4f4;border:1px solid #f2b8bd;color:#9b1c25;margin-top:14px;font-weight:700;font-size:13px;display:none}.alert-banner.show{display:block}
+.empty{text-align:center;padding:22px!important;color:#667085}.footer{text-align:center;margin-top:35px;font-size:10px;color:#777;opacity:.7;letter-spacing:1px}
+#botButton{position:fixed;bottom:20px;right:20px;width:58px;height:58px;border:0;border-radius:50%;background:#28a745;color:#fff;font-size:23px;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.3);z-index:1000}#botWindow{display:none;position:fixed;bottom:88px;right:20px;width:320px;max-width:calc(100vw - 40px);background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,.3);z-index:1000}#botWindow header{background:#0057b7;color:#fff;padding:12px;text-align:center;font-weight:700}.messages{height:240px;overflow-y:auto;padding:12px;background:#f8fbff}.bot-msg{margin-bottom:9px;line-height:1.4;font-size:13px}.bot-user{font-weight:700}.bot-reply{color:#0057b7}#botInput{width:100%;padding:12px;border:0;border-top:1px solid #ddd;outline:0}
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin-top:18px}
+.staff-card{background:#fff;border-radius:17px;box-shadow:0 9px 24px rgba(0,0,0,.11);padding:22px;border:1px solid #edf1f6}
+.staff-card h3{color:#0057b7;margin-bottom:7px}.staff-card p{color:#667085;font-size:13px;line-height:1.5;margin-bottom:15px}
+.staff-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.staff-form .full{grid-column:1/-1}
+.staff-form label{font-size:12px;font-weight:700;color:#344054;margin-bottom:-5px}.staff-form input,.staff-form select{width:100%;padding:11px;border:1px solid #d8dee8;border-radius:8px;outline:0;background:#fff}.staff-form input:focus,.staff-form select:focus{border-color:#0057b7;box-shadow:0 0 0 3px rgba(0,87,183,.08)}
+.generated-box{display:none;margin-top:14px;padding:14px;border-radius:10px;background:#f0f8ff;border:1px solid #b9dcff}.generated-box.show{display:block}.generated-box code{display:block;margin-top:5px;font-size:14px;font-weight:700;word-break:break-all}
+.staff-table{margin-top:18px}.staff-table table{min-width:980px}.staff-actions{display:flex;gap:7px;flex-wrap:wrap}.email-ready{color:#16733a;font-weight:700}.status-active{color:#16733a;font-weight:700}.status-pending{color:#8a6100;font-weight:700}
+@media(max-width:650px){.staff-form{grid-template-columns:1fr}.staff-form .full{grid-column:auto}}
 
-body{
-display:flex;
-min-height:100vh;
-background:linear-gradient(
-135deg,
-#cce7ff,
-#28a745,
-#f2f9ff
-);
-}
-
-/* SIDEBAR */
-
-.sidebar{
-width:260px;
-background:#0b1f3a;
-padding:25px;
-color:white;
-display:flex;
-flex-direction:column;
-}
-
-.logo{
-text-align:center;
-margin-bottom:35px;
-}
-
-.logo img{
-width:170px;
-}
-
-.menu{
-display:flex;
-flex-direction:column;
-gap:15px;
-}
-
-.menu button{
-background:#112b4a;
-color:white;
-border:none;
-padding:14px;
-border-radius:12px;
-cursor:pointer;
-text-align:left;
-font-size:15px;
-transition:0.3s;
-}
-
-.menu button:hover{
-background:#0057b7;
-transform:translateX(5px);
-}
-
-/* MAIN */
-
-.main{
-flex:1;
-padding:25px;
-overflow-y:auto;
-}
-
-/* TOPBAR */
-
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-gap:15px;
-flex-wrap:wrap;
-}
-
-.search{
-width:300px;
-max-width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-
-.clock{
-font-size:18px;
-font-weight:bold;
-color:#0057b7;
-}
-
-/* CARDS */
-
-.cards{
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-}
-
-.card{
-background:white;
-padding:25px;
-border-radius:18px;
-box-shadow:0 10px 25px rgba(0,0,0,0.12);
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-5px);
-}
-
-.card h2{
-font-size:34px;
-color:#0057b7;
-margin-bottom:10px;
-}
-
-.card p{
-color:#666;
-font-size:15px;
-}
-
-/* ACTIVITY */
-
-.activity{
-margin-top:30px;
-background:white;
-padding:25px;
-border-radius:18px;
-box-shadow:0 10px 25px rgba(0,0,0,0.12);
-}
-
-.activity h3{
-color:#28a745;
-margin-bottom:20px;
-}
-
-.prescription{
-border-bottom:1px solid #ddd;
-padding:15px 0;
-}
-
-.prescription:last-child{
-border-bottom:none;
-}
-
-.status{
-font-weight:bold;
-margin-top:8px;
-}
-
-.pending{
-color:#ffc107;
-}
-
-.queried{
-color:#dc3545;
-}
-
-.dispensed{
-color:#28a745;
-}
-
-.view-btn{
-margin-top:10px;
-background:#0057b7;
-color:white;
-border:none;
-padding:8px 14px;
-border-radius:8px;
-cursor:pointer;
-}
-
-/* TABLE */
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:15px;
-background:white;
-}
-
-th{
-background:#0057b7;
-color:white;
-padding:12px;
-}
-
-td{
-padding:12px;
-border-bottom:1px solid #ddd;
-}
-
-/* BOT */
-
-#botButton{
-position:fixed;
-bottom:20px;
-right:20px;
-width:65px;
-height:65px;
-border:none;
-border-radius:50%;
-background:#28a745;
-color:white;
-font-size:24px;
-cursor:pointer;
-box-shadow:0 6px 16px rgba(0,0,0,0.3);
-z-index:1000;
-}
-
-#botWindow{
-display:none;
-position:fixed;
-bottom:95px;
-right:20px;
-width:320px;
-background:white;
-border-radius:15px;
-overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.3);
-z-index:1000;
-}
-
-#botWindow header{
-background:#0057b7;
-color:white;
-padding:12px;
-text-align:center;
-font-weight:bold;
-}
-
-.messages{
-height:250px;
-overflow-y:auto;
-padding:12px;
-background:#f8fbff;
-}
-
-#botInput{
-width:100%;
-padding:12px;
-border:none;
-border-top:1px solid #ddd;
-outline:none;
-}
-
-/* FOOTER */
-
-.footer{
-text-align:center;
-margin-top:40px;
-font-size:10px;
-color:#d9d9d9;
-opacity:0.6;
-letter-spacing:1px;
-}
-
-/* MOBILE */
-
-@media(max-width:900px){
-
-body{
-flex-direction:column;
-}
-
-.sidebar{
-width:100%;
-overflow-x:auto;
-}
-
-.menu{
-flex-direction:row;
-}
-
-}
-
+@media(max-width:900px){body{display:block}.sidebar{width:100%;height:auto;min-height:0;position:relative;padding:14px}.logo{margin-bottom:8px}.logo img{width:135px}.admin-title{margin-bottom:12px}.menu{flex-direction:row;overflow-x:auto;padding-bottom:4px}.menu button{min-width:145px;white-space:nowrap}.main{padding:14px}.topbar{margin-bottom:15px}.search{width:100%}}
 </style>
 </head>
-
 <body>
-
-<!-- SIDEBAR -->
-
-<div class="sidebar">
-
-<div class="logo">
-<img src="NeoPharmaBridge Logo.jpeg">
-</div>
-
-<div class="menu">
-
-<button>🏠 Dashboard</button>
-
-<button onclick="showPatientsTab()">
-🧑 Patients
-</button>
-
-<button onclick="showDoctorsTab()">
-🩺 Doctors
-</button>
-
-<button onclick="showPharmacistsTab()">
-💊 Pharmacists
-</button>
-
-<button onclick="openArchives()">
-📄 Prescriptions
-</button>
-<button>📊 Reports</button>
-
-<button>⚙ Settings</button>
-
-<button
-onclick="logout()"
-style="background:#dc3545;"
->
-🚪 Logout
-</button>
-
-</div>
-
-</div>
-
-<!-- MAIN -->
-
-<div class="main">
-
-<!-- TOPBAR -->
-
-<div class="topbar">
-
-<input
-class="search"
-placeholder="Search patients, prescriptions..."
->
-
-<div class="clock" id="clock"></div>
-
-</div>
-
-<!-- STATS -->
-
-<div class="cards">
-
-<div class="card">
-<h2 id="patientCount">0</h2>
-<p>Total Patients</p>
-</div>
-
-<div class="card">
-<h2 id="prescriptionCount">0</h2>
-<p>Total Prescriptions</p>
-</div>
-
-<div class="card">
-<h2 id="queryCount">0</h2>
-<p>Queries Raised</p>
-</div>
-
-<div class="card">
-<h2 id="dispensedCount">0</h2>
-<p>Dispensed Scripts</p>
-</div>
-
-</div>
-
-<!-- ACTIVITY -->
-
-<div class="activity">
-
-<h3>Recent Prescription Activity</h3>
-
-<div id="activityList"></div>
-
-</div>
-
-<!-- PATIENTS -->
-
-<div
-class="activity"
-id="patientsSection"
-style="display:none;"
->
-
-<h3>Registered Patients</h3>
-
-<div style="overflow-x:auto;">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>ICAM</th>
-<th>Full Name</th>
-<th>DOB</th>
-<th>Gender</th>
-<th>Allergies</th>
-<th>Contact</th>
-
-</tr>
-
-</thead>
-
-<tbody id="patientsTable"></tbody>
-
-</table>
-
-</div>
-
-</div>
-
-<div class="footer">
-Jesus Christ
-</div>
-
-</div>
-
-<!-- DOCTORS SECTION -->
-
-<div class="activity"
-id="doctorsSection"
-style="display:none;">
-
-<h3>Registered Doctors</h3>
-
-<table style="
-width:100%;
-border-collapse:collapse;
-margin-top:15px;
-background:white;
-">
-
-<thead>
-
-<tr style="
-background:#0057b7;
-color:white;
-">
-
-<th style="padding:12px;">
-Doctor
-</th>
-
-<th style="padding:12px;">
-HPCSA
-</th>
-
-<th style="padding:12px;">
-Digital Signature
-</th>
-
-</tr>
-
-</thead>
-
-<tbody id="doctorsTable">
-
-<tr>
-
-<td style="padding:12px;">
-DR KOALANE
-</td>
-
-<td style="padding:12px;">
-MP123456
-</td>
-
-<td style="padding:12px;">
-Dr_Koalane_Signature
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-<!-- PHARMACISTS SECTION -->
-
-<div class="activity"
-id="pharmacistsSection"
-style="display:none;">
-
-<h3>Registered Pharmacists</h3>
-
-<table style="
-width:100%;
-border-collapse:collapse;
-margin-top:15px;
-background:white;
-">
-
-<thead>
-
-<tr style="
-background:#28a745;
-color:white;
-">
-
-<th style="padding:12px;">
-Pharmacist
-</th>
-
-<th style="padding:12px;">
-P Number
-</th>
-
-<th style="padding:12px;">
-Dispenser ID
-</th>
-
-</tr>
-
-</thead>
-
-<tbody id="pharmacistsTable">
-
-<tr>
-
-<td style="padding:12px;">
-N.K KOALANE
-</td>
-
-<td style="padding:12px;">
-P72436
-</td>
-
-<td style="padding:12px;">
-DSP-72436
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-<!-- BOT -->
-
-<button
-id="botButton"
-onclick="toggleBot()"
->
-💬
-</button>
-
-<div id="botWindow">
-
-<header>
-NeoPharmaBridge Assistant
-</header>
-
-<div
-class="messages"
-id="messages"
-></div>
-
-<input
-id="botInput"
-placeholder="Ask something..."
-onkeydown="
-if(event.key==='Enter')
-sendMessage()
-"
->
-
-</div>
+<aside class="sidebar">
+  <div class="logo"><img src="NeoPharmaBridge Logo.jpeg" alt="NeoPharmaBridge"></div>
+  <div class="admin-title">ADMIN CONTROL CENTRE</div>
+  <nav class="menu">
+    <button class="active" onclick="showTab('dashboard',this)">🏠 Dashboard</button>
+    <button onclick="showTab('patients',this)">🧑 Patients</button>
+    <button onclick="showTab('doctors',this)">🩺 Doctors</button>
+    <button onclick="showTab('pharmacists',this)">💊 Pharmacists</button>
+    <button onclick="showTab('prescriptions',this)">📄 Prescriptions</button>
+    <button onclick="showTab('stock',this)">📦 Pharmacy Stock</button>
+    <button onclick="showTab('reports',this)">📊 Reports</button>
+    <button onclick="showTab('settings',this)">⚙ Settings</button>
+    <button onclick="logout()" style="background:#dc3545">🚪 Logout</button>
+  </nav>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <input id="globalSearch" class="search" placeholder="Search patients, prescriptions, stock..." oninput="globalSearch()">
+    <div id="clock" class="clock"></div>
+  </div>
+
+  <section id="dashboard" class="page-section active">
+    <div class="section-title"><div><h2>Admin Dashboard</h2><p>NeoPharmaBridge system overview</p></div></div>
+    <div class="cards">
+      <div class="card"><h2 id="patientCount">0</h2><p>Total Patients</p></div>
+      <div class="card"><h2 id="doctorCount">0</h2><p>Registered Doctors</p></div>
+      <div class="card"><h2 id="pharmacistCount">0</h2><p>Registered Pharmacists</p></div>
+      <div class="card"><h2 id="prescriptionCount">0</h2><p>Total Prescriptions</p></div>
+      <div class="card"><h2 id="queryCount">0</h2><p>Queries Raised</p></div>
+      <div class="card"><h2 id="dispensedCount">0</h2><p>Dispensed Scripts</p></div>
+    </div>
+    <div class="activity"><h3>Recent Prescription Activity</h3><div id="activityList"></div></div>
+  </section>
+
+  <section id="patients" class="page-section">
+    <div class="activity"><div class="section-title"><div><h2>Registered Patients</h2><p>Patients currently stored in browser storage</p></div></div><div class="table-wrapper"><table><thead><tr><th>Patient Number / ICAM</th><th>Full Name</th><th>DOB</th><th>Gender</th><th>Allergies</th><th>Contact</th></tr></thead><tbody id="patientsTable"></tbody></table></div></div>
+  </section>
+
+  <section id="doctors" class="page-section">
+    <div class="activity"><div class="section-title"><div><h2>Registered Doctors</h2><p>Doctor registration information</p></div></div><div class="table-wrapper"><table><thead><tr><th>Doctor</th><th>HPCSA</th><th>Digital Signature</th></tr></thead><tbody id="doctorsTable"></tbody></table></div></div>
+  </section>
+
+  <section id="pharmacists" class="page-section">
+    <div class="activity"><div class="section-title"><div><h2>Registered Pharmacists</h2><p>Pharmacist registration information</p></div></div><div class="table-wrapper"><table><thead><tr><th>Pharmacist</th><th>P Number</th><th>Dispenser ID</th></tr></thead><tbody id="pharmacistsTable"></tbody></table></div></div>
+  </section>
+
+  <section id="prescriptions" class="page-section">
+    <div class="activity"><div class="section-title"><div><h2>Prescription Management</h2><p>Monitor the prescription lifecycle</p></div></div><div class="table-wrapper"><table><thead><tr><th>Prescription</th><th>Patient</th><th>Doctor</th><th>Pharmacy</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody id="prescriptionsTable"></tbody></table></div></div>
+  </section>
+
+  <section id="stock" class="page-section">
+    <div class="activity">
+      <div class="section-title"><div><h2>📦 Pharmacy Stock Management</h2><p>Admin controls stock gathering, editing and removal. Pharmacists only USE stock during dispensing.</p></div></div>
+      <div class="stock-form">
+        <input id="stockMedicine" placeholder="Medicine">
+        <input id="stockStrength" placeholder="Strength e.g. 500 mg">
+        <input id="stockForm" placeholder="Form e.g. Tablet">
+        <input id="stockBatch" placeholder="Batch Number">
+        <input id="stockExpiry" type="date">
+        <input id="stockQuantity" type="number" min="0" step="1" placeholder="Quantity">
+        <input id="stockMinimum" type="number" min="0" step="1" placeholder="Minimum Stock">
+        <input id="stockShelf" placeholder="Shelf">
+      </div>
+      <div class="form-actions"><button class="btn btn-green" onclick="addStock()">➕ Add / Gather Stock</button><button class="btn btn-yellow" onclick="clearStockForm()">Clear</button><button class="btn btn-blue" onclick="seedDemoInventory()">Load Demo Stock</button></div>
+    </div>
+    <div class="activity"><h3>Current Pharmacy Inventory</h3><div class="table-wrapper"><table><thead><tr><th>Medicine</th><th>Strength</th><th>Form</th><th>Batch</th><th>Expiry</th><th>Quantity</th><th>Minimum</th><th>Shelf</th><th>Status</th><th>Action</th></tr></thead><tbody id="inventoryTable"></tbody></table></div></div>
+  </section>
+
+  <section id="reports" class="page-section">
+    <div class="activity">
+      <div class="section-title"><div><h2>📊 Inventory & Movement Reports</h2><p>Movement is calculated from dispensing records in the last 30 days.</p></div><button class="btn btn-blue" onclick="exportSystemData()">📥 Export System Data</button></div>
+      <div class="report-grid">
+        <div class="report-box"><h4>Total Stock Items</h4><strong id="reportStockItems">0</strong></div>
+        <div class="report-box"><h4>Total Units</h4><strong id="reportUnits">0</strong></div>
+        <div class="report-box"><h4>Low Stock</h4><strong id="reportLow">0</strong></div>
+        <div class="report-box"><h4>Expired</h4><strong id="reportExpired">0</strong></div>
+        <div class="report-box alert"><h4>🚨 Order Alerts</h4><strong id="reportOrderAlerts">0</strong></div>
+        <div class="report-box fast"><h4>🚀 Fast Moving</h4><strong id="reportFastMoving">0</strong></div>
+        <div class="report-box slow"><h4>🐢 Slow Moving</h4><strong id="reportSlowMoving">0</strong></div>
+      </div>
+      <div id="reportAlertBanner" class="alert-banner"></div>
+    </div>
+
+    <div class="activity"><h3 style="color:#dc3545">🚨 Stock Order Alerts</h3><p class="muted">Order alerts are generated when stock is at or below its minimum level. The recommended order brings stock to 2 × the minimum level as a simple prototype rule.</p><div class="table-wrapper"><table><thead><tr><th>Medicine</th><th>Strength</th><th>Current</th><th>Minimum</th><th>Recommended Order</th><th>Movement</th><th>Advice</th></tr></thead><tbody id="orderAlertsTable"></tbody></table></div></div>
+
+    <div class="activity"><h3 style="color:#28a745">🚀 Fast-Moving Medicines</h3><p class="muted">Fast = 10 or more units dispensed in the last 30 days. These should be monitored closely and ordered early when stock approaches the minimum.</p><div class="table-wrapper"><table><thead><tr><th>Medicine</th><th>Strength</th><th>Current Stock</th><th>Units Dispensed</th><th>Movement</th><th>Advice</th></tr></thead><tbody id="fastMovingTable"></tbody></table></div></div>
+
+    <div class="activity"><h3 style="color:#b77900">🐢 Slow-Moving Medicines</h3><p class="muted">Slow = fewer than 3 units dispensed in the last 30 days. Avoid unnecessary over-ordering and review demand before purchasing more.</p><div class="table-wrapper"><table><thead><tr><th>Medicine</th><th>Strength</th><th>Current Stock</th><th>Units Dispensed</th><th>Movement</th><th>Advice</th></tr></thead><tbody id="slowMovingTable"></tbody></table></div></div>
+  </section>
+
+  <section id="settings" class="page-section">
+    <div class="activity">
+      <div class="section-title">
+        <div><h2>⚙ System Settings</h2><p>Admin-only staff registration and system controls</p></div>
+      </div>
+      <p class="muted">NeoPharmaBridge is currently operating using browser localStorage. Staff accounts created here are prototype accounts. The email invitation opens the administrator's email application with a ready-to-send invitation.</p>
+      <p style="margin-bottom:15px"><strong>Storage Mode:</strong> localStorage</p>
+    </div>
+
+    <div class="staff-grid">
+      <div class="staff-card">
+        <h3>🩺 Register Doctor</h3>
+        <p>Create a doctor account, generate a temporary password and prepare an email invitation.</p>
+        <form id="doctorRegistrationForm" class="staff-form" onsubmit="registerDoctor(event)">
+          <label>Full Name<input id="doctorFullName" required placeholder="e.g. Dr KOALANE"></label>
+          <label>HPCSA Number<input id="doctorHpcsa" required placeholder="e.g. MP123456"></label>
+          <label>Email Address<input id="doctorEmail" type="email" required placeholder="doctor@example.com"></label>
+          <label>Contact Number<input id="doctorContact" type="tel" required placeholder="e.g. 0821234567"></label>
+          <label class="full">Digital Signature<input id="doctorSignature" required placeholder="Doctor's digital signature / signature ID"></label>
+          <div class="form-actions full"><button class="btn btn-blue" type="submit">➕ REGISTER DOCTOR</button><button class="btn btn-gray" type="button" onclick="document.getElementById('doctorRegistrationForm').reset();hideGenerated('doctorGenerated')">Clear</button></div>
+        </form>
+        <div id="doctorGenerated" class="generated-box"></div>
+      </div>
+
+      <div class="staff-card">
+        <h3>💊 Register Pharmacist</h3>
+        <p>Create a pharmacist account, generate a Y-number and temporary password, then prepare the email invitation.</p>
+        <form id="pharmacistRegistrationForm" class="staff-form" onsubmit="registerPharmacist(event)">
+          <label>Full Name<input id="pharmacistFullName" required placeholder="e.g. N.K KOALANE"></label>
+          <label>SAPC<input id="pharmacistPNumber" required pattern="P\d{5}" placeholder="e.g. P12345" title="Use P followed by 5 digits"></label>
+		  <label>Email Address<input id="pharmacistEmail" type="email" required placeholder="pharmacist@example.com"></label>
+          <label>Contact Number<input id="pharmacistContact" type="tel" required placeholder="e.g. 0821234567"></label>
+		  <label class="full">Digital Signature<input id="PharmacistSignature" required placeholder="PHARMACIST's digital signature / signature ID"></label>
+          <div class="form-actions full"><button class="btn btn-green" type="submit">➕ REGISTER PHARMACIST</button><button class="btn btn-gray" type="button" onclick="document.getElementById('pharmacistRegistrationForm').reset();hideGenerated('pharmacistGenerated')">Clear</button></div>
+        </form>
+        <div id="pharmacistGenerated" class="generated-box"></div>
+      </div>
+    </div>
+
+    <div class="activity staff-table">
+      <div class="section-title"><div><h2>👥 Registered Staff Accounts</h2><p>Accounts created by the Admin are stored locally during the prototype phase.</p></div></div>
+      <div class="table-wrapper"><table><thead><tr><th>Role</th><th>Name</th><th>Registration / Access ID</th><th>Email</th><th>Pharmacy</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead><tbody id="staffAccountsTable"></tbody></table></div>
+    </div>
+
+    <div class="activity">
+      <h3>🔐 Prototype Security Notice</h3>
+      <p class="muted" style="margin-bottom:0">For this no-database prototype, account credentials are stored in localStorage so the other prototype pages can read them. Do not use real passwords or real patient/staff data in this version. In production, passwords should be hashed server-side and invitations should use secure one-time links instead of emailing passwords.</p>
+    </div>
+
+    <div class="activity"><button class="btn btn-red" onclick="clearSystemData()">⚠ Clear Demo System Data</button></div>
+  </section>
+  <div class="footer">Jesus Christ</div>
+</main>
+
+<button id="botButton" onclick="toggleBot()">💬</button>
+<div id="botWindow"><header>NeoPharmaBridge Assistant</header><div class="messages" id="messages"></div><input id="botInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendMessage()"></div>
 
 <script>
+'use strict';
 
-/* =========================================
-ACCESS CONTROL
-========================================= */
-
-const role =
-localStorage.getItem("neoRole");
-
-if(role !== "admin"){
-
-window.location.href =
-"Login.html";
-
+// =========================================================
+// ACCESS CONTROL
+// =========================================================
+if(localStorage.getItem('neoRole') !== 'admin'){
+  window.location.href='Login.html';
 }
 
-/* =========================================
-LOAD DATA
-========================================= */
+// =========================================================
+// SAFE STORAGE
+// =========================================================
+function readArray(key){
+  try{
+    const raw=localStorage.getItem(key);
+    if(!raw) return [];
+    const data=JSON.parse(raw);
+    if(Array.isArray(data)) return data;
+    return data ? [data] : [];
+  }catch(error){
+    console.error('Storage error:',key,error);
+    return [];
+  }
+}
+function writeArray(key,data){ localStorage.setItem(key,JSON.stringify(Array.isArray(data)?data:[])); }
+function escapeHTML(value){return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+function safeDate(value){const d=value?new Date(value):null;return d && !Number.isNaN(d.getTime())?d:null;}
+function dateText(value){const d=safeDate(value);return d?d.toLocaleString():'N/A';}
+function normalizeKey(value){return String(value??'').trim().toLowerCase();}
 
-let prescriptions =
-JSON.parse(
-localStorage.getItem(
-"adminPrescriptions"
-)
-) || [];
+// =========================================================
+// DATA GETTERS
+// =========================================================
+function getPatients(){return readArray('patients');}
+function getDoctors(){
+  const doctors=readArray('doctors');
+  return doctors.length?doctors:[{name:'DR KOALANE',hpcsa:'MP123456',signature:'Dr_Koalane_Signature'}];
+}
+function getPharmacists(){
+  const pharmacists=readArray('pharmacists');
+  return pharmacists.length?pharmacists:[{name:'N.K KOALANE',pNumber:'P72436',dispenserId:'DSP-72436'}];
+}
+function getInventory(){return readArray('neoPharmaBridgeInventory');}
+function saveInventory(inventory){writeArray('neoPharmaBridgeInventory',inventory);}
 
-let patients =
-JSON.parse(
-localStorage.getItem("patients")
-) || [];
+function prescriptionKey(p){
+  return String(p?.prescriptionNumber||p?.prescriptionNo||p?.rxNumber||p?.id||JSON.stringify(p));
+}
+function getPrescriptions(){
+  const sources=[...readArray('adminPrescriptions'),...readArray('neoPharmaBridgePrescriptions'),...readArray('neoPharmaBridgePrescription')];
+  const map=new Map();
+  sources.forEach(p=>{if(p&&!map.has(prescriptionKey(p)))map.set(prescriptionKey(p),p);});
+  return [...map.values()];
+}
+function getPatientName(p){
+  if(typeof p?.patient==='string') return p.patient;
+  if(p?.patient && typeof p.patient==='object') return p.patient.name||p.patient.fullName||'Unknown';
+  return p?.patientName||p?.fullName||'Unknown';
+}
+function getDoctorName(p){
+  if(typeof p?.doctor==='string') return p.doctor;
+  return p?.doctor?.name||p?.doctor?.fullName||p?.doctorName||'N/A';
+}
+function getPharmacyName(p){
+  if(typeof p?.pharmacy==='string') return p.pharmacy;
+  return p?.pharmacy?.name||p?.pharmacyName||'Not selected';
+}
+function getPrescriptionDate(p){return p?.date||p?.createdAt||p?.prescriptionDate||'';}
 
-/* =========================================
-CLOCK
-========================================= */
+// =========================================================
+// CLOCK
+// =========================================================
+function updateClock(){document.getElementById('clock').textContent=new Date().toLocaleString();}
+updateClock();setInterval(updateClock,1000);
 
-function updateClock(){
-
-const now = new Date();
-
-document.getElementById(
-"clock"
-).innerText =
-now.toLocaleTimeString();
-
+// =========================================================
+// TABS
+// =========================================================
+function showTab(tabId,button){
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  const section=document.getElementById(tabId);if(section)section.classList.add('active');
+  document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
+  if(button)button.classList.add('active');
+  refreshAll();
 }
 
-setInterval(updateClock,1000);
-
-updateClock();
-
-/* =========================================
-COUNTS
-========================================= */
-
-document.getElementById(
-"prescriptionCount"
-).innerText =
-prescriptions.length;
-
-document.getElementById(
-"patientCount"
-).innerText =
-patients.length;
-
-let queryCount = 0;
-let dispensedCount = 0;
-
-prescriptions.forEach(p => {
-
-if(p.status === "Query Raised"){
-queryCount++;
+// =========================================================
+// DASHBOARD
+// =========================================================
+function loadDashboard(){
+  const patients=getPatients(),doctors=getDoctors(),pharmacists=getPharmacists(),prescriptions=getPrescriptions();
+  document.getElementById('patientCount').textContent=patients.length;
+  document.getElementById('doctorCount').textContent=doctors.length;
+  document.getElementById('pharmacistCount').textContent=pharmacists.length;
+  document.getElementById('prescriptionCount').textContent=prescriptions.length;
+  let queries=0,dispensed=0;
+  prescriptions.forEach(p=>{
+    const status=normalizeKey(p.status);
+    if(status.includes('query'))queries++;
+    if(status==='dispensed')dispensed++;
+  });
+  document.getElementById('queryCount').textContent=queries;
+  document.getElementById('dispensedCount').textContent=dispensed;
+  loadActivity(prescriptions);
+}
+function loadActivity(prescriptions){
+  const el=document.getElementById('activityList');el.innerHTML='';
+  if(!prescriptions.length){el.innerHTML='<p class="empty">No prescription activity available.</p>';return;}
+  [...prescriptions].sort((a,b)=>(safeDate(getPrescriptionDate(b))?.getTime()||0)-(safeDate(getPrescriptionDate(a))?.getTime()||0)).slice(0,10).forEach(p=>{
+    const div=document.createElement('div');div.className='prescription';div.style.padding='12px 0';div.style.borderBottom='1px solid #eee';
+    const status=normalizeKey(p.status||'Pending');
+    let badge='badge-yellow',label='🟡 Pending';
+    if(status.includes('query')){badge='badge-red';label='🔴 Query Raised'}
+    else if(status==='dispensed'){badge='badge-green';label='🟢 Dispensed'}
+    else if(status==='verified'){badge='badge-blue';label='🔵 Verified'}
+    const number=p.prescriptionNumber||p.prescriptionNo||p.rxNumber||'N/A';
+    div.innerHTML=`<p><strong>Prescription:</strong> ${escapeHTML(number)}</p><p><strong>Patient:</strong> ${escapeHTML(getPatientName(p))}</p><p style="margin:4px 0 7px;color:#667085;font-size:12px">${escapeHTML(dateText(getPrescriptionDate(p)))}</p><span class="badge ${badge}">${label}</span> <button class="btn btn-blue" style="margin-left:6px" onclick="viewPrescriptionByKey(${JSON.stringify(prescriptionKey(p))})">View</button>`;
+    el.appendChild(div);
+  });
 }
 
-if(p.status === "Dispensed"){
-dispensedCount++;
-}
-
-});
-
-document.getElementById(
-"queryCount"
-).innerText =
-queryCount;
-
-document.getElementById(
-"dispensedCount"
-).innerText =
-dispensedCount;
-
-/* =========================================
-ACTIVITY
-========================================= */
-
-const activityList =
-document.getElementById(
-"activityList"
-);
-
-if(prescriptions.length === 0){
-
-activityList.innerHTML =
-"<p>No prescription activity available.</p>";
-
-}else{
-
-[...prescriptions]
-.reverse()
-.forEach((p,index)=>{
-
-let statusClass = "pending";
-let statusText = "🟡 Pending";
-
-if(p.status === "Query Raised"){
-
-statusClass = "queried";
-statusText = "🔴 Query Raised";
-
-}
-
-if(p.status === "Dispensed"){
-
-statusClass = "dispensed";
-statusText = "🟢 Dispensed";
-
-}
-
-const div =
-document.createElement("div");
-
-div.className =
-"prescription";
-
-div.innerHTML = `
-
-<p>
-<strong>Patient:</strong>
-${p.patient || "Unknown"}
-</p>
-
-<p>
-<strong>Date:</strong>
-${p.date
-? new Date(p.date)
-.toLocaleString()
-: "Unknown"}
-</p>
-
-<p class="status ${statusClass}">
-${statusText}
-</p>
-
-<button
-class="view-btn"
-onclick="openPrescription(${index})"
->
-View Prescription
-</button>
-
-`;
-
-activityList.appendChild(div);
-
-});
-
-}
-
-/* =========================================
-PATIENTS TAB
-========================================= */
-
-function showPatientsTab(){
-
-const section =
-document.getElementById(
-"patientsSection"
-);
-
-section.style.display =
-"block";
-
-loadPatients();
-
-}
-
-/* =========================================
-LOAD PATIENTS
-========================================= */
-
+// =========================================================
+// PATIENTS / DOCTORS / PHARMACISTS
+// =========================================================
 function loadPatients(){
-
-const table =
-document.getElementById(
-"patientsTable"
-);
-
-table.innerHTML = "";
-
-patients =
-JSON.parse(
-localStorage.getItem("patients")
-) || [];
-
-if(patients.length === 0){
-
-table.innerHTML = `
-
-<tr>
-
-<td
-colspan="6"
-style="
-padding:15px;
-text-align:center;
-"
->
-No registered patients found
-</td>
-
-</tr>
-
-`;
-
-return;
-
+  const table=document.getElementById('patientsTable');if(!table)return;table.innerHTML='';
+  const data=getPatients();
+  if(!data.length){table.innerHTML='<tr><td colspan="6" class="empty">No registered patients found.</td></tr>';return;}
+  data.forEach(p=>{const row=document.createElement('tr');row.innerHTML=`<td>${escapeHTML(p.patientNumber||p.patientNo||p.icam||p.icamNumber||'N/A')}</td><td>${escapeHTML(p.name||p.fullName||'N/A')}</td><td>${escapeHTML(p.dob||'N/A')}</td><td>${escapeHTML(p.gender||'N/A')}</td><td>${escapeHTML(p.allergies||'None')}</td><td>${escapeHTML(p.contact||p.contactNumber||'N/A')}</td>`;table.appendChild(row);});
+}
+function loadDoctors(){
+  const table=document.getElementById('doctorsTable');if(!table)return;table.innerHTML='';
+  getDoctors().forEach(d=>{const row=document.createElement('tr');row.innerHTML=`<td>${escapeHTML(d.name||d.fullName||'N/A')}</td><td>${escapeHTML(d.hpcsa||d.hpcsaNumber||'N/A')}</td><td>${escapeHTML(d.signature||d.digitalSignature||'N/A')}</td>`;table.appendChild(row);});
+}
+function loadPharmacists(){
+  const table=document.getElementById('pharmacistsTable');if(!table)return;table.innerHTML='';
+  getPharmacists().forEach(p=>{const row=document.createElement('tr');row.innerHTML=`<td>${escapeHTML(p.name||p.fullName||'N/A')}</td><td>${escapeHTML(p.pNumber||p.registrationNumber||p.yNumber||'N/A')}</td><td>${escapeHTML(p.dispenserId||p.dispenserID||'N/A')}</td>`;table.appendChild(row);});
 }
 
-patients.forEach(patient => {
-
-const row =
-document.createElement("tr");
-
-row.innerHTML = `
-
-<td>
-${patient.icam || "N/A"}
-</td>
-
-<td>
-${patient.name || "N/A"}
-</td>
-
-<td>
-${patient.dob || "N/A"}
-</td>
-
-<td>
-${patient.gender || "N/A"}
-</td>
-
-<td>
-${patient.allergies || "None"}
-</td>
-
-<td>
-${patient.contact || "N/A"}
-</td>
-
-`;
-
-table.appendChild(row);
-
-});
-
+// =========================================================
+// PRESCRIPTIONS
+// =========================================================
+function loadPrescriptions(){
+  const table=document.getElementById('prescriptionsTable');if(!table)return;table.innerHTML='';
+  const data=[...getPrescriptions()].sort((a,b)=>(safeDate(getPrescriptionDate(b))?.getTime()||0)-(safeDate(getPrescriptionDate(a))?.getTime()||0));
+  if(!data.length){table.innerHTML='<tr><td colspan="7" class="empty">No prescriptions found.</td></tr>';return;}
+  data.forEach(p=>{
+    const row=document.createElement('tr');
+    const number=p.prescriptionNumber||p.prescriptionNo||p.rxNumber||'N/A';
+    row.innerHTML=`<td>${escapeHTML(number)}</td><td>${escapeHTML(getPatientName(p))}</td><td>${escapeHTML(getDoctorName(p))}</td><td>${escapeHTML(getPharmacyName(p))}</td><td>${escapeHTML(p.status||'Pending')}</td><td>${escapeHTML(dateText(getPrescriptionDate(p)))}</td><td><button class="btn btn-blue" onclick="viewPrescriptionByKey(${JSON.stringify(prescriptionKey(p))})">View</button></td>`;
+    table.appendChild(row);
+  });
 }
-/* =========================================
-SHOW DOCTORS TAB
-========================================= */
-
-function showDoctorsTab(){
-
-document.getElementById(
-"patientsSection"
-).style.display = "none";
-
-document.getElementById(
-"pharmacistsSection"
-).style.display = "none";
-
-document.getElementById(
-"doctorsSection"
-).style.display = "block";
-
+function viewPrescriptionByKey(key){
+  const p=getPrescriptions().find(x=>prescriptionKey(x)===String(key));
+  if(!p){alert('Prescription not found.');return;}
+  localStorage.setItem('selectedPrescription','neoStaffAccounts','doctors','pharmacists',JSON.stringify(p));
+  localStorage.setItem('neoPharmaBridgeCurrentPrescription',JSON.stringify(p));
+  localStorage.setItem('neoPharmaBridgeDispensingPrescription',JSON.stringify(p));
+  window.open('View-Prescription.html','_blank');
 }
 
-/* =========================================
-SHOW PHARMACISTS TAB
-========================================= */
-
-function showPharmacistsTab(){
-
-document.getElementById(
-"patientsSection"
-).style.display = "none";
-
-document.getElementById(
-"doctorsSection"
-).style.display = "none";
-
-document.getElementById(
-"pharmacistsSection"
-).style.display = "block";
-
+// =========================================================
+// INVENTORY
+// =========================================================
+function clearStockForm(){['stockMedicine','stockStrength','stockForm','stockBatch','stockExpiry','stockQuantity','stockMinimum','stockShelf'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});}
+function addStock(){
+  const medicine=document.getElementById('stockMedicine').value.trim();
+  const strength=document.getElementById('stockStrength').value.trim();
+  const form=document.getElementById('stockForm').value.trim();
+  const batch=document.getElementById('stockBatch').value.trim();
+  const expiry=document.getElementById('stockExpiry').value;
+  const quantity=Number(document.getElementById('stockQuantity').value);
+  const minimum=Number(document.getElementById('stockMinimum').value||0);
+  const shelf=document.getElementById('stockShelf').value.trim();
+  if(!medicine||!strength||!batch||!expiry||!Number.isInteger(quantity)||quantity<0){alert('Please enter Medicine, Strength, Batch, Expiry and a valid whole-number Quantity.');return;}
+  if(!Number.isInteger(minimum)||minimum<0){alert('Minimum stock must be a whole number of 0 or more.');return;}
+  const inventory=getInventory();
+  const existing=inventory.find(i=>normalizeKey(i.medicine||i.name)===normalizeKey(medicine)&&normalizeKey(i.strength)===normalizeKey(strength)&&normalizeKey(i.batch)===normalizeKey(batch));
+  const now=new Date().toISOString(),user=localStorage.getItem('neoUser')||'Neo Admin';
+  if(existing){existing.quantity=Number(existing.quantity||0)+quantity;existing.expiry=expiry;existing.form=form||existing.form||'N/A';existing.min=minimum;existing.shelf=shelf||existing.shelf||'N/A';existing.updatedAt=now;existing.updatedBy=user;}
+  else inventory.push({id:'STK-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),medicine,name:medicine,strength,form:form||'N/A',batch,expiry,quantity,min:minimum,shelf:shelf||'N/A',updatedAt:now,updatedBy:user});
+  saveInventory(inventory);clearStockForm();refreshAll();alert('Stock successfully added to NeoPharmaBridge.');
+}
+function editStock(id){
+  const inventory=getInventory();const index=inventory.findIndex(i=>String(i.id)===String(id));if(index<0)return;const item=inventory[index];
+  const value=prompt(`Enter the new quantity for ${item.medicine||item.name||'this item'}:`,String(item.quantity??0));if(value===null)return;const quantity=Number(value);
+  if(!Number.isInteger(quantity)||quantity<0){alert('Quantity must be a whole number of 0 or more.');return;}
+  item.quantity=quantity;item.updatedAt=new Date().toISOString();item.updatedBy=localStorage.getItem('neoUser')||'Neo Admin';saveInventory(inventory);refreshAll();
+}
+function deleteStock(id){
+  const inventory=getInventory();const index=inventory.findIndex(i=>String(i.id)===String(id));if(index<0)return;const item=inventory[index];
+  if(!confirm(`Remove ${item.medicine||item.name||'this stock item'} batch ${item.batch||''} from inventory?`))return;
+  inventory.splice(index,1);saveInventory(inventory);refreshAll();
+}
+function loadInventory(){
+  const table=document.getElementById('inventoryTable');if(!table)return;table.innerHTML='';const inventory=getInventory();
+  if(!inventory.length){table.innerHTML='<tr><td colspan="10" class="empty">No inventory recorded.</td></tr>';return;}
+  const today=new Date();today.setHours(0,0,0,0);
+  inventory.forEach(item=>{
+    const q=Number(item.quantity||0),min=Number(item.min||0),expiry=safeDate(item.expiry);let status='In Stock',cls='stock-good';
+    if(expiry){const e=new Date(expiry);e.setHours(0,0,0,0);if(e<today){status='Expired';cls='stock-expired';}else if(q<=0){status='Out of Stock';cls='stock-out';}else if(q<=min){status='Low Stock';cls='stock-low';}}else if(q<=0){status='Out of Stock';cls='stock-out';}else if(q<=min){status='Low Stock';cls='stock-low';}
+    const row=document.createElement('tr');row.innerHTML=`<td>${escapeHTML(item.medicine||item.name||'N/A')}</td><td>${escapeHTML(item.strength||'N/A')}</td><td>${escapeHTML(item.form||'N/A')}</td><td>${escapeHTML(item.batch||'N/A')}</td><td>${escapeHTML(item.expiry||'N/A')}</td><td><strong>${q}</strong></td><td>${min}</td><td>${escapeHTML(item.shelf||'N/A')}</td><td class="${cls}">${status}</td><td><button class="btn btn-yellow" onclick="editStock(${JSON.stringify(String(item.id))})">Edit</button> <button class="btn btn-red" onclick="deleteStock(${JSON.stringify(String(item.id))})">Delete</button></td>`;table.appendChild(row);
+  });
+}
+function seedDemoInventory(){
+  if(getInventory().length&&!confirm('Inventory already exists. Replace it with demo stock?'))return;
+  const inventory=[
+    ['STK-PCM500','Paracetamol','500 mg','Tablet','PCM2026A','2027-06-30',100,20,'A1'],
+    ['STK-PCM1000','Paracetamol','1 g','Tablet','PCM2026B','2027-08-31',80,20,'A1'],
+    ['STK-AMX500','Amoxicillin','500 mg','Capsule','AMX2026A','2027-04-30',60,15,'B1'],
+    ['STK-MET500','Metformin','500 mg','Tablet','MET2026A','2028-01-31',120,25,'C1'],
+    ['STK-MET850','Metformin','850 mg','Tablet','MET2026B','2027-11-30',90,20,'C1'],
+    ['STK-AML5','Amlodipine','5 mg','Tablet','AML2026A','2028-03-31',75,20,'D1'],
+    ['STK-IBU400','Ibuprofen','400 mg','Tablet','IBU2026A','2027-09-30',50,15,'E1'],
+    ['STK-OMP20','Omeprazole','20 mg','Capsule','OMP2026A','2028-02-29',45,10,'F1']
+  ].map(x=>({id:x[0],medicine:x[1],name:x[1],strength:x[2],form:x[3],batch:x[4],expiry:x[5],quantity:x[6],min:x[7],shelf:x[8]}));
+  saveInventory(inventory);refreshAll();alert('Demo pharmacy stock loaded.');
 }
 
-/* =========================================
-AUTO REFRESH
-========================================= */
+// =========================================================
+// REPORTS - LAST 30 DAYS
+// =========================================================
+function getDispensingRecords(){return readArray('neoPharmaBridgeDispensingRecords');}
+function getRecordDate(record){return record?.date||record?.createdAt||record?.dispensedAt||record?.timestamp||'';}
+function getRecordItems(record){return Array.isArray(record?.items)?record.items:[];}
+function updateReports(){
+  const inventory=getInventory();const records=getDispensingRecords();const cutoff=Date.now()-30*24*60*60*1000;const today=new Date();
+  let units=0,low=0,expired=0;
+  inventory.forEach(item=>{const q=Number(item.quantity||0),min=Number(item.min||0);units+=q;if(q<=min)low++;const d=safeDate(item.expiry);if(d&&d<today)expired++;});
 
-setInterval(loadDoctors,2000);
+  const movement=new Map();
+  records.forEach(record=>{
+    const d=safeDate(getRecordDate(record));
+    if(d&&d.getTime()<cutoff)return;
+    getRecordItems(record).forEach(item=>{
+      const medicine=String(item.medicine||item.name||item.drug||'').trim();const strength=String(item.strength||'').trim();if(!medicine)return;
+      const key=normalizeKey(medicine)+'|'+normalizeKey(strength);const qty=Number(item.quantity??item.qty??0);if(!Number.isFinite(qty)||qty<=0)return;
+      if(!movement.has(key))movement.set(key,{medicine,strength,unitsDispensed:0,prescriptions:0});
+      const m=movement.get(key);m.unitsDispensed+=qty;m.prescriptions++;
+    });
+  });
 
-setInterval(loadPharmacists,2000);
-
-/* =========================================
-AUTO REFRESH
-========================================= */
-
-setInterval(loadPatients,2000);
-
-/* =========================================
-OPEN PRESCRIPTION
-========================================= */
-
-function openPrescription(index){
-
-localStorage.setItem(
-"selectedPrescriptionIndex",
-index
-);
-
-window.open(
-"View-Prescription.html",
-"_blank"
-);
-
+  const reportItems=inventory.map(item=>{
+    const medicine=item.medicine||item.name||'Unknown',strength=item.strength||'N/A',key=normalizeKey(medicine)+'|'+normalizeKey(strength),m=movement.get(key)||{unitsDispensed:0,prescriptions:0};
+    const quantity=Number(item.quantity||0),minimum=Number(item.min||0),target=Math.max(minimum*2,1);
+    const orderQuantity=Math.max(target-quantity,0);const movementClass=m.unitsDispensed>=10?'Fast':m.unitsDispensed>=3?'Moderate':'Slow';
+    return {...item,medicine,strength,quantity,minimum,unitsDispensed:m.unitsDispensed,prescriptions:m.prescriptions,movement:movementClass,orderQuantity,orderAlert:quantity<=minimum};
+  });
+  const alerts=reportItems.filter(i=>i.orderAlert).sort((a,b)=>a.quantity-b.quantity);const fast=reportItems.filter(i=>i.movement==='Fast').sort((a,b)=>b.unitsDispensed-a.unitsDispensed);const slow=reportItems.filter(i=>i.movement==='Slow').sort((a,b)=>a.unitsDispensed-b.unitsDispensed);
+  document.getElementById('reportStockItems').textContent=inventory.length;document.getElementById('reportUnits').textContent=units;document.getElementById('reportLow').textContent=low;document.getElementById('reportExpired').textContent=expired;document.getElementById('reportOrderAlerts').textContent=alerts.length;document.getElementById('reportFastMoving').textContent=fast.length;document.getElementById('reportSlowMoving').textContent=slow.length;
+  const banner=document.getElementById('reportAlertBanner');banner.classList.toggle('show',alerts.length>0);banner.textContent=alerts.length?`🚨 ${alerts.length} medicine item(s) need stock attention. Review the Order Alerts table before placing the next order.`:'';
+  renderOrderAlerts(alerts);renderFastMoving(fast);renderSlowMoving(slow);
+}
+function renderOrderAlerts(items){
+  const table=document.getElementById('orderAlertsTable');table.innerHTML='';if(!items.length){table.innerHTML='<tr><td colspan="7" class="empty">✅ No immediate reorder alerts.</td></tr>';return;}
+  items.forEach(i=>{const advice=i.quantity<=0?'🚨 URGENT — ORDER NOW':i.movement==='Fast'?'🚨 FAST MOVING — ORDER NOW':'⚠️ REORDER STOCK';const row=document.createElement('tr');row.innerHTML=`<td>${escapeHTML(i.medicine)}</td><td>${escapeHTML(i.strength)}</td><td><strong>${i.quantity}</strong></td><td>${i.minimum}</td><td><strong>${i.orderQuantity} units</strong></td><td><span class="badge ${i.movement==='Fast'?'badge-green':i.movement==='Slow'?'badge-yellow':'badge-blue'}">${i.movement}</span></td><td><strong>${advice}</strong></td>`;table.appendChild(row);});
+}
+function renderFastMoving(items){
+  const table=document.getElementById('fastMovingTable');table.innerHTML='';if(!items.length){table.innerHTML='<tr><td colspan="6" class="empty">No fast-moving medicines recorded in the last 30 days.</td></tr>';return;}
+  items.forEach(i=>{const advice=i.quantity<=i.minimum?'🚨 Fast moving + LOW STOCK — ORDER NOW':'📈 Monitor closely — high usage';const row=document.createElement('tr');row.innerHTML=`<td>${escapeHTML(i.medicine)}</td><td>${escapeHTML(i.strength)}</td><td>${i.quantity}</td><td><strong>${i.unitsDispensed}</strong></td><td><span class="badge badge-green">🚀 FAST</span></td><td>${advice}</td>`;table.appendChild(row);});
+}
+function renderSlowMoving(items){
+  const table=document.getElementById('slowMovingTable');table.innerHTML='';if(!items.length){table.innerHTML='<tr><td colspan="6" class="empty">No slow-moving medicines recorded.</td></tr>';return;}
+  items.forEach(i=>{const advice=i.unitsDispensed===0?'⚠️ No movement — avoid over-ordering':'🐢 Low usage — monitor before ordering';const row=document.createElement('tr');row.innerHTML=`<td>${escapeHTML(i.medicine)}</td><td>${escapeHTML(i.strength)}</td><td>${i.quantity}</td><td>${i.unitsDispensed}</td><td><span class="badge badge-yellow">🐢 SLOW</span></td><td>${advice}</td>`;table.appendChild(row);});
 }
 
-/* =========================================
-LOGOUT
-========================================= */
-
-function logout(){
-
-localStorage.removeItem(
-"neoRole"
-);
-
-window.location.href =
-"NeoPharmaBridge Homepage.html";
-
+// =========================================================
+// GLOBAL SEARCH
+// =========================================================
+function globalSearch(){
+  const q=normalizeKey(document.getElementById('globalSearch').value);if(!q){refreshAll();return;}
+  const patients=getPatients().filter(p=>JSON.stringify(p).toLowerCase().includes(q));const prescriptions=getPrescriptions().filter(p=>JSON.stringify(p).toLowerCase().includes(q));const inventory=getInventory().filter(i=>JSON.stringify(i).toLowerCase().includes(q));
+  document.getElementById('activityList').innerHTML='';
+  const results=[];
+  patients.forEach(p=>results.push(`<p>🧑 <strong>Patient:</strong> ${escapeHTML(p.name||p.fullName||'N/A')} — ${escapeHTML(p.patientNumber||p.icam||p.icamNumber||'N/A')}</p>`));
+  prescriptions.slice(0,15).forEach(p=>results.push(`<p>📄 <strong>Prescription:</strong> ${escapeHTML(p.prescriptionNumber||p.prescriptionNo||p.rxNumber||'N/A')} — ${escapeHTML(getPatientName(p))} — ${escapeHTML(p.status||'Pending')}</p>`));
+  inventory.forEach(i=>results.push(`<p>📦 <strong>Stock:</strong> ${escapeHTML(i.medicine||i.name||'N/A')} ${escapeHTML(i.strength||'')} — ${Number(i.quantity||0)} units</p>`));
+  document.getElementById('activityList').innerHTML=results.length?results.join(''):'<p class="empty">No matching records found.</p>';
 }
 
-/* =========================================
-BOT
-========================================= */
-
-const botWindow =
-document.getElementById(
-"botWindow"
-);
-
-const messages =
-document.getElementById(
-"messages"
-);
-
-function toggleBot(){
-
-botWindow.style.display =
-
-botWindow.style.display
-=== "block"
-
-?
-
-"none"
-
-:
-
-"block";
-
+// =========================================================
+// STAFF REGISTRATION / EMAIL INVITATIONS
+// =========================================================
+function getStaffAccounts(){return readArray('neoStaffAccounts');}
+function saveStaffAccounts(accounts){writeArray('neoStaffAccounts',accounts);}
+function generateTemporaryPassword(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
+  let password='';
+  for(let i=0;i<12;i++) password+=chars[Math.floor(Math.random()*chars.length)];
+  return password;
+}
+function normalizeEmail(value){return String(value||'').trim().toLowerCase();}
+function staffEmailSubject(role){return `NeoPharmaBridge ${role} Account Invitation`;}
+function buildStaffEmail(account){
+  const roleLabel=account.role==='doctor'?'Doctor':'Pharmacist';
+  const registration=account.role==='doctor'?account.hpcsa:account.yNumber;
+  const pharmacy=account.role==='pharmacist'?`\nPharmacy: ${account.pharmacyName}`:'';
+  return `Dear ${account.name},\n\nYou have been registered as a ${roleLabel} on NeoPharmaBridge.\n\nYour account details are:\nAccess ID: ${registration}${pharmacy}\nTemporary Password: ${account.temporaryPassword}\n\nPlease use these details to access the NeoPharmaBridge ${roleLabel} portal.\nFor security, change your password when the production password-management system is enabled.\n\nThis is an automated NeoPharmaBridge invitation from the Administrator.\n\nKind regards,\nNeoPharmaBridge Administration`;
+}
+function openStaffEmail(account){
+  const recipient=encodeURIComponent(account.email);
+  const subject=encodeURIComponent(staffEmailSubject(account.role));
+  const body=encodeURIComponent(buildStaffEmail(account));
+  window.location.href=`mailto:${recipient}?subject=${subject}&body=${body}`;
+}
+function showGenerated(id,account){
+  const box=document.getElementById(id);if(!box)return;
+  const access=account.role==='doctor'?account.hpcsa:account.yNumber;
+  box.innerHTML=`<strong>✅ ${account.role==='doctor'?'Doctor':'Pharmacist'} registered successfully</strong><br><span>Access ID:</span><code>${escapeHTML(access)}</code><span>Temporary Password:</span><code>${escapeHTML(account.temporaryPassword)}</code><div class="form-actions"><button class="btn btn-blue" onclick="openStaffEmailById(${JSON.stringify(account.id)})">✉ Open Email Invitation</button><button class="btn btn-gray" onclick="copyStaffCredentials(${JSON.stringify(account.id)})">📋 Copy Credentials</button></div>`;
+  box.classList.add('show');
+}
+function hideGenerated(id){const box=document.getElementById(id);if(box){box.classList.remove('show');box.innerHTML='';}}
+function registerDoctor(event){
+  event.preventDefault();
+  const name=document.getElementById('doctorFullName').value.trim();
+  const hpcsa=document.getElementById('doctorHpcsa').value.trim().toUpperCase();
+  const email=normalizeEmail(document.getElementById('doctorEmail').value);
+  const contact=document.getElementById('doctorContact').value.trim();
+  const signature=document.getElementById('doctorSignature').value.trim();
+  const accounts=getStaffAccounts();
+  if(accounts.some(a=>normalizeKey(a.hpcsa)===normalizeKey(hpcsa))){alert('A doctor with this HPCSA number is already registered.');return;}
+  if(accounts.some(a=>normalizeEmail(a.email)===email)){alert('This email address is already registered.');return;}
+  const account={id:'STAFF-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),role:'doctor',name,hpcsa,email,contact,signature,temporaryPassword:generateTemporaryPassword(),status:'Active',createdAt:new Date().toISOString()};
+  accounts.push(account);saveStaffAccounts(accounts);
+  const doctors=readArray('doctors');
+  if(!doctors.some(d=>normalizeKey(d.hpcsa||d.hpcsaNumber)===normalizeKey(hpcsa))) doctors.push({name,fullName:name,hpcsa,hpcsaNumber:hpcsa,email,contact,signature,digitalSignature:signature,status:'Active',createdAt:account.createdAt});
+  writeArray('doctors',doctors);
+  showGenerated('doctorGenerated',account);document.getElementById('doctorRegistrationForm').reset();refreshAll();
+}
+function registerPharmacist(event){
+  event.preventDefault();
+  const name=document.getElementById('pharmacistFullName').value.trim();
+  const yNumber=document.getElementById('pharmacistYNumber').value.trim().toUpperCase();
+  const pharmacyName=document.getElementById('pharmacyName').value.trim();
+  const email=normalizeEmail(document.getElementById('pharmacistEmail').value);
+  const contact=document.getElementById('pharmacistContact').value.trim();
+  if(!/^Y\d{7}$/.test(yNumber)){alert('SAPC / Y-Number must be Y followed by exactly 7 digits.');return;}
+  const accounts=getStaffAccounts();
+  if(accounts.some(a=>normalizeKey(a.yNumber)===normalizeKey(yNumber))){alert('A pharmacist with this Y-number is already registered.');return;}
+  if(accounts.some(a=>normalizeEmail(a.email)===email)){alert('This email address is already registered.');return;}
+  const account={id:'STAFF-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),role:'pharmacist',name,yNumber,pharmacyName,email,contact,temporaryPassword:generateTemporaryPassword(),status:'Active',createdAt:new Date().toISOString()};
+  accounts.push(account);saveStaffAccounts(accounts);
+  const pharmacists=readArray('pharmacists');
+  if(!pharmacists.some(p=>normalizeKey(p.yNumber||p.pNumber||p.registrationNumber)===normalizeKey(yNumber))) pharmacists.push({name,fullName:name,yNumber,pNumber:yNumber,registrationNumber:yNumber,email,contact,pharmacyName,status:'Active',dispenserId:'DSP-'+yNumber.slice(1),createdAt:account.createdAt});
+  writeArray('pharmacists',pharmacists);
+  showGenerated('pharmacistGenerated',account);document.getElementById('pharmacistRegistrationForm').reset();refreshAll();
+}
+function openStaffEmailById(id){const account=getStaffAccounts().find(a=>a.id===id);if(account)openStaffEmail(account);}
+function copyStaffCredentials(id){
+  const account=getStaffAccounts().find(a=>a.id===id);if(!account)return;
+  const access=account.role==='doctor'?account.hpcsa:account.yNumber;
+  const text=`NeoPharmaBridge ${account.role==='doctor'?'Doctor':'Pharmacist'}\nAccess ID: ${access}\nTemporary Password: ${account.temporaryPassword}`;
+  if(navigator.clipboard&&window.isSecureContext) navigator.clipboard.writeText(text).then(()=>alert('Credentials copied.')).catch(()=>alert(text));
+  else alert(text);
+}
+function loadStaffAccounts(){
+  const table=document.getElementById('staffAccountsTable');if(!table)return;table.innerHTML='';
+  const accounts=getStaffAccounts();
+  if(!accounts.length){table.innerHTML='<tr><td colspan="8" class="empty">No staff accounts registered yet.</td></tr>';return;}
+  accounts.sort((a,b)=>(safeDate(b.createdAt)?.getTime()||0)-(safeDate(a.createdAt)?.getTime()||0)).forEach(a=>{
+    const access=a.role==='doctor'?a.hpcsa:a.yNumber;
+    const role=a.role==='doctor'?'🩺 Doctor':'💊 Pharmacist';
+    const pharmacy=a.role==='pharmacist'?(a.pharmacyName||'N/A'):'—';
+    const row=document.createElement('tr');
+    row.innerHTML=`<td>${role}</td><td>${escapeHTML(a.name)}</td><td><strong>${escapeHTML(access)}</strong></td><td>${escapeHTML(a.email)}</td><td>${escapeHTML(pharmacy)}</td><td><span class="${a.status==='Active'?'status-active':'status-pending'}">${escapeHTML(a.status||'Active')}</span></td><td>${escapeHTML(dateText(a.createdAt))}</td><td><div class="staff-actions"><button class="btn btn-blue" onclick="openStaffEmailById(${JSON.stringify(a.id)})">✉ Email</button><button class="btn btn-red" onclick="removeStaffAccount(${JSON.stringify(a.id)})">Remove</button></div></td>`;
+    table.appendChild(row);
+  });
+}
+function removeStaffAccount(id){
+  const accounts=getStaffAccounts();const account=accounts.find(a=>a.id===id);if(!account)return;
+  if(!confirm(`Remove ${account.name}'s ${account.role} account?`))return;
+  saveStaffAccounts(accounts.filter(a=>a.id!==id));
+  if(account.role==='doctor') writeArray('doctors',readArray('doctors').filter(d=>normalizeKey(d.hpcsa||d.hpcsaNumber)!==normalizeKey(account.hpcsa)));
+  if(account.role==='pharmacist') writeArray('pharmacists',readArray('pharmacists').filter(p=>normalizeKey(p.yNumber||p.pNumber||p.registrationNumber)!==normalizeKey(account.yNumber)));
+  refreshAll();
 }
 
-function sendMessage(){
-
-const input =
-document.getElementById(
-"botInput"
-);
-
-if(input.value.trim() === "")
-return;
-
-addMessage(
-"You: " + input.value
-);
-
-const text =
-input.value.toLowerCase();
-
-input.value = "";
-
-setTimeout(()=>{
-
-let reply =
-"NeoPharmaBridge Assistant: Please contact support for advanced assistance.";
-
-if(text.includes("query")){
-
-reply =
-"NeoPharmaBridge Assistant: Queries are highlighted in red.";
-
+// =========================================================
+// EXPORT / RESET / LOGOUT
+// =========================================================
+function exportSystemData(){
+  const data={exportedAt:new Date().toISOString(),patients:getPatients(),doctors:getDoctors(),pharmacists:getPharmacists(),prescriptions:getPrescriptions(),inventory:getInventory(),dispensingRecords:getDispensingRecords(),staffAccounts:getStaffAccounts()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='NeoPharmaBridge-System-Export.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
 }
-
-if(text.includes("dispense")){
-
-reply =
-"NeoPharmaBridge Assistant: Dispensed prescriptions appear in green.";
-
+function clearSystemData(){
+  if(!confirm('This will clear NeoPharmaBridge demo data from this browser. Continue?'))return;
+  ['patients','adminPrescriptions','neoPharmaBridgePrescriptions','neoPharmaBridgePrescription','neoPharmaBridgeInventory','neoPharmaBridgeDispensingRecords','neoPharmaBridgeDispensingPrescription','neoPharmaBridgeCurrentPrescription','selectedPrescription'].forEach(k=>localStorage.removeItem(k));refreshAll();alert('Demo system data cleared.');
 }
+function logout(){localStorage.removeItem('neoRole');localStorage.removeItem('neoUser');window.location.href='NeoPharmaBridge Homepage.html';}
 
-addMessage(reply);
+// =========================================================
+// BOT
+// =========================================================
+function toggleBot(){const w=document.getElementById('botWindow');w.style.display=w.style.display==='block'?'none':'block';if(!document.getElementById('messages').children.length)addMessage('NeoPharmaBridge Assistant: Hello Admin 👋 How can I help?','reply');}
+function sendMessage(){const input=document.getElementById('botInput');const text=input.value.trim();if(!text)return;addMessage('You: '+text,'user');input.value='';const lower=text.toLowerCase();setTimeout(()=>{let reply='I can help with patients, prescriptions, pharmacists, doctors, stock and reports.';if(lower.includes('stock'))reply='Stock is controlled by Admin. Pharmacists only USE stock during dispensing.';else if(lower.includes('order')||lower.includes('slow')||lower.includes('fast'))reply='Open Reports. Fast-moving medicines show high recent usage, slow-moving medicines show low usage, and Order Alerts advise what needs attention.';else if(lower.includes('dispense'))reply='Pharmacists select a stock batch using USE. Stock is deducted only after Confirm Dispensing.';else if(lower.includes('query'))reply='Query Raised prescriptions are counted and displayed on the Admin Dashboard.';else if(lower.includes('patient'))reply='Registered patients can be viewed from the Patients tab.';else if(lower.includes('prescription'))reply='Prescriptions from the NeoPharmaBridge storage keys are combined and displayed here.';addMessage('NeoPharmaBridge Assistant: '+reply,'reply');},250);}
+function addMessage(msg,type){const div=document.createElement('div');div.className='bot-msg '+(type==='user'?'bot-user':'bot-reply');div.textContent=msg;const box=document.getElementById('messages');box.appendChild(div);box.scrollTop=box.scrollHeight;}
 
-},500);
-
-}
-
-function addMessage(msg){
-
-const div =
-document.createElement("div");
-
-div.style.marginBottom =
-"10px";
-
-div.innerText = msg;
-
-messages.appendChild(div);
-
-messages.scrollTop =
-messages.scrollHeight;
-
-}
-
-/* =========================================
-OPEN PRESCRIPTION ARCHIVES
-========================================= */
-
-function openArchives(){
-
-  window.location.href =
-  "Pharmacy_Archives.html";
-
-}
-
+// =========================================================
+// START / SYNC
+// =========================================================
+function refreshAll(){loadDashboard();loadPatients();loadDoctors();loadPharmacists();loadPrescriptions();loadInventory();updateReports();loadStaffAccounts();}
+refreshAll();setInterval(refreshAll,3000);window.addEventListener('storage',refreshAll);
 </script>
-
 </body>
 </html>
