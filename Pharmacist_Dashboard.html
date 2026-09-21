@@ -1,136 +1,583 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<title>NeoPharmaBridge | Pharmacist Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NeoPharmaBridge | Pharmacy Dashboard</title>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+>
 
 <style>
 
 *{
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+    box-sizing:border-box;
+    font-family:'Poppins',Arial,sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
-background:linear-gradient(to right,#e6f2ff,#f8fbff);
-padding:30px;
-margin:0;
+    margin:0;
+    padding:25px;
+    color:#222;
+    background:linear-gradient(135deg,#e6f2ff,#f8fbff);
 }
 
+/* =========================
+   TOP BAR
+========================= */
+
 .topbar{
-background:linear-gradient(135deg,#cce7ff,#28a745,#f2f9ff);
-padding:15px 30px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 4px 12px rgba(0,0,0,0.1);
-border-radius:14px;
-margin-bottom:25px;
+    background:linear-gradient(135deg,#cce7ff,#28a745,#f2f9ff);
+    padding:15px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    border-radius:16px;
+    box-shadow:0 5px 18px rgba(0,0,0,.12);
+    margin-bottom:25px;
 }
 
 .topbar img{
-height:70px;
+    height:65px;
+    max-width:220px;
+    object-fit:contain;
 }
 
-h1{
-text-align:center;
-color:#0057b7;
-margin-bottom:25px;
+.user-info{
+    text-align:right;
 }
 
-.card{
-background:#fff;
-padding:20px;
-border-radius:12px;
-box-shadow:0 6px 16px rgba(0,0,0,0.15);
-margin-bottom:20px;
+.user-info strong{
+    display:block;
+    font-size:15px;
 }
 
-input,
-textarea,
+.user-info span{
+    display:block;
+    font-size:12px;
+    margin-top:3px;
+}
+
+.verified{
+    color:#16843a;
+    font-weight:700;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.header h1{
+    color:#0057b7;
+    margin:0;
+    font-size:32px;
+}
+
+.header p{
+    color:#666;
+    margin-top:6px;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.navigation{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;
+    margin-bottom:25px;
+}
+
+.nav-btn{
+    position:relative;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+    background:white;
+    color:#0057b7;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    transition:.2s;
+}
+
+.nav-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 7px 18px rgba(0,0,0,.12);
+}
+
+.nav-btn.active{
+    background:#0057b7;
+    color:white;
+}
+
+/* =========================
+   UNREAD
+========================= */
+
+.unread-dot{
+    position:absolute;
+    top:7px;
+    right:9px;
+    width:10px;
+    height:10px;
+    background:#dc3545;
+    border-radius:50%;
+    box-shadow:0 0 0 3px rgba(220,53,69,.12);
+    display:none;
+}
+
+.unread-dot.show{
+    display:block;
+}
+
+.unread-counter{
+    display:none;
+    margin-left:6px;
+    min-width:20px;
+    height:20px;
+    padding:0 6px;
+    border-radius:20px;
+    background:#dc3545;
+    color:white;
+    font-size:10px;
+    line-height:20px;
+    text-align:center;
+    vertical-align:middle;
+}
+
+.unread-counter.show{
+    display:inline-block;
+}
+
+/* =========================
+   WELCOME
+========================= */
+
+.welcome-card{
+    background:white;
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:22px;
+    box-shadow:0 6px 18px rgba(0,0,0,.08);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.welcome-card h2{
+    margin:0;
+    color:#0057b7;
+}
+
+.welcome-card p{
+    margin:7px 0 0;
+    color:#666;
+    font-size:13px;
+}
+
+.status-pill{
+    padding:8px 14px;
+    background:#d4edda;
+    color:#155724;
+    border-radius:30px;
+    font-size:11px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+/* =========================
+   QUICK ACTIONS
+========================= */
+
+.quick-actions{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.action-card{
+    position:relative;
+    padding:25px;
+    border-radius:17px;
+    cursor:pointer;
+    border:2px solid transparent;
+    transition:.25s;
+    box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+.action-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(0,0,0,.13);
+}
+
+.action-card h2{
+    margin:0 0 7px;
+}
+
+.action-card p{
+    margin:0;
+    color:#666;
+    font-size:13px;
+}
+
+.action-icon{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.action-footer{
+    margin-top:18px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.otc-card{
+    background:linear-gradient(135deg,#e9fff0,#ffffff);
+    border-color:#28a745;
+}
+
+.otc-card .action-footer{
+    color:#16843a;
+}
+
+.rx-card{
+    background:linear-gradient(135deg,#eaf4ff,#ffffff);
+    border-color:#0057b7;
+}
+
+.rx-card .action-footer{
+    color:#0057b7;
+}
+
+.inventory-card{
+    background:linear-gradient(135deg,#fff8e1,#ffffff);
+    border-color:#ffc107;
+}
+
+.inventory-card .action-footer{
+    color:#856404;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.stat{
+    position:relative;
+    background:white;
+    padding:18px;
+    border-radius:14px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.stat-number{
+    font-size:28px;
+    font-weight:700;
+    color:#0057b7;
+}
+
+.stat-label{
+    color:#777;
+    font-size:13px;
+}
+
+.stat-unread{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#dc3545;
+    display:none;
+}
+
+.stat-unread.show{
+    display:block;
+}
+
+/* =========================
+   PANELS
+========================= */
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.panel{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.panel-header h3{
+    margin:0;
+    color:#0057b7;
+}
+
+.panel-header span{
+    font-size:11px;
+    color:#777;
+}
+
+/* =========================
+   PRESCRIPTION PREVIEW
+========================= */
+
+.prescription-preview{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.rx-preview{
+    position:relative;
+    padding:13px;
+    border:1px solid #e5e5e5;
+    border-radius:11px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.rx-preview:hover{
+    background:#f7fbff;
+    border-color:#b9d8f7;
+}
+
+.rx-preview.unread{
+    border-left:4px solid #dc3545;
+    background:#fffafa;
+}
+
+.rx-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.rx-name{
+    font-weight:700;
+    color:#0057b7;
+}
+
+.rx-number{
+    font-size:11px;
+    color:#777;
+}
+
+.rx-meta{
+    margin-top:5px;
+    color:#666;
+    font-size:11px;
+}
+
+.new-label{
+    display:inline-block;
+    margin-left:6px;
+    padding:3px 7px;
+    border-radius:10px;
+    background:#dc3545;
+    color:white;
+    font-size:8px;
+    font-weight:700;
+}
+
+/* =========================
+   OTC PREVIEW
+========================= */
+
+.otc-preview{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.otc-item{
+    padding:13px;
+    border-radius:11px;
+    border:1px solid #e4e4e4;
+    border-left:4px solid #28a745;
+    background:#fff;
+}
+
+.otc-item strong{
+    color:#16843a;
+}
+
+.otc-item small{
+    display:block;
+    color:#777;
+    margin-top:4px;
+    font-size:10px;
+}
+
+.otc-status{
+    display:inline-block;
+    margin-top:6px;
+    padding:3px 7px;
+    border-radius:10px;
+    background:#d4edda;
+    color:#155724;
+    font-size:9px;
+    font-weight:700;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    text-align:center;
+    color:#777;
+    padding:25px 15px;
+    font-size:13px;
+}
+
+.empty-icon{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
 button{
-padding:10px;
-border-radius:8px;
-border:1px solid #ccc;
+    border:none;
+    border-radius:9px;
+    padding:11px 15px;
+    cursor:pointer;
+    font-weight:600;
+    transition:.2s;
 }
 
-button{
-cursor:pointer;
-border:none;
+button:hover{
+    transform:translateY(-1px);
 }
 
-.search-btn{
-background:#28a745;
-color:white;
+.primary-btn{
+    background:#0057b7;
+    color:white;
 }
 
-.view-btn{
-background:#0057b7;
-color:white;
-margin-top:10px;
+.green-btn{
+    background:#28a745;
+    color:white;
 }
 
-.dispense-btn{
-background:#28a745;
-color:white;
-margin-top:10px;
-margin-left:5px;
-}
-
-.repeat-btn{
-background:#6f42c1;
-color:white;
-margin-top:10px;
-margin-left:5px;
-}
-
-.query-btn{
-background:#ffc107;
-color:black;
-margin-top:10px;
-margin-left:5px;
-}
-
-.query-save{
-background:#dc3545;
-color:white;
-margin-top:10px;
+.refresh-btn{
+    background:#17a2b8;
+    color:white;
 }
 
 .logout-btn{
-background:#dc3545;
-color:white;
-float:right;
-margin-top:10px;
+    background:#dc3545;
+    color:white;
 }
 
-.status{
-font-weight:bold;
-margin-top:10px;
+/* =========================
+   CONTROLS
+========================= */
+
+.control-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    background:white;
+    padding:17px 20px;
+    border-radius:14px;
+    box-shadow:0 5px 15px rgba(0,0,0,.07);
 }
 
-.pending{
-color:#ffc107;
+.control-row span{
+    color:#666;
+    font-size:12px;
 }
 
-.dispensed{
-color:#28a745;
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+    text-align:center;
+    margin-top:45px;
+    color:#999;
+    font-size:11px;
+    padding-bottom:20px;
 }
 
-.queried{
-color:#dc3545;
-}
+/* =========================
+   MOBILE
+========================= */
 
-.prescription-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-gap:20px;
-}
+@media(max-width:650px){
 
-textarea{
-width:100%;
-margin-top:10px;
+    body{
+        padding:12px;
+    }
+
+    .topbar{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .user-info{
+        text-align:center;
+    }
+
+    .header h1{
+        font-size:26px;
+    }
+
+    .welcome-card{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .dashboard-grid,
+    .quick-actions{
+        grid-template-columns:1fr;
+    }
+
 }
 
 </style>
@@ -138,594 +585,2224 @@ margin-top:10px;
 
 <body>
 
-<!-- TOPBAR -->
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
 
 <div class="topbar">
 
-  <img src="NeoPharmaBridge Logo.jpeg" alt="NeoPharmaBridge Logo">
+    <img
+        src="NeoPharmaBridge Logo.jpeg"
+        alt="NeoPharmaBridge"
+        onerror="this.style.display='none'"
+    >
 
-  <div>
-    <strong>N.K KOALANE</strong>
-    <p>P72436</p>
-    <p>SAPC Verified</p>
-  </div>
+    <div class="user-info">
 
-</div>
+        <strong id="pharmacistName">
+            N.K KOALANE
+        </strong>
 
-<h1>Pharmacist Dashboard</h1>
+        <span id="pharmacistSAPC">
+            P72436
+        </span>
 
-<!-- SEARCH -->
+        <span class="verified">
+            ✓ SAPC Verified
+        </span>
 
-<div class="card">
-
-  <h3>Search Patient</h3>
-
-  <input
-    id="icamSearch"
-    placeholder="Search by ICAM or Patient Name"
-    style="width:70%;"
-  >
-
-  <button 
-  onclick="searchPatient()"
-    id="searchBtn"
-    class="search-btn"
-    style="width:28%;margin-left:1%;"
-  >
-    Search
-  </button>
-
-  <div
-    id="patientResult"
-    style="margin-top:15px;font-weight:bold;"
-  ></div>
+    </div>
 
 </div>
 
-<!-- PRESCRIPTIONS -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
-<div
-  id="prescriptions"
-  class="prescription-grid"
-></div>
+<div class="header">
 
-<!-- LOGOUT -->
+    <h1>Pharmacy Dashboard</h1>
 
-<button
-  onclick="logout()"
-  class="logout-btn"
->
-  Logout
-</button>
+    <p>
+        Your NeoPharmaBridge pharmacy control centre.
+    </p>
+
+</div>
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<div class="navigation">
+
+    <button
+        class="nav-btn active"
+        type="button"
+        onclick="goDashboard()"
+    >
+        🏠 Dashboard
+    </button>
+
+    <button
+        class="nav-btn"
+        type="button"
+        onclick="goPrescriptions()"
+    >
+        📋 Prescriptions
+
+        <span
+            id="navUnread"
+            class="unread-counter"
+        >0</span>
+
+        <span
+            id="navUnreadDot"
+            class="unread-dot"
+        ></span>
+
+    </button>
+
+    <button
+        class="nav-btn"
+        type="button"
+        onclick="goOTC()"
+    >
+        🛒 OTC Pharmacy
+    </button>
+
+    <button
+        class="nav-btn"
+        type="button"
+        onclick="goInventory()"
+    >
+        💊 Inventory
+    </button>
+
+    <button
+        class="nav-btn"
+        type="button"
+        onclick="refreshDashboard()"
+    >
+        🔄 Refresh
+    </button>
+
+</div>
+
+<!-- =====================================================
+     WELCOME
+===================================================== -->
+
+<div class="welcome-card">
+
+    <div>
+
+        <h2>
+            Welcome back,
+            <span id="welcomeName">Pharmacist</span>
+        </h2>
+
+        <p>
+            Review prescriptions, process OTC transactions
+            and monitor your pharmacy workflow.
+        </p>
+
+    </div>
+
+    <div class="status-pill">
+        ● Pharmacy Online
+    </div>
+
+</div>
+
+<!-- =====================================================
+     QUICK ACTIONS
+===================================================== -->
+
+<div class="quick-actions">
+
+    <div
+        class="action-card otc-card"
+        onclick="goOTC()"
+    >
+
+        <div class="action-icon">🛒</div>
+
+        <h2>OTC Transaction</h2>
+
+        <p>
+            Start an OTC pharmacy transaction.
+            Complete patient assessment and counselling
+            before charging.
+        </p>
+
+        <div class="action-footer">
+            START OTC →
+        </div>
+
+    </div>
+
+    <div
+        class="action-card rx-card"
+        onclick="goPrescriptions()"
+    >
+
+        <div class="action-icon">📋</div>
+
+        <h2>Prescriptions</h2>
+
+        <p>
+            Review prescriptions assigned to your pharmacy
+            and continue dispensing.
+        </p>
+
+        <div class="action-footer">
+
+            OPEN PRESCRIPTIONS
+
+            <span
+                id="rxUnreadText"
+                class="unread-counter"
+            >0</span>
+
+        </div>
+
+    </div>
+
+    <div
+        class="action-card inventory-card"
+        onclick="goInventory()"
+    >
+
+        <div class="action-icon">💊</div>
+
+        <h2>Pharmacy Inventory</h2>
+
+        <p>
+            View stock, dispensing movements,
+            fast-moving and slow-moving medicines.
+        </p>
+
+        <div class="action-footer">
+            OPEN INVENTORY →
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     STATISTICS
+===================================================== -->
+
+<div class="stats">
+
+    <div class="stat">
+
+        <div
+            id="totalCount"
+            class="stat-number"
+        >0</div>
+
+        <div class="stat-label">
+            Total Prescriptions
+        </div>
+
+    </div>
+
+    <div class="stat">
+
+        <div
+            id="pendingCount"
+            class="stat-number"
+        >0</div>
+
+        <div class="stat-label">
+            Awaiting Dispensing
+        </div>
+
+        <span
+            id="pendingUnread"
+            class="stat-unread"
+        ></span>
+
+    </div>
+
+    <div class="stat">
+
+        <div
+            id="queryCount"
+            class="stat-number"
+        >0</div>
+
+        <div class="stat-label">
+            Queries
+        </div>
+
+        <span
+            id="queryUnread"
+            class="stat-unread"
+        ></span>
+
+    </div>
+
+    <div class="stat">
+
+        <div
+            id="dispensedCount"
+            class="stat-number"
+        >0</div>
+
+        <div class="stat-label">
+            Dispensed
+        </div>
+
+    </div>
+
+    <div class="stat">
+
+        <div
+            id="otcCount"
+            class="stat-number"
+        >0</div>
+
+        <div class="stat-label">
+            OTC Transactions
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     DASHBOARD PANELS
+===================================================== -->
+
+<div class="dashboard-grid">
+
+    <!-- PRESCRIPTIONS -->
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <h3>📋 Prescription Activity</h3>
+
+            <span>Latest 5</span>
+
+        </div>
+
+        <div
+            id="prescriptionPreview"
+            class="prescription-preview"
+        ></div>
+
+        <br>
+
+        <button
+            class="primary-btn"
+            type="button"
+            onclick="goPrescriptions()"
+        >
+            View All Prescriptions
+        </button>
+
+    </div>
+
+    <!-- OTC -->
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <h3>🛒 Recent OTC</h3>
+
+            <span>Latest 5</span>
+
+        </div>
+
+        <div
+            id="otcPreview"
+            class="otc-preview"
+        ></div>
+
+        <br>
+
+        <button
+            class="green-btn"
+            type="button"
+            onclick="startNewOTC()"
+        >
+            New OTC Transaction
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     CONTROLS
+===================================================== -->
+
+<div class="control-row">
+
+    <span>
+        🔐 Pharmacist session active
+    </span>
+
+    <div>
+
+        <button
+            class="refresh-btn"
+            type="button"
+            onclick="refreshDashboard()"
+        >
+            🔄 Refresh
+        </button>
+
+        <button
+            class="logout-btn"
+            type="button"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<div class="footer">
+
+    NeoPharmaBridge
+
+    <br><br>
+
+    Jesus Christ
+
+</div>
 
 <script>
 
-/* =========================================
-ACCESS CONTROL
-========================================= */
+/* =========================================================
+   NEO PHARMABRIDGE
+   PHARMACIST DASHBOARD
+   VERSION: OTC / RX SAFE CONTROLLER
+========================================================= */
 
-const role = localStorage.getItem("neoRole");
+"use strict";
 
-if(role !== "pharmacist"){
-  window.location.href = "Login.html";
-}
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
-if(localStorage.getItem("pharmacistAccess") !== "granted"){
-  window.location.href = "Pharmacist_Access.html";
-}
+const NPB = {
 
-/* =========================================
-LOAD DATA
-========================================= */
+    pages:{
+        dashboard:"Pharmacist_Dashboard.html",
+        prescriptions:"Pharmacist_Prescriptions.html",
+        otc:"Pharmacist_OTC.html",
+        inventory:"Pharmacy_Inventory.html",
+        login:"Login.html",
+        access:"Pharmacist_Access.html",
+        home:"NeoPharmaBridge Homepage.html"
+    },
 
-let prescriptions =
-JSON.parse(
-  localStorage.getItem("adminPrescriptions")
-) || [];
+    storage:{
+        prescriptions:[
+            "neoPharmaBridgePrescriptions",
+            "neoPharmaBridgePrescription",
+            "adminPrescriptions"
+        ],
 
-const container =
-document.getElementById("prescriptions");
+        currentPrescription:
+            "neoPharmaBridgeCurrentPrescription",
 
-const patientResult =
-document.getElementById("patientResult");
+        selectedPrescription:
+            "selectedPrescriptionNumber",
 
-/* =========================================
-AUTO FIX DATA
-========================================= */
+        otc:
+            "neoPharmaBridgeOTCTransactions",
 
-prescriptions.forEach(p => {
+        pendingOTC:
+            "neoPharmaBridgePendingOTC",
 
-  if(!p.status){
-    p.status = "Pending";
-  }
-
-  if(p.repeatsLeft == null){
-    p.repeatsLeft = 1;
-  }
-
-});
-
-localStorage.setItem(
-  "adminPrescriptions",
-  JSON.stringify(prescriptions)
-);
-
-/* =========================================
-RENDER
-========================================= */
-
-function renderPrescriptions(list){
-
-  container.innerHTML = "";
-
-  if(list.length === 0){
-
-    container.innerHTML = `
-      <div class="card">
-        <h3>No prescriptions found</h3>
-      </div>
-    `;
-
-    return;
-  }
-
-  list
-  .slice()
-  .reverse()
-  .forEach((prescription) => {
-
-    const realIndex =
-    prescriptions.indexOf(prescription);
-
-    let statusClass = "pending";
-
-    if(prescription.status === "Dispensed"){
-      statusClass = "dispensed";
+        inventoryMovements:
+            "neoPharmaBridgeInventoryMovements"
     }
 
-    if(prescription.status === "Query Raised"){
-      statusClass = "queried";
+};
+
+/* =========================================================
+   DOM HELPER
+========================================================= */
+
+function $(id){
+
+    return document.getElementById(id);
+
+}
+
+/* =========================================================
+   ACCESS CONTROL
+========================================================= */
+
+function checkAccess(){
+
+    const role =
+        String(
+            localStorage.getItem("neoRole") || ""
+        )
+        .trim()
+        .toLowerCase();
+
+    const pharmacistAccess =
+        String(
+            localStorage.getItem("pharmacistAccess") || ""
+        )
+        .trim()
+        .toLowerCase();
+
+    if(
+        role &&
+        role !== "pharmacist"
+    ){
+
+        window.location.href =
+            NPB.pages.login;
+
+        return false;
+
     }
 
-    const repeats =
-    prescription.repeatsLeft ?? 0;
+    if(
+        pharmacistAccess &&
+        pharmacistAccess !== "granted"
+    ){
 
-    const medsHTML =
-    Array.isArray(prescription.meds)
-    ?
-    prescription.meds
-      .map(m => `<li>${m}</li>`)
-      .join("")
-    :
-    "<li>No medication</li>";
+        window.location.href =
+            NPB.pages.access;
 
-    const card =
-    document.createElement("div");
+        return false;
 
-    card.className = "card";
+    }
 
-    card.innerHTML = `
+    return true;
 
-      <h3 style="color:#0057b7;">
-        ${prescription.patient || "Unknown Patient"}
-      </h3>
+}
 
-      <p>
-        <strong>ICAM:</strong>
-        ${prescription.icam || "N/A"}
-      </p>
+/* =========================================================
+   PHARMACIST DETAILS
+========================================================= */
 
-      <p>
-        <strong>Contact:</strong>
-        ${prescription.contact || "N/A"}
-      </p>
+function loadPharmacistDetails(){
 
-      <p>
-        <strong>Allergies:</strong>
-        ${prescription.allergies || "None"}
-      </p>
+    const name =
 
-      <p>
-        <strong>History:</strong><br>
-        ${prescription.history || "No history"}
-      </p>
+        localStorage.getItem("pharmacistName")
 
-      <p>
-        <strong>Date:</strong><br>
-        ${
-          prescription.date
-          ?
-          new Date(
-            prescription.date
-          ).toLocaleString()
-          :
-          "Unknown"
+        ||
+
+        localStorage.getItem("neoUser")
+
+        ||
+
+        "N.K KOALANE";
+
+    const sapc =
+
+        localStorage.getItem("pharmacistSAPC")
+
+        ||
+
+        localStorage.getItem("neoAccessNumber")
+
+        ||
+
+        localStorage.getItem("pharmacistYNumber")
+
+        ||
+
+        "P72436";
+
+    $("pharmacistName").textContent =
+        name;
+
+    $("pharmacistSAPC").textContent =
+        sapc;
+
+    $("welcomeName").textContent =
+        name;
+
+}
+
+/* =========================================================
+   SAFE STORAGE READER
+========================================================= */
+
+function readStorage(key){
+
+    try{
+
+        const raw =
+            localStorage.getItem(key);
+
+        if(
+            raw === null ||
+            raw === ""
+        ){
+
+            return [];
+
         }
-      </p>
 
-      <p class="status ${statusClass}">
-        Status:
-        ${prescription.status}
-      </p>
+        const parsed =
+            JSON.parse(raw);
 
-      <p>
-        <strong>Repeats Left:</strong>
-        ${repeats}
-      </p>
+        if(Array.isArray(parsed)){
 
-      ${
-        repeats <= 0
-        ?
-        `
-        <p style="
-          color:red;
-          font-weight:bold;
-        ">
-          OUT OF REPEATS
-        </p>
-        `
-        :
-        ""
-      }
+            return parsed;
 
-      ${
-        prescription.query
-        ?
-        `
-        <p style="color:#dc3545;">
-          <strong>Query:</strong><br>
-          ${prescription.query}
-        </p>
-        `
-        :
-        ""
-      }
+        }
 
-      <h4>Medication</h4>
+        if(
+            parsed &&
+            typeof parsed === "object"
+        ){
 
-      <ul>
-        ${medsHTML}
-      </ul>
+            /*
+               Supports single transaction
+               or single prescription objects.
+            */
 
-      <button
-        class="view-btn"
-        onclick="viewDetails(${realIndex})"
-      >
-        View Prescription
-      </button>
+            return [parsed];
 
-      <button
-        class="dispense-btn"
-        onclick="markDispensed(${realIndex})"
-      >
-        Dispense
-      </button>
+        }
 
-      <button
-        class="repeat-btn"
-        onclick="reduceRepeat(${realIndex})"
-      >
-        Use Repeat
-      </button>
+        return [];
 
-      <button
-        class="query-btn"
-        onclick="toggleQuery(${realIndex})"
-      >
-        Raise Query
-      </button>
+    }
 
-      <div
-        id="queryBox${realIndex}"
-        style="
-          display:none;
-          margin-top:10px;
-        "
-      >
+    catch(error){
 
-        <textarea
-          id="queryInput${realIndex}"
-          placeholder="Type pharmacist query..."
-        ></textarea>
+        console.error(
+            "NeoPharmaBridge storage error:",
+            key,
+            error
+        );
 
-        <button
-          class="query-save"
-          onclick="saveQuery(${realIndex})"
-        >
-          Submit Query
-        </button>
+        return [];
 
-      </div>
-
-    `;
-
-    container.appendChild(card);
-
-  });
+    }
 
 }
 
-/* =========================================
-SEARCH FUNCTION
-========================================= */
+/* =========================================================
+   SAFE HTML
+========================================================= */
 
-function searchPatient(){
+function escapeHTML(value){
 
-  const search =
-  document.getElementById(
-    "icamSearch"
-  ).value
-  .trim()
-  .toLowerCase();
+    const div =
+        document.createElement("div");
 
-  /* EMPTY SEARCH */
+    div.textContent =
+        value === null ||
+        value === undefined
+            ? ""
+            : String(value);
 
-  if(search === ""){
+    return div.innerHTML;
 
-    showRecentPrescriptions();
+}
 
-    patientResult.innerHTML =
-    "Showing prescriptions from last 24 hours";
+/* =========================================================
+   SAFE NUMBER
+========================================================= */
 
-    return;
-  }
+function safeNumber(value){
 
-  /* FILTER */
+    const number =
+        Number(value);
 
-  const filtered =
-  prescriptions.filter(p => {
+    return Number.isFinite(number)
+        ? number
+        : 0;
 
-    const patientName =
-    (p.patient || "")
-    .toLowerCase();
+}
 
-    const patientICAM =
-    (p.icam || "")
-    .toLowerCase();
+/* =========================================================
+   DATE HELPERS
+========================================================= */
+
+function getDateValue(item){
+
+    if(
+        !item ||
+        typeof item !== "object"
+    ){
+
+        return null;
+
+    }
 
     return (
-      patientName.includes(search)
-      ||
-      patientICAM.includes(search)
+
+        item.createdAt
+
+        ||
+
+        item.date
+
+        ||
+
+        item.created
+
+        ||
+
+        item.timestamp
+
+        ||
+
+        item.updatedAt
+
+        ||
+
+        item.transactionDate
+
+        ||
+
+        item.prescriptionDate
+
+        ||
+
+        null
+
     );
-
-  });
-
-  /* NO RESULTS */
-
-  if(filtered.length === 0){
-
-    patientResult.innerHTML =
-    "<span style='color:red;'>No patient found</span>";
-
-    renderPrescriptions([]);
-
-    return;
-  }
-
-  /* RESULTS FOUND */
-
-  patientResult.innerHTML =
-  `
-  <span style="color:#28a745;">
-    ${filtered.length}
-    prescription(s) found
-  </span>
-  `;
-
-  renderPrescriptions(filtered);
 
 }
 
-/* =========================================
-RECENT PRESCRIPTIONS
-========================================= */
+function dateObject(item){
 
-function showRecentPrescriptions(){
+    const value =
+        getDateValue(item);
 
-  const now = new Date();
+    if(!value){
 
-  const recent =
-  prescriptions.filter(p => {
+        return new Date(0);
 
-    if(!p.date){
-      return false;
     }
 
-    const prescriptionDate =
-    new Date(p.date);
+    /*
+       Support numeric timestamps.
+    */
 
-    const diffHours =
-    (now - prescriptionDate)
-    / (1000 * 60 * 60);
+    if(
+        typeof value === "number"
+    ){
 
-    return diffHours <= 24;
+        const numericDate =
+            new Date(value);
 
-  });
+        return Number.isNaN(
+            numericDate.getTime()
+        )
+            ? new Date(0)
+            : numericDate;
 
-  renderPrescriptions(recent);
+    }
 
-}
+    const date =
+        new Date(value);
 
-/* =========================================
-VIEW
-========================================= */
-
-function viewDetails(index){
-
-  localStorage.setItem(
-    "selectedPrescription",
-    index
-  );
-
-  window.open(
-    "View_Prescription.html",
-    "_blank"
-  );
+    return Number.isNaN(
+        date.getTime()
+    )
+        ? new Date(0)
+        : date;
 
 }
 
-/* =========================================
-DISPENSE
-========================================= */
+function formatDate(value){
 
-function markDispensed(index){
+    if(!value){
 
-  prescriptions[index].status =
-  "Dispensed";
+        return "Unknown date";
 
-  localStorage.setItem(
-    "adminPrescriptions",
-    JSON.stringify(prescriptions)
-  );
+    }
 
-  searchPatient();
+    const date =
+        new Date(value);
+
+    if(
+        Number.isNaN(
+            date.getTime()
+        )
+    ){
+
+        return "Unknown date";
+
+    }
+
+    return date.toLocaleString();
 
 }
 
-/* =========================================
-REPEATS
-========================================= */
+/* =========================================================
+   PRESCRIPTION NORMALIZER
+========================================================= */
 
-function reduceRepeat(index){
+function normalizePrescription(item){
 
-  if(
-    prescriptions[index].repeatsLeft <= 0
-  ){
+    if(
+        !item ||
+        typeof item !== "object"
+    ){
 
-    alert(
-      "Prescription is out of repeats"
+        return null;
+
+    }
+
+    let patient =
+        item.patient;
+
+    if(
+        !patient ||
+        typeof patient !== "object"
+    ){
+
+        patient = {
+
+            name:
+                item.patientName
+                ||
+                item.name
+                ||
+                "Unknown Patient",
+
+            icam:
+                item.icam
+                ||
+                item.icamNumber
+                ||
+                "",
+
+            contact:
+                item.contact
+                ||
+                item.contactNumber
+                ||
+                ""
+
+        };
+
+    }
+
+    let doctor =
+        item.doctor;
+
+    if(
+        !doctor ||
+        typeof doctor !== "object"
+    ){
+
+        doctor = {
+
+            name:
+                item.doctorName
+                ||
+                "N/A",
+
+            hpcsa:
+                item.hpcsa
+                ||
+                item.hpcsaNumber
+                ||
+                ""
+
+        };
+
+    }
+
+    const prescriptionNumber =
+
+        item.prescriptionNumber
+
+        ||
+
+        item.prescriptionNo
+
+        ||
+
+        item.rxNumber
+
+        ||
+
+        item.id
+
+        ||
+
+        (
+            "RX-" +
+            Date.now() +
+            "-" +
+            Math.floor(
+                Math.random()*1000
+            )
+        );
+
+    return {
+
+        ...item,
+
+        prescriptionNumber:
+            String(
+                prescriptionNumber
+            ),
+
+        patient,
+
+        doctor,
+
+        status:
+            item.status ||
+            "Pending",
+
+        pharmacy:
+            item.pharmacy ||
+            null,
+
+        repeatsLeft:
+            safeNumber(
+                item.repeatsLeft
+            ),
+
+        date:
+            getDateValue(item)
+            ||
+            new Date().toISOString()
+
+    };
+
+}
+
+/* =========================================================
+   PRESCRIPTION COLLECTION
+========================================================= */
+
+function getPrescriptions(){
+
+    const map =
+        new Map();
+
+    NPB.storage.prescriptions
+        .forEach(
+            key => {
+
+                const records =
+                    readStorage(key);
+
+                records.forEach(
+                    record => {
+
+                        const prescription =
+                            normalizePrescription(
+                                record
+                            );
+
+                        if(!prescription){
+
+                            return;
+
+                        }
+
+                        const keyValue =
+                            prescription
+                                .prescriptionNumber
+                                .trim()
+                                .toLowerCase();
+
+                        const existing =
+                            map.get(keyValue);
+
+                        if(!existing){
+
+                            map.set(
+                                keyValue,
+                                prescription
+                            );
+
+                            return;
+
+                        }
+
+                        /*
+                           Keep newest version.
+                        */
+
+                        if(
+                            dateObject(
+                                prescription
+                            ) >=
+                            dateObject(
+                                existing
+                            )
+                        ){
+
+                            map.set(
+                                keyValue,
+                                prescription
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    /*
+       The currently selected prescription
+       should NOT be added as a new record.
+       It is simply a pointer.
+    */
+
+    return Array.from(
+        map.values()
     );
 
-    return;
-  }
+}
 
-  prescriptions[index].repeatsLeft--;
+/* =========================================================
+   PHARMACY HELPERS
+========================================================= */
 
-  localStorage.setItem(
-    "adminPrescriptions",
-    JSON.stringify(prescriptions)
-  );
+function cleanPharmacyName(name){
 
-  alert(
-    "Repeat used successfully"
-  );
-
-  searchPatient();
+    return String(name || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g,"");
 
 }
 
-/* =========================================
-QUERY
-========================================= */
+function getCurrentPharmacy(){
 
-function toggleQuery(index){
+    return (
 
-  const box =
-  document.getElementById(
-    "queryBox" + index
-  );
+        localStorage.getItem(
+            "pharmacistPharmacy"
+        )
 
-  if(box.style.display === "block"){
-    box.style.display = "none";
-  }else{
-    box.style.display = "block";
-  }
+        ||
+
+        "NeoPharmaCare"
+
+    );
 
 }
 
-function saveQuery(index){
+function getPharmacyName(pharmacy){
 
-  const text =
-  document.getElementById(
-    "queryInput" + index
-  ).value.trim();
+    if(!pharmacy){
 
-  if(!text){
+        return "";
 
-    alert("Please type a query");
+    }
 
-    return;
-  }
+    if(
+        typeof pharmacy === "string"
+    ){
 
-  prescriptions[index].query =
-  text;
+        return pharmacy;
 
-  prescriptions[index].status =
-  "Query Raised";
+    }
 
-  localStorage.setItem(
-    "adminPrescriptions",
-    JSON.stringify(prescriptions)
-  );
+    if(
+        typeof pharmacy === "object"
+    ){
 
-  alert(
-    "Query submitted successfully"
-  );
+        return (
 
-  searchPatient();
+            pharmacy.name
+
+            ||
+
+            pharmacy.pharmacyName
+
+            ||
+
+            pharmacy.title
+
+            ||
+
+            ""
+
+        );
+
+    }
+
+    return "";
 
 }
 
-/* =========================================
-LOGOUT
-========================================= */
+function belongsToPharmacy(p){
+
+    if(!p){
+
+        return false;
+
+    }
+
+    const pharmacyName =
+        getPharmacyName(
+            p.pharmacy
+        );
+
+    /*
+       Prototype behaviour:
+       if no pharmacy is assigned,
+       show it to the pharmacist.
+    */
+
+    if(!pharmacyName){
+
+        return true;
+
+    }
+
+    const rx =
+        cleanPharmacyName(
+            pharmacyName
+        );
+
+    const mine =
+        cleanPharmacyName(
+            getCurrentPharmacy()
+        );
+
+    if(!rx || !mine){
+
+        return true;
+
+    }
+
+    return (
+
+        rx === mine
+
+        ||
+
+        rx.includes(mine)
+
+        ||
+
+        mine.includes(rx)
+
+    );
+
+}
+
+/* =========================================================
+   ASSIGNED PRESCRIPTIONS
+========================================================= */
+
+function getAssignedPrescriptions(){
+
+    return getPrescriptions()
+        .filter(
+            belongsToPharmacy
+        );
+
+}
+
+/* =========================================================
+   PRESCRIPTION STATUS
+========================================================= */
+
+function statusValue(p){
+
+    return String(
+        p?.status || ""
+    )
+    .trim()
+    .toLowerCase();
+
+}
+
+function isPending(p){
+
+    const status =
+        statusValue(p);
+
+    return (
+
+        status === "pending"
+
+        ||
+
+        status.includes("sent")
+
+        ||
+
+        status === "verified"
+
+        ||
+
+        status.includes("awaiting")
+
+    );
+
+}
+
+function isQuery(p){
+
+    return statusValue(p)
+        .includes("query");
+
+}
+
+function isDispensed(p){
+
+    return statusValue(p)
+        .includes("dispensed");
+
+}
+
+/* =========================================================
+   UNREAD
+========================================================= */
+
+function isUnread(p){
+
+    if(
+        p.unread === true
+        ||
+        p.read === false
+        ||
+        p.viewed === false
+    ){
+
+        return true;
+
+    }
+
+    if(
+        p.unread === false
+        ||
+        p.read === true
+        ||
+        p.viewed === true
+    ){
+
+        return false;
+
+    }
+
+    return (
+        isPending(p)
+        ||
+        isQuery(p)
+    );
+
+}
+
+/* =========================================================
+   OTC NORMALIZER
+========================================================= */
+
+function normalizeOTCTransaction(item){
+
+    if(
+        !item ||
+        typeof item !== "object"
+    ){
+
+        return null;
+
+    }
+
+    /*
+       PATIENT
+    */
+
+    let patient =
+        item.patient;
+
+    if(
+        !patient ||
+        typeof patient !== "object"
+    ){
+
+        patient = {
+
+            name:
+                item.customerName
+                ||
+                item.patientName
+                ||
+                item.customer
+                ||
+                "Customer",
+
+            number:
+                item.patientNumber
+                ||
+                item.icam
+                ||
+                ""
+
+        };
+
+    }
+
+    /*
+       MEDICINE
+    */
+
+    let medicine =
+        item.medicine;
+
+    if(
+        typeof medicine === "string"
+    ){
+
+        medicine = {
+
+            name:medicine
+
+        };
+
+    }
+
+    if(
+        !medicine ||
+        typeof medicine !== "object"
+    ){
+
+        medicine = {
+
+            name:
+                item.medicineName
+                ||
+                item.productName
+                ||
+                "Medicine",
+
+            quantity:
+                item.quantity
+                ||
+                0,
+
+            price:
+                item.price
+                ||
+                0
+
+        };
+
+    }
+
+    /*
+       QUANTITY
+    */
+
+    const quantity =
+
+        medicine.quantity
+
+        ??
+
+        item.quantity
+
+        ??
+
+        item.qty
+
+        ??
+
+        0;
+
+    /*
+       TOTAL
+    */
+
+    const total =
+
+        item.payment?.amount
+
+        ??
+
+        item.totalAmount
+
+        ??
+
+        item.total
+
+        ??
+
+        medicine.total
+
+        ??
+
+        (
+            safeNumber(
+                medicine.price
+            )
+            *
+            safeNumber(
+                quantity
+            )
+        )
+
+        ??
+
+        0;
+
+    /*
+       TRANSACTION NUMBER
+    */
+
+    const transactionNumber =
+
+        item.transactionNumber
+
+        ||
+
+        item.transactionNo
+
+        ||
+
+        item.otcNumber
+
+        ||
+
+        item.id
+
+        ||
+
+        "OTC";
+
+    /*
+       STATUS
+    */
+
+    const status =
+
+        item.status
+
+        ||
+
+        (
+            item.counsellingConfirmed
+            ? "Completed"
+            : "Recorded"
+        );
+
+    return {
+
+        ...item,
+
+        transactionNumber:
+            String(transactionNumber),
+
+        patient,
+
+        medicine,
+
+        quantity:
+            safeNumber(quantity),
+
+        total:
+            safeNumber(total),
+
+        status,
+
+        date:
+            getDateValue(item)
+            ||
+            new Date().toISOString()
+
+    };
+
+}
+
+/* =========================================================
+   GET OTC TRANSACTIONS
+========================================================= */
+
+function getOTCTransactions(){
+
+    return readStorage(
+        NPB.storage.otc
+    )
+
+    .map(
+        normalizeOTCTransaction
+    )
+
+    .filter(Boolean)
+
+    .sort(
+        (a,b) =>
+            dateObject(b) -
+            dateObject(a)
+    );
+
+}
+
+/* =========================================================
+   OTC PATIENT
+========================================================= */
+
+function getOTCPatientName(transaction){
+
+    return (
+
+        transaction?.patient?.name
+
+        ||
+
+        transaction?.customer?.name
+
+        ||
+
+        transaction?.customerName
+
+        ||
+
+        transaction?.patientName
+
+        ||
+
+        "Customer"
+
+    );
+
+}
+
+/* =========================================================
+   OTC MEDICINE
+========================================================= */
+
+function getOTCMedicineName(transaction){
+
+    return (
+
+        transaction?.medicine?.name
+
+        ||
+
+        transaction?.medicine?.medicineName
+
+        ||
+
+        transaction?.medicineName
+
+        ||
+
+        transaction?.productName
+
+        ||
+
+        "Medicine"
+
+    );
+
+}
+
+/* =========================================================
+   OTC STATUS
+========================================================= */
+
+function getOTCStatus(transaction){
+
+    return (
+
+        transaction?.status
+
+        ||
+
+        (
+            transaction?.counsellingConfirmed
+            ? "Completed"
+            : "Recorded"
+        )
+
+    );
+
+}
+
+/* =========================================================
+   UPDATE STATISTICS
+========================================================= */
+
+function updateStats(){
+
+    const prescriptions =
+        getAssignedPrescriptions();
+
+    const otc =
+        getOTCTransactions();
+
+    const total =
+        prescriptions.length;
+
+    const pending =
+        prescriptions.filter(
+            isPending
+        ).length;
+
+    const queries =
+        prescriptions.filter(
+            isQuery
+        ).length;
+
+    const dispensed =
+        prescriptions.filter(
+            isDispensed
+        ).length;
+
+    const unread =
+        prescriptions.filter(
+            isUnread
+        ).length;
+
+    $("totalCount").textContent =
+        total;
+
+    $("pendingCount").textContent =
+        pending;
+
+    $("queryCount").textContent =
+        queries;
+
+    $("dispensedCount").textContent =
+        dispensed;
+
+    $("otcCount").textContent =
+        otc.length;
+
+    /*
+       NAVIGATION UNREAD
+    */
+
+    const navUnread =
+        $("navUnread");
+
+    const navDot =
+        $("navUnreadDot");
+
+    if(unread > 0){
+
+        navUnread.textContent =
+            unread > 99
+                ? "99+"
+                : unread;
+
+        navUnread.classList.add("show");
+
+        navDot.classList.add("show");
+
+    }
+    else{
+
+        navUnread.classList.remove("show");
+
+        navDot.classList.remove("show");
+
+    }
+
+    /*
+       RX CARD
+    */
+
+    const rxUnread =
+        $("rxUnreadText");
+
+    if(unread > 0){
+
+        rxUnread.textContent =
+            unread > 99
+                ? "99+"
+                : unread;
+
+        rxUnread.classList.add("show");
+
+    }
+    else{
+
+        rxUnread.classList.remove("show");
+
+    }
+
+    /*
+       PENDING DOT
+    */
+
+    $("pendingUnread")
+        .classList.toggle(
+            "show",
+            pending > 0
+        );
+
+    /*
+       QUERY DOT
+    */
+
+    $("queryUnread")
+        .classList.toggle(
+            "show",
+            queries > 0
+        );
+
+}
+
+/* =========================================================
+   RENDER PRESCRIPTIONS
+========================================================= */
+
+function renderPrescriptionPreview(){
+
+    const container =
+        $("prescriptionPreview");
+
+    const prescriptions =
+        getAssignedPrescriptions()
+        .sort(
+            (a,b) =>
+                dateObject(b) -
+                dateObject(a)
+        );
+
+    container.innerHTML = "";
+
+    if(!prescriptions.length){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    📋
+                </div>
+
+                No prescriptions
+                currently assigned.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    prescriptions
+        .slice(0,5)
+        .forEach(
+            prescription => {
+
+                const unread =
+                    isUnread(
+                        prescription
+                    );
+
+                const patient =
+                    prescription
+                        .patient
+                        ?.name
+                    ||
+                    "Unknown Patient";
+
+                const number =
+                    prescription
+                        .prescriptionNumber
+                    ||
+                    "N/A";
+
+                const status =
+                    prescription.status
+                    ||
+                    "Pending";
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+                row.className =
+                    "rx-preview";
+
+                if(unread){
+
+                    row.classList.add(
+                        "unread"
+                    );
+
+                }
+
+                row.onclick =
+                    () =>
+                        openPrescription(
+                            number
+                        );
+
+                row.innerHTML = `
+
+                    <div class="rx-top">
+
+                        <div>
+
+                            <span class="rx-name">
+
+                                ${escapeHTML(
+                                    patient
+                                )}
+
+                            </span>
+
+                            ${
+                                unread
+                                ?
+                                `
+                                <span
+                                    class="new-label"
+                                >
+                                    NEW
+                                </span>
+                                `
+                                :
+                                ""
+                            }
+
+                        </div>
+
+                        <span class="rx-number">
+
+                            ${escapeHTML(
+                                number
+                            )}
+
+                        </span>
+
+                    </div>
+
+                    <div class="rx-meta">
+
+                        ${escapeHTML(
+                            status
+                        )}
+
+                        &nbsp; • &nbsp;
+
+                        ${escapeHTML(
+                            formatDate(
+                                prescription.date
+                            )
+                        )}
+
+                    </div>
+
+                `;
+
+                container.appendChild(
+                    row
+                );
+
+            }
+        );
+
+}
+
+/* =========================================================
+   RENDER OTC
+========================================================= */
+
+function renderOTCPreview(){
+
+    const container =
+        $("otcPreview");
+
+    const transactions =
+        getOTCTransactions();
+
+    container.innerHTML = "";
+
+    if(!transactions.length){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🛒
+                </div>
+
+                No OTC transactions yet.
+
+                <br><br>
+
+                Start your first OTC transaction.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    transactions
+        .slice(0,5)
+        .forEach(
+            transaction => {
+
+                const medicine =
+                    getOTCMedicineName(
+                        transaction
+                    );
+
+                const patient =
+                    getOTCPatientName(
+                        transaction
+                    );
+
+                const number =
+                    transaction
+                        .transactionNumber
+                    ||
+                    "OTC";
+
+                const quantity =
+                    transaction.quantity
+                    ||
+                    0;
+
+                const total =
+                    safeNumber(
+                        transaction.total
+                    );
+
+                const status =
+                    getOTCStatus(
+                        transaction
+                    );
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+                item.className =
+                    "otc-item";
+
+                item.innerHTML = `
+
+                    <strong>
+
+                        🛒
+
+                        ${escapeHTML(
+                            medicine
+                        )}
+
+                    </strong>
+
+                    <div>
+
+                        ${escapeHTML(
+                            patient
+                        )}
+
+                        · Qty:
+                        ${escapeHTML(
+                            quantity
+                        )}
+
+                        ${
+                            total > 0
+                            ?
+                            ` · R${total.toFixed(2)}`
+                            :
+                            ""
+                        }
+
+                    </div>
+
+                    <span class="otc-status">
+
+                        ${escapeHTML(
+                            status
+                        )}
+
+                    </span>
+
+                    <small>
+
+                        ${escapeHTML(
+                            number
+                        )}
+
+                        ·
+
+                        ${escapeHTML(
+                            formatDate(
+                                transaction.date
+                            )
+                        )}
+
+                    </small>
+
+                `;
+
+                container.appendChild(
+                    item
+                );
+
+            }
+        );
+
+}
+
+/* =========================================================
+   OPEN PRESCRIPTION
+========================================================= */
+
+function openPrescription(
+    prescriptionNumber
+){
+
+    const target =
+        String(
+            prescriptionNumber
+        )
+        .trim()
+        .toLowerCase();
+
+    const prescription =
+        getAssignedPrescriptions()
+        .find(
+            p =>
+                String(
+                    p.prescriptionNumber
+                )
+                .trim()
+                .toLowerCase()
+                ===
+                target
+        );
+
+    if(!prescription){
+
+        alert(
+            "Prescription could not be found."
+        );
+
+        return;
+
+    }
+
+    /*
+       Mark it as viewed locally.
+
+       This makes the dashboard behave
+       like WhatsApp-style unread tracking.
+    */
+
+    prescription.viewed = true;
+    prescription.read = true;
+
+    /*
+       Save selected prescription.
+    */
+
+    localStorage.setItem(
+        NPB.storage.currentPrescription,
+        JSON.stringify(
+            prescription
+        )
+    );
+
+    localStorage.setItem(
+        NPB.storage.selectedPrescription,
+        prescription.prescriptionNumber
+    );
+
+    /*
+       Send pharmacist to prescription page.
+    */
+
+    window.location.href =
+        NPB.pages.prescriptions;
+
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function goDashboard(){
+
+    window.location.href =
+        NPB.pages.dashboard;
+
+}
+
+function goPrescriptions(){
+
+    window.location.href =
+        NPB.pages.prescriptions;
+
+}
+
+function goOTC(){
+
+    /*
+       Dedicated OTC engine.
+
+       Dashboard DOES NOT process OTC.
+    */
+
+    window.location.href =
+        NPB.pages.otc;
+
+}
+
+function startNewOTC(){
+
+    /*
+       Clear only the unfinished OTC transaction.
+
+       Completed OTC transactions remain untouched.
+    */
+
+    localStorage.removeItem(
+        NPB.storage.pendingOTC
+    );
+
+    window.location.href =
+        NPB.pages.otc;
+
+}
+
+function goInventory(){
+
+    window.location.href =
+        NPB.pages.inventory;
+
+}
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+function refreshDashboard(){
+
+    try{
+
+        renderPrescriptionPreview();
+
+        renderOTCPreview();
+
+        updateStats();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "NeoPharmaBridge dashboard error:",
+            error
+        );
+
+    }
+
+}
+
+/* =========================================================
+   LOGOUT
+========================================================= */
 
 function logout(){
 
-  localStorage.removeItem(
-    "pharmacistAccess"
-  );
+    const confirmLogout =
+        confirm(
+            "Log out of the pharmacist session?"
+        );
 
-  window.location.href =
-  "NeoPharmaBridge Homepage.html";
+    if(!confirmLogout){
+
+        return;
+
+    }
+
+    localStorage.removeItem(
+        "pharmacistAccess"
+    );
+
+    localStorage.removeItem(
+        "pharmacistYNumber"
+    );
+
+    localStorage.removeItem(
+        "pharmacistSAPC"
+    );
+
+    localStorage.removeItem(
+        "pharmacistName"
+    );
+
+    window.location.href =
+        NPB.pages.home;
 
 }
 
-/* =========================================
-BUTTON FIX
-========================================= */
+/* =========================================================
+   START DASHBOARD
+========================================================= */
 
-document
-.getElementById("searchBtn")
-.addEventListener(
-  "click",
-  searchPatient
+if(checkAccess()){
+
+    loadPharmacistDetails();
+
+    refreshDashboard();
+
+}
+
+/* =========================================================
+   LIVE UPDATE
+========================================================= */
+
+setInterval(
+    refreshDashboard,
+    5000
 );
 
-document
-.getElementById("icamSearch")
-.addEventListener(
-  "keypress",
-  function(e){
+/*
+   Also refresh when returning to this tab.
+*/
 
-    if(e.key === "Enter"){
-      searchPatient();
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            refreshDashboard();
+
+        }
+
     }
-
-  }
 );
-
-/* =========================================
-INITIAL LOAD
-========================================= */
-
-showRecentPrescriptions();
-
-patientResult.innerHTML =
-"Showing prescriptions from the last 24 hours";
 
 </script>
-
-<footer style="
-text-align:center;
-margin-top:40px;
-font-size:10px;
-color:#e5e5e5;
-opacity:0.6;
-">
-Jesus Christ
-</footer>
 
 </body>
 </html>
