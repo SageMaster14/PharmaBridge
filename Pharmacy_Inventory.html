@@ -1,0 +1,3496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NeoPharmaBridge | Pharmacy Inventory</title>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f2f9ff;
+    color:#1f2937;
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar{
+    height:70px;
+    background:linear-gradient(
+        135deg,
+        #cce7ff,
+        #ffffff
+    );
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 30px;
+
+    border-bottom:1px solid #dbeafe;
+
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo{
+    width:45px;
+    height:45px;
+    object-fit:cover;
+    border-radius:12px;
+}
+
+.brand h1{
+    color:#0f4c81;
+    font-size:21px;
+}
+
+.brand span{
+    display:block;
+    color:#64748b;
+    font-size:12px;
+    margin-top:2px;
+}
+
+.user-area{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.user-name{
+    color:#0f4c81;
+    font-weight:bold;
+}
+
+.back-btn{
+    border:none;
+    background:#0f4c81;
+    color:white;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.container{
+    max-width:1450px;
+    margin:auto;
+    padding:25px;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.page-header h2{
+    color:#0f4c81;
+    font-size:28px;
+}
+
+.page-header p{
+    color:#64748b;
+    margin-top:5px;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:18px;
+
+    margin-bottom:25px;
+}
+
+.stat-card{
+    background:white;
+    padding:20px;
+    border-radius:14px;
+
+    border:1px solid #e5eef8;
+
+    box-shadow:
+        0 4px 15px
+        rgba(15,76,129,.08);
+}
+
+.stat-title{
+    color:#64748b;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.stat-value{
+    color:#0f4c81;
+    font-size:29px;
+    font-weight:bold;
+}
+
+
+/* =========================================================
+   PRESCRIPTION
+========================================================= */
+
+.dispensing-card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+
+    margin-bottom:25px;
+
+    border:1px solid #e5eef8;
+
+    box-shadow:
+        0 4px 15px
+        rgba(15,76,129,.08);
+}
+
+.dispensing-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.dispensing-header h3{
+    color:#0f4c81;
+}
+
+.rx-badge{
+    background:#e8f4ff;
+    color:#0f4c81;
+
+    padding:7px 13px;
+
+    border-radius:20px;
+
+    font-size:13px;
+    font-weight:bold;
+}
+
+.patient-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin-bottom:22px;
+}
+
+.info-box{
+    background:#f8fbff;
+
+    padding:14px;
+
+    border-radius:9px;
+
+    border:1px solid #e5eef8;
+}
+
+.info-box small{
+    display:block;
+
+    color:#64748b;
+
+    font-size:11px;
+
+    margin-bottom:5px;
+}
+
+.info-box strong{
+    color:#1e293b;
+}
+
+
+/* =========================================================
+   MEDICATION ITEM
+========================================================= */
+
+.prescription-item{
+    background:#fbfdff;
+
+    border:1px solid #dbeafe;
+
+    border-radius:12px;
+
+    padding:18px;
+
+    margin-bottom:15px;
+}
+
+.med-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:15px;
+}
+
+.med-name{
+    color:#0f4c81;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.item-number{
+    width:30px;
+    height:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#0f4c81;
+    color:white;
+
+    font-weight:bold;
+}
+
+.med-grid{
+    display:grid;
+
+    grid-template-columns:
+        2fr
+        1fr
+        1fr
+        2fr;
+
+    gap:15px;
+}
+
+.field label{
+    display:block;
+
+    color:#64748b;
+
+    font-size:12px;
+    font-weight:bold;
+
+    margin-bottom:6px;
+}
+
+.field input,
+.field select{
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #cbd5e1;
+
+    border-radius:8px;
+
+    background:white;
+}
+
+.stock-info{
+    background:#f8fafc;
+
+    padding:10px;
+
+    border-radius:8px;
+
+    font-size:12px;
+
+    min-height:42px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.primary-btn{
+    border:none;
+
+    background:#28a745;
+
+    color:white;
+
+    padding:12px 20px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+}
+
+.primary-btn:hover{
+    opacity:.9;
+}
+
+.use-btn{
+    border:none;
+
+    background:#0f4c81;
+
+    color:white;
+
+    padding:8px 13px;
+
+    border-radius:7px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+}
+
+.use-btn:hover{
+    opacity:.9;
+}
+
+.cancel-btn{
+    border:none;
+
+    background:#e2e8f0;
+
+    color:#334155;
+
+    padding:11px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   INVENTORY
+========================================================= */
+
+.inventory-section{
+    background:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    border:1px solid #e5eef8;
+
+    box-shadow:
+        0 4px 15px
+        rgba(15,76,129,.08);
+}
+
+.inventory-section h3{
+    color:#0f4c81;
+
+    margin-bottom:15px;
+}
+
+.inventory-toolbar{
+    display:flex;
+
+    gap:12px;
+
+    margin-bottom:20px;
+}
+
+.search{
+    flex:1;
+
+    padding:12px;
+
+    border:1px solid #cbd5e1;
+
+    border-radius:9px;
+}
+
+.filter{
+    padding:12px;
+
+    border:1px solid #cbd5e1;
+
+    border-radius:9px;
+
+    background:white;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+th{
+    background:#eef7ff;
+
+    color:#0f4c81;
+
+    text-align:left;
+
+    padding:13px;
+
+    font-size:13px;
+}
+
+td{
+    padding:13px;
+
+    border-bottom:1px solid #edf2f7;
+
+    font-size:14px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status{
+    display:inline-block;
+
+    padding:5px 9px;
+
+    border-radius:20px;
+
+    font-size:11px;
+
+    font-weight:bold;
+}
+
+.status-good{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.status-low{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.status-out{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.status-expired{
+    background:#f3f4f6;
+    color:#374151;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(15,23,42,.55);
+
+    z-index:500;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+}
+
+.modal-content{
+    width:100%;
+    max-width:900px;
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:25px;
+}
+
+.modal-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.modal-header h3{
+    color:#0f4c81;
+}
+
+.close{
+    border:none;
+
+    background:#f1f5f9;
+
+    width:35px;
+    height:35px;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    font-size:18px;
+}
+
+
+/* =========================================================
+   SUCCESS
+========================================================= */
+
+.success-icon{
+    font-size:50px;
+
+    margin-bottom:10px;
+}
+
+.success-box{
+    text-align:center;
+}
+
+.success-box h2{
+    color:#16803c;
+
+    margin-bottom:8px;
+}
+
+.label-list{
+    display:grid;
+
+    gap:15px;
+
+    margin-top:20px;
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.print-area{
+    display:none;
+}
+
+.medicine-label{
+    width:90mm;
+
+    min-height:55mm;
+
+    border:2px solid #111;
+
+    padding:8mm;
+
+    background:white;
+
+    font-family:Arial,sans-serif;
+}
+
+.label-brand{
+    font-size:14px;
+
+    font-weight:bold;
+
+    border-bottom:1px solid #111;
+
+    padding-bottom:4px;
+
+    margin-bottom:7px;
+}
+
+.label-medicine{
+    font-size:18px;
+
+    font-weight:bold;
+
+    margin:7px 0;
+}
+
+.label-directions{
+    font-size:14px;
+
+    margin:8px 0;
+}
+
+.label-line{
+    font-size:11px;
+
+    margin-top:3px;
+}
+
+
+@media print{
+
+    body *{
+        visibility:hidden;
+    }
+
+    .print-area,
+    .print-area *{
+        visibility:visible;
+    }
+
+    .print-area{
+        display:block;
+
+        position:absolute;
+
+        top:0;
+        left:0;
+
+        width:100%;
+    }
+
+    .medicine-label{
+        page-break-after:always;
+
+        margin:10mm;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px){
+
+    .stats{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .patient-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .med-grid{
+        grid-template-columns:
+            1fr 1fr;
+    }
+}
+
+@media(max-width:650px){
+
+    .topbar{
+        padding:0 15px;
+    }
+
+    .user-name{
+        display:none;
+    }
+
+    .container{
+        padding:15px;
+    }
+
+    .page-header{
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:12px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .patient-grid{
+        grid-template-columns:1fr;
+    }
+
+    .med-grid{
+        grid-template-columns:1fr;
+    }
+
+    .inventory-toolbar{
+        flex-direction:column;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     TOP BAR
+========================================================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <img
+            src="NeoPharmaBridge Logo.jpeg"
+            class="logo"
+            onerror="this.style.display='none'"
+        >
+
+        <div>
+
+            <h1>
+                NeoPharmaBridge
+            </h1>
+
+            <span>
+                Pharmacy Inventory & Dispensing
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="user-area">
+
+        <span
+            class="user-name"
+            id="pharmacistName"
+        >
+            Pharmacist
+        </span>
+
+        <button
+            class="back-btn"
+            onclick="goBack()"
+        >
+            ← Dashboard
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<div class="container">
+
+
+<!-- =========================================================
+     PAGE HEADER
+========================================================= -->
+
+<div class="page-header">
+
+    <div>
+
+        <h2>
+            Pharmacy Inventory
+        </h2>
+
+        <p>
+            Use available stock to dispense prescriptions.
+            Stock management is controlled by Admin.
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     STATISTICS
+========================================================= -->
+
+<div class="stats">
+
+    <div class="stat-card">
+
+        <div class="stat-title">
+            INVENTORY LINES
+        </div>
+
+        <div
+            class="stat-value"
+            id="totalLines"
+        >
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-title">
+            TOTAL UNITS
+        </div>
+
+        <div
+            class="stat-value"
+            id="totalUnits"
+        >
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-title">
+            LOW STOCK
+        </div>
+
+        <div
+            class="stat-value"
+            id="lowStock"
+        >
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-title">
+            EXPIRED
+        </div>
+
+        <div
+            class="stat-value"
+            id="expiredStock"
+        >
+            0
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     PRESCRIPTION DISPENSING
+========================================================= -->
+
+<div
+    class="dispensing-card"
+    id="dispensingCard"
+>
+
+    <div class="dispensing-header">
+
+        <h3>
+            Prescription Ready for Dispensing
+        </h3>
+
+        <div
+            class="rx-badge"
+            id="rxNumber"
+        >
+            No prescription
+        </div>
+
+    </div>
+
+
+    <div id="prescriptionContent">
+
+        <p style="color:#64748b;">
+
+            No prescription selected.
+
+            Click
+            <strong>
+                Dispense
+            </strong>
+
+            from the pharmacist dashboard.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     INVENTORY TABLE
+========================================================= -->
+
+<div class="inventory-section">
+
+    <h3>
+        Available Pharmacy Stock
+    </h3>
+
+
+    <div class="inventory-toolbar">
+
+        <input
+            type="text"
+            id="inventorySearch"
+            class="search"
+            placeholder="Search medicine, batch or location..."
+            oninput="renderInventory()"
+        >
+
+
+        <select
+            id="statusFilter"
+            class="filter"
+            onchange="renderInventory()"
+        >
+
+            <option value="all">
+                All Stock
+            </option>
+
+            <option value="good">
+                In Stock
+            </option>
+
+            <option value="low">
+                Low Stock
+            </option>
+
+            <option value="out">
+                Out of Stock
+            </option>
+
+            <option value="expired">
+                Expired
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Medicine
+                    </th>
+
+                    <th>
+                        Strength
+                    </th>
+
+                    <th>
+                        Form
+                    </th>
+
+                    <th>
+                        Batch
+                    </th>
+
+                    <th>
+                        Expiry
+                    </th>
+
+                    <th>
+                        Quantity
+                    </th>
+
+                    <th>
+                        Location
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody
+                id="inventoryBody"
+            ></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     SUCCESS MODAL
+========================================================= -->
+
+<div
+    class="modal"
+    id="successModal"
+>
+
+    <div class="modal-content">
+
+        <div class="success-box">
+
+            <div class="success-icon">
+                ✅
+            </div>
+
+            <h2>
+                Dispensing Complete
+            </h2>
+
+            <p style="margin-top:8px;color:#64748b;">
+
+                The prescription has been dispensed successfully.
+
+            </p>
+
+
+            <div
+                class="label-list"
+                id="labelPreview"
+            ></div>
+
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:flex-end;
+                    gap:10px;
+                    margin-top:20px;
+                "
+            >
+
+                <button
+                    class="cancel-btn"
+                    onclick="closeSuccessModal()"
+                >
+                    Close
+                </button>
+
+
+                <button
+                    class="primary-btn"
+                    onclick="printLabels()"
+                >
+                    🖨 Print Labels
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     PRINT AREA
+========================================================= -->
+
+<div
+    class="print-area"
+    id="printArea"
+></div>
+
+
+
+<script>
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+const INVENTORY_KEY =
+    "neoPharmaBridgeInventory";
+
+const DISPENSING_KEY =
+    "neoPharmaBridgeDispensingRecords";
+
+const CURRENT_RX_KEY =
+    "neoPharmaBridgeDispensingPrescription";
+
+
+/* =========================================================
+   PHARMACIST
+========================================================= */
+
+const pharmacistName =
+    localStorage.getItem("neoUser") ||
+    "Pharmacist";
+
+document.getElementById(
+    "pharmacistName"
+).textContent =
+    pharmacistName;
+
+
+/* =========================================================
+   INVENTORY
+========================================================= */
+
+let inventory =
+    JSON.parse(
+        localStorage.getItem(
+            INVENTORY_KEY
+        )
+    ) || [];
+
+
+/*
+    Demo stock.
+
+    IMPORTANT:
+    This is only generated if no inventory
+    currently exists.
+*/
+
+if(inventory.length === 0){
+
+    inventory = [
+
+        {
+            id:generateId(),
+            medicine:"Paracetamol",
+            strength:"500 mg",
+            form:"Tablet",
+            batch:"PCM2026A",
+            expiry:"2027-06-30",
+            quantity:100,
+            minStock:20,
+            location:"Shelf A1"
+        },
+
+        {
+            id:generateId(),
+            medicine:"Paracetamol",
+            strength:"1 g",
+            form:"Tablet",
+            batch:"PCM2026B",
+            expiry:"2027-08-31",
+            quantity:80,
+            minStock:20,
+            location:"Shelf A1"
+        },
+
+        {
+            id:generateId(),
+            medicine:"Amoxicillin",
+            strength:"500 mg",
+            form:"Capsule",
+            batch:"AMX2026A",
+            expiry:"2027-04-30",
+            quantity:60,
+            minStock:15,
+            location:"Shelf B2"
+        },
+
+        {
+            id:generateId(),
+            medicine:"Metformin",
+            strength:"500 mg",
+            form:"Tablet",
+            batch:"MET2026A",
+            expiry:"2028-01-31",
+            quantity:120,
+            minStock:20,
+            location:"Shelf C1"
+        },
+
+        {
+            id:generateId(),
+            medicine:"Metformin",
+            strength:"850 mg",
+            form:"Tablet",
+            batch:"MET2026B",
+            expiry:"2027-11-30",
+            quantity:90,
+            minStock:20,
+            location:"Shelf C1"
+        },
+
+        {
+            id:generateId(),
+            medicine:"Amlodipine",
+            strength:"5 mg",
+            form:"Tablet",
+            batch:"AML2026A",
+            expiry:"2028-03-31",
+            quantity:75,
+            minStock:15,
+            location:"Shelf C3"
+        },
+
+        {
+            id:generateId(),
+            medicine:"Ibuprofen",
+            strength:"400 mg",
+            form:"Tablet",
+            batch:"IBU2026A",
+            expiry:"2027-09-30",
+            quantity:50,
+            minStock:10,
+            location:"Shelf D1"
+        },
+
+        {
+            id:generateId(),
+            medicine:"Omeprazole",
+            strength:"20 mg",
+            form:"Capsule",
+            batch:"OMP2026A",
+            expiry:"2028-02-29",
+            quantity:45,
+            minStock:10,
+            location:"Shelf E2"
+        }
+
+    ];
+
+    saveInventory();
+
+}
+
+
+/* =========================================================
+   CURRENT PRESCRIPTION
+========================================================= */
+
+let currentPrescription =
+    JSON.parse(
+        localStorage.getItem(
+            CURRENT_RX_KEY
+        )
+    );
+
+
+let normalizedItems = [];
+
+let successfulLabels = [];
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+renderInventory();
+
+updateStatistics();
+
+renderPrescription();
+
+
+/* =========================================================
+   GENERATE ID
+========================================================= */
+
+function generateId(){
+
+    return (
+        "INV-" +
+        Date.now() +
+        "-" +
+        Math.floor(
+            Math.random()*10000
+        )
+    );
+
+}
+
+
+/* =========================================================
+   SAVE INVENTORY
+========================================================= */
+
+function saveInventory(){
+
+    localStorage.setItem(
+        INVENTORY_KEY,
+        JSON.stringify(inventory)
+    );
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function getStatus(item){
+
+    const today =
+        new Date();
+
+    const expiry =
+        new Date(
+            item.expiry +
+            "T23:59:59"
+        );
+
+
+    if(
+        expiry < today
+    ){
+
+        return "expired";
+
+    }
+
+
+    if(
+        Number(item.quantity) <= 0
+    ){
+
+        return "out";
+
+    }
+
+
+    if(
+        Number(item.quantity)
+        <=
+        Number(item.minStock)
+    ){
+
+        return "low";
+
+    }
+
+
+    return "good";
+
+}
+
+
+/* =========================================================
+   STATUS HTML
+========================================================= */
+
+function getStatusHTML(item){
+
+    const status =
+        getStatus(item);
+
+
+    if(status === "expired"){
+
+        return `
+            <span class="status status-expired">
+                EXPIRED
+            </span>
+        `;
+
+    }
+
+
+    if(status === "out"){
+
+        return `
+            <span class="status status-out">
+                OUT OF STOCK
+            </span>
+        `;
+
+    }
+
+
+    if(status === "low"){
+
+        return `
+            <span class="status status-low">
+                LOW STOCK
+            </span>
+        `;
+
+    }
+
+
+    return `
+        <span class="status status-good">
+            IN STOCK
+        </span>
+    `;
+
+}
+
+
+/* =========================================================
+   RENDER INVENTORY
+========================================================= */
+
+function renderInventory(){
+
+    const body =
+        document.getElementById(
+            "inventoryBody"
+        );
+
+
+    const search =
+        document.getElementById(
+            "inventorySearch"
+        )
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const filter =
+        document.getElementById(
+            "statusFilter"
+        ).value;
+
+
+    const filtered =
+        inventory.filter(item => {
+
+            const searchable = (
+
+                item.medicine +
+                " " +
+                item.strength +
+                " " +
+                item.form +
+                " " +
+                item.batch +
+                " " +
+                item.location
+
+            ).toLowerCase();
+
+
+            return (
+
+                searchable.includes(search)
+
+                &&
+
+                (
+                    filter === "all" ||
+                    getStatus(item) === filter
+                )
+
+            );
+
+        });
+
+
+    if(
+        filtered.length === 0
+    ){
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="9"
+                    style="
+                        text-align:center;
+                        padding:30px;
+                        color:#64748b;
+                    "
+                >
+
+                    No inventory found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    body.innerHTML =
+        filtered
+        .map(item => `
+
+            <tr>
+
+                <td>
+                    <strong>
+                        ${escapeHTML(
+                            item.medicine
+                        )}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        item.strength
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        item.form
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        item.batch
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        item.expiry
+                    )}
+                </td>
+
+                <td>
+                    <strong>
+                        ${item.quantity}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        item.location
+                    )}
+                </td>
+
+                <td>
+                    ${getStatusHTML(item)}
+                </td>
+
+                <td>
+
+                    <button
+                        class="use-btn"
+                        onclick="
+                            useStock(
+                                '${item.id}'
+                            )
+                        "
+                    >
+                        💊 USE
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `)
+        .join("");
+
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function updateStatistics(){
+
+    const totalUnits =
+        inventory.reduce(
+            (sum,item) =>
+                sum +
+                Number(
+                    item.quantity || 0
+                ),
+            0
+        );
+
+
+    const lowStock =
+        inventory.filter(
+            item =>
+                getStatus(item)
+                ===
+                "low"
+        ).length;
+
+
+    const expiredStock =
+        inventory.filter(
+            item =>
+                getStatus(item)
+                ===
+                "expired"
+        ).length;
+
+
+    document.getElementById(
+        "totalLines"
+    ).textContent =
+        inventory.length;
+
+
+    document.getElementById(
+        "totalUnits"
+    ).textContent =
+        totalUnits;
+
+
+    document.getElementById(
+        "lowStock"
+    ).textContent =
+        lowStock;
+
+
+    document.getElementById(
+        "expiredStock"
+    ).textContent =
+        expiredStock;
+
+}
+
+
+/* =========================================================
+   NORMALIZE PRESCRIPTION
+========================================================= */
+
+function normalizePrescriptionItems(
+    prescription
+){
+
+    let items =
+        prescription.medications ||
+        prescription.meds ||
+        [];
+
+
+    if(
+        !Array.isArray(items)
+    ){
+
+        items = [];
+
+    }
+
+
+    return items.map(item => {
+
+        if(
+            typeof item === "string"
+        ){
+
+            return parseMedicationString(
+                item
+            );
+
+        }
+
+
+        return {
+
+            name:
+                item.name ||
+                item.medicine ||
+                item.medication ||
+                "",
+
+            strength:
+                item.strength ||
+                item.dose ||
+                "",
+
+            form:
+                item.form ||
+                item.dosageForm ||
+                "Tablet",
+
+            instructions:
+                item.instructions ||
+                item.directions ||
+                "",
+
+            quantity:
+                Number(
+                    item.quantity ||
+                    item.qty ||
+                    1
+                ),
+
+            repeats:
+                item.repeats ||
+                ""
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   PARSE STRING MEDICATION
+========================================================= */
+
+function parseMedicationString(
+    text
+){
+
+    text =
+        String(text)
+        .trim();
+
+
+    const match =
+        text.match(
+            /^(.*?)(\d+(?:\.\d+)?\s*(?:mg|g|mcg|µg|ml|mL|%|units?))\b(.*)$/i
+        );
+
+
+    if(match){
+
+        return {
+
+            name:
+                match[1].trim(),
+
+            strength:
+                match[2].trim(),
+
+            form:
+                "Tablet",
+
+            instructions:
+                match[3].trim(),
+
+            quantity:1,
+
+            repeats:""
+
+        };
+
+    }
+
+
+    return {
+
+        name:text,
+
+        strength:"",
+
+        form:"Tablet",
+
+        instructions:"",
+
+        quantity:1,
+
+        repeats:""
+
+    };
+
+}
+
+
+/* =========================================================
+   RENDER PRESCRIPTION
+========================================================= */
+
+function renderPrescription(){
+
+    const container =
+        document.getElementById(
+            "prescriptionContent"
+        );
+
+
+    if(
+        !currentPrescription
+    ){
+
+        return;
+
+    }
+
+
+    const patient =
+        currentPrescription.patient ||
+        {};
+
+
+    const patientName =
+        patient.name ||
+        patient.patient ||
+        (
+            typeof patient === "string"
+                ? patient
+                : "Unknown Patient"
+        );
+
+
+    const patientNumber =
+        patient.icam ||
+        patient.patientNumber ||
+        currentPrescription.icam ||
+        "Not available";
+
+
+    const contact =
+        patient.contact ||
+        currentPrescription.contact ||
+        "Not available";
+
+
+    const doctor =
+        currentPrescription.doctor ||
+        {};
+
+
+    const doctorName =
+        doctor.name ||
+        currentPrescription.doctorName ||
+        "Not available";
+
+
+    const rxNumber =
+        currentPrescription.prescriptionNumber ||
+        currentPrescription.rxNumber ||
+        currentPrescription.number ||
+        "RX-" + Date.now();
+
+
+    document.getElementById(
+        "rxNumber"
+    ).textContent =
+        rxNumber;
+
+
+    normalizedItems =
+        normalizePrescriptionItems(
+            currentPrescription
+        );
+
+
+    if(
+        normalizedItems.length === 0
+    ){
+
+        container.innerHTML = `
+
+            <div
+                style="
+                    padding:20px;
+                    background:#fff7ed;
+                    color:#9a3412;
+                    border-radius:10px;
+                "
+            >
+
+                No medications were found
+                on this prescription.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <div class="patient-grid">
+
+            <div class="info-box">
+
+                <small>
+                    PATIENT
+                </small>
+
+                <strong>
+                    ${escapeHTML(
+                        patientName
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <small>
+                    PATIENT NUMBER
+                </small>
+
+                <strong>
+                    ${escapeHTML(
+                        patientNumber
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <small>
+                    CONTACT
+                </small>
+
+                <strong>
+                    ${escapeHTML(
+                        contact
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <small>
+                    PRESCRIBER
+                </small>
+
+                <strong>
+                    ${escapeHTML(
+                        doctorName
+                    )}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="prescriptionItems"
+        ></div>
+
+
+        <div
+            style="
+                display:flex;
+                justify-content:flex-end;
+                margin-top:20px;
+            "
+        >
+
+            <button
+                class="primary-btn"
+                onclick="
+                    confirmDispensing()
+                "
+            >
+
+                ✓ CONFIRM DISPENSING
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    const itemsContainer =
+        document.getElementById(
+            "prescriptionItems"
+        );
+
+
+    normalizedItems.forEach(
+        (med,index) => {
+
+            itemsContainer.innerHTML +=
+                createPrescriptionItem(
+                    med,
+                    index
+                );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   MATCH STOCK
+========================================================= */
+
+function findMatchingStock(
+    med
+){
+
+    const medicineName =
+        String(
+            med.name || ""
+        )
+        .toLowerCase()
+        .trim();
+
+
+    const strength =
+        String(
+            med.strength || ""
+        )
+        .toLowerCase()
+        .replace(
+            /\s+/g,
+            ""
+        );
+
+
+    return inventory
+        .filter(item => {
+
+            const itemName =
+                String(
+                    item.medicine || ""
+                )
+                .toLowerCase()
+                .trim();
+
+
+            const itemStrength =
+                String(
+                    item.strength || ""
+                )
+                .toLowerCase()
+                .replace(
+                    /\s+/g,
+                    ""
+                );
+
+
+            const nameMatch =
+                itemName === medicineName ||
+                itemName.includes(
+                    medicineName
+                ) ||
+                medicineName.includes(
+                    itemName
+                );
+
+
+            const strengthMatch =
+                !strength ||
+                !itemStrength ||
+                itemStrength === strength;
+
+
+            return (
+                nameMatch &&
+                strengthMatch
+            );
+
+        })
+        .sort(
+            (a,b) =>
+                new Date(a.expiry)
+                -
+                new Date(b.expiry)
+        );
+
+}
+
+
+/* =========================================================
+   PRESCRIPTION MEDICATION CARD
+========================================================= */
+
+function createPrescriptionItem(
+    med,
+    index
+){
+
+    const matches =
+        findMatchingStock(med);
+
+
+    let options = `
+        <option value="">
+            Select stock batch
+        </option>
+    `;
+
+
+    matches.forEach(stock => {
+
+        const status =
+            getStatus(stock);
+
+
+        const disabled =
+            status === "expired" ||
+            status === "out";
+
+
+        options += `
+
+            <option
+                value="${stock.id}"
+                ${disabled ? "disabled" : ""}
+            >
+
+                ${escapeHTML(
+                    stock.batch
+                )}
+
+                —
+                ${stock.quantity}
+                units
+
+                —
+                Exp
+                ${escapeHTML(
+                    stock.expiry
+                )}
+
+            </option>
+
+        `;
+
+    });
+
+
+    if(
+        matches.length === 0
+    ){
+
+        options += `
+
+            <option disabled>
+
+                No matching stock available
+
+            </option>
+
+        `;
+
+    }
+
+
+    return `
+
+        <div
+            class="prescription-item"
+            id="prescription-item-${index}"
+        >
+
+            <div class="med-header">
+
+                <div class="med-name">
+
+                    ${escapeHTML(
+                        med.name
+                    )}
+
+                    ${
+                        med.strength
+                        ?
+                        " " +
+                        escapeHTML(
+                            med.strength
+                        )
+                        :
+                        ""
+                    }
+
+                </div>
+
+
+                <div class="item-number">
+
+                    ${index + 1}
+
+                </div>
+
+            </div>
+
+
+            <div class="med-grid">
+
+
+                <div class="field">
+
+                    <label>
+                        AVAILABLE STOCK
+                    </label>
+
+                    <select
+                        id="stock-${index}"
+                        onchange="
+                            updateStockInfo(
+                                ${index}
+                            )
+                        "
+                    >
+
+                        ${options}
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        QUANTITY
+                    </label>
+
+                    <input
+                        type="number"
+                        id="qty-${index}"
+                        min="1"
+                        value="${med.quantity || 1}"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        DIRECTIONS
+                    </label>
+
+                    <input
+                        type="text"
+                        id="instructions-${index}"
+                        value="${escapeAttribute(
+                            med.instructions ||
+                            ""
+                        )}"
+                        placeholder="e.g. Take twice daily"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        STOCK INFORMATION
+                    </label>
+
+                    <div
+                        class="stock-info"
+                        id="stock-info-${index}"
+                    >
+
+                        Select a stock batch.
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   USE STOCK BUTTON
+========================================================= */
+
+function useStock(id){
+
+    const stock =
+        inventory.find(
+            item =>
+                item.id === id
+        );
+
+
+    if(!stock){
+
+        alert(
+            "Stock item could not be found."
+        );
+
+        return;
+
+    }
+
+
+    const status =
+        getStatus(stock);
+
+
+    if(
+        status === "expired"
+    ){
+
+        alert(
+            `${stock.medicine} ${stock.strength} — Batch ${stock.batch} is expired and cannot be used.`
+        );
+
+        return;
+
+    }
+
+
+    if(
+        status === "out"
+    ){
+
+        alert(
+            `${stock.medicine} ${stock.strength} is out of stock.`
+        );
+
+        return;
+
+    }
+
+
+    /*
+        If there is an active prescription,
+        select this batch for the matching
+        medication.
+    */
+
+    if(
+        currentPrescription &&
+        normalizedItems.length > 0
+    ){
+
+        let selected = false;
+
+
+        normalizedItems.forEach(
+            (med,index) => {
+
+                const matches =
+                    findMatchingStock(
+                        med
+                    );
+
+
+                const match =
+                    matches.find(
+                        item =>
+                            item.id === id
+                    );
+
+
+                if(match){
+
+                    const select =
+                        document.getElementById(
+                            `stock-${index}`
+                        );
+
+
+                    if(select){
+
+                        select.value =
+                            stock.id;
+
+
+                        updateStockInfo(
+                            index
+                        );
+
+
+                        selected = true;
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        if(selected){
+
+            alert(
+                `${stock.medicine} ${stock.strength} — Batch ${stock.batch} selected for dispensing.`
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    /*
+        If there is no matching prescription,
+        USE simply displays stock information.
+    */
+
+    alert(
+
+        `${stock.medicine} ${stock.strength}\n\n` +
+
+        `Batch: ${stock.batch}\n` +
+
+        `Available: ${stock.quantity} units\n` +
+
+        `Expiry: ${stock.expiry}\n` +
+
+        `Location: ${stock.location}`
+
+    );
+
+}
+
+
+/* =========================================================
+   STOCK INFO
+========================================================= */
+
+function updateStockInfo(
+    index
+){
+
+    const select =
+        document.getElementById(
+            `stock-${index}`
+        );
+
+
+    const info =
+        document.getElementById(
+            `stock-info-${index}`
+        );
+
+
+    const stock =
+        inventory.find(
+            item =>
+                item.id ===
+                select.value
+        );
+
+
+    if(!stock){
+
+        info.innerHTML =
+            "Select a stock batch.";
+
+        return;
+
+    }
+
+
+    const status =
+        getStatus(stock);
+
+
+    if(
+        status === "expired"
+    ){
+
+        info.innerHTML = `
+
+            <span
+                style="
+                    color:#c62828;
+                    font-weight:bold;
+                "
+            >
+
+                ⚠ EXPIRED STOCK
+
+            </span>
+
+        `;
+
+        return;
+
+    }
+
+
+    if(
+        status === "out"
+    ){
+
+        info.innerHTML = `
+
+            <span
+                style="
+                    color:#c62828;
+                    font-weight:bold;
+                "
+            >
+
+                ⚠ OUT OF STOCK
+
+            </span>
+
+        `;
+
+        return;
+
+    }
+
+
+    info.innerHTML = `
+
+        <strong>
+            Batch:
+        </strong>
+
+        ${escapeHTML(
+            stock.batch
+        )}
+
+        <br>
+
+        <strong>
+            Available:
+        </strong>
+
+        ${stock.quantity}
+
+        units
+
+        <br>
+
+        <strong>
+            Expiry:
+        </strong>
+
+        ${escapeHTML(
+            stock.expiry
+        )}
+
+        <br>
+
+        <strong>
+            Location:
+        </strong>
+
+        ${escapeHTML(
+            stock.location
+        )}
+
+    `;
+
+}
+
+
+/* =========================================================
+   CONFIRM DISPENSING
+========================================================= */
+
+function confirmDispensing(){
+
+    if(
+        !currentPrescription
+    ){
+
+        alert(
+            "No prescription selected."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        normalizedItems.length === 0
+    ){
+
+        alert(
+            "No medications found."
+        );
+
+        return;
+
+    }
+
+
+    const selectedItems = [];
+
+    let error = "";
+
+
+    normalizedItems.forEach(
+        (med,index) => {
+
+            if(error){
+                return;
+            }
+
+
+            const stockId =
+                document.getElementById(
+                    `stock-${index}`
+                ).value;
+
+
+            const quantity =
+                Number(
+                    document.getElementById(
+                        `qty-${index}`
+                    ).value
+                );
+
+
+            const instructions =
+                document.getElementById(
+                    `instructions-${index}`
+                ).value.trim();
+
+
+            if(
+                !stockId
+            ){
+
+                error =
+                    `Please select stock for ${med.name}.`;
+
+                return;
+
+            }
+
+
+            if(
+                !quantity ||
+                quantity <= 0
+            ){
+
+                error =
+                    `Enter a valid quantity for ${med.name}.`;
+
+                return;
+
+            }
+
+
+            const stock =
+                inventory.find(
+                    item =>
+                        item.id ===
+                        stockId
+                );
+
+
+            if(!stock){
+
+                error =
+                    `Stock could not be found for ${med.name}.`;
+
+                return;
+
+            }
+
+
+            if(
+                getStatus(stock)
+                ===
+                "expired"
+            ){
+
+                error =
+                    `${stock.medicine} batch ${stock.batch} is expired.`;
+
+                return;
+
+            }
+
+
+            if(
+                Number(stock.quantity)
+                <
+                quantity
+            ){
+
+                error =
+                    `Insufficient ${stock.medicine} stock. Available: ${stock.quantity}.`;
+
+                return;
+
+            }
+
+
+            selectedItems.push({
+
+                stockId:
+                    stock.id,
+
+                medicine:
+                    stock.medicine,
+
+                strength:
+                    stock.strength,
+
+                form:
+                    stock.form,
+
+                batch:
+                    stock.batch,
+
+                expiry:
+                    stock.expiry,
+
+                quantity:
+                    quantity,
+
+                instructions:
+                    instructions,
+
+                location:
+                    stock.location
+
+            });
+
+        }
+    );
+
+
+    if(error){
+
+        alert(error);
+
+        return;
+
+    }
+
+
+    /*
+        FINAL STOCK DEDUCTION
+    */
+
+    selectedItems.forEach(
+        item => {
+
+            const stock =
+                inventory.find(
+                    stock =>
+                        stock.id ===
+                        item.stockId
+                );
+
+
+            stock.quantity =
+                Number(
+                    stock.quantity
+                )
+                -
+                Number(
+                    item.quantity
+                );
+
+        }
+    );
+
+
+    saveInventory();
+
+
+    /*
+        CREATE DISPENSING RECORD
+    */
+
+    const patient =
+        currentPrescription.patient ||
+        {};
+
+
+    const patientName =
+        patient.name ||
+        patient.patient ||
+        (
+            typeof patient === "string"
+            ?
+            patient
+            :
+            "Unknown Patient"
+        );
+
+
+    const rxNumber =
+        currentPrescription.prescriptionNumber ||
+        currentPrescription.rxNumber ||
+        currentPrescription.number ||
+        "RX-" + Date.now();
+
+
+    const record = {
+
+        dispensingId:
+            "DSP-" + Date.now(),
+
+        prescriptionNumber:
+            rxNumber,
+
+        patient:
+            patientName,
+
+        pharmacist:
+            pharmacistName,
+
+        date:
+            new Date().toISOString(),
+
+        items:
+            selectedItems
+
+    };
+
+
+    const records =
+        JSON.parse(
+            localStorage.getItem(
+                DISPENSING_KEY
+            )
+        ) || [];
+
+
+    records.push(
+        record
+    );
+
+
+    localStorage.setItem(
+        DISPENSING_KEY,
+        JSON.stringify(records)
+    );
+
+
+    /*
+        UPDATE PRESCRIPTION
+    */
+
+    updatePrescriptionStatus(
+        currentPrescription,
+        "Dispensed"
+    );
+
+
+    /*
+        CREATE LABELS
+    */
+
+    successfulLabels =
+        selectedItems.map(
+            item =>
+                createLabelData(
+                    item,
+                    currentPrescription,
+                    record
+                )
+        );
+
+
+    buildLabelPreview();
+
+
+    renderInventory();
+
+    updateStatistics();
+
+
+    document.getElementById(
+        "successModal"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* =========================================================
+   UPDATE PRESCRIPTION STATUS
+========================================================= */
+
+function updatePrescriptionStatus(
+    prescription,
+    status
+){
+
+    prescription.status =
+        status;
+
+
+    localStorage.setItem(
+        "neoPharmaBridgePrescription",
+        JSON.stringify(
+            prescription
+        )
+    );
+
+
+    /*
+        Main prescription array
+    */
+
+    let prescriptions =
+        JSON.parse(
+            localStorage.getItem(
+                "neoPharmaBridgePrescriptions"
+            )
+        ) || [];
+
+
+    const rxNumber =
+        prescription.prescriptionNumber ||
+        prescription.rxNumber ||
+        prescription.number;
+
+
+    prescriptions =
+        prescriptions.map(
+            rx => {
+
+                const number =
+                    rx.prescriptionNumber ||
+                    rx.rxNumber ||
+                    rx.number;
+
+
+                if(
+                    rxNumber &&
+                    number ===
+                    rxNumber
+                ){
+
+                    return {
+                        ...rx,
+                        status
+                    };
+
+                }
+
+
+                return rx;
+
+            }
+        );
+
+
+    localStorage.setItem(
+        "neoPharmaBridgePrescriptions",
+        JSON.stringify(
+            prescriptions
+        )
+    );
+
+
+    /*
+        Admin prescription array
+    */
+
+    let admin =
+        JSON.parse(
+            localStorage.getItem(
+                "adminPrescriptions"
+            )
+        ) || [];
+
+
+    admin =
+        admin.map(
+            rx => {
+
+                const number =
+                    rx.prescriptionNumber ||
+                    rx.rxNumber ||
+                    rx.number;
+
+
+                if(
+                    rxNumber &&
+                    number ===
+                    rxNumber
+                ){
+
+                    return {
+                        ...rx,
+                        status
+                    };
+
+                }
+
+
+                return rx;
+
+            }
+        );
+
+
+    localStorage.setItem(
+        "adminPrescriptions",
+        JSON.stringify(admin)
+    );
+
+}
+
+
+/* =========================================================
+   LABEL DATA
+========================================================= */
+
+function createLabelData(
+    item,
+    prescription,
+    record
+){
+
+    const patient =
+        prescription.patient ||
+        {};
+
+
+    const patientName =
+        patient.name ||
+        patient.patient ||
+        (
+            typeof patient === "string"
+            ?
+            patient
+            :
+            "Unknown Patient"
+        );
+
+
+    const rxNumber =
+        prescription.prescriptionNumber ||
+        prescription.rxNumber ||
+        prescription.number ||
+        record.prescriptionNumber;
+
+
+    return {
+
+        pharmacy:
+            prescription.pharmacy?.name ||
+            prescription.pharmacy ||
+            "NeoPharmaBridge Pharmacy",
+
+        patient:
+            patientName,
+
+        medicine:
+            item.medicine,
+
+        strength:
+            item.strength,
+
+        form:
+            item.form,
+
+        instructions:
+            item.instructions ||
+            "Use as directed",
+
+        quantity:
+            item.quantity,
+
+        batch:
+            item.batch,
+
+        expiry:
+            item.expiry,
+
+        prescriptionNumber:
+            rxNumber,
+
+        date:
+            new Date()
+            .toLocaleDateString(),
+
+        pharmacist:
+            pharmacistName
+
+    };
+
+}
+
+
+/* =========================================================
+   LABEL PREVIEW
+========================================================= */
+
+function buildLabelPreview(){
+
+    const container =
+        document.getElementById(
+            "labelPreview"
+        );
+
+
+    container.innerHTML =
+        successfulLabels
+        .map(label => `
+
+            <div
+                style="
+                    text-align:left;
+                    padding:15px;
+                    border:1px solid #dbeafe;
+                    border-radius:10px;
+                "
+            >
+
+                <strong
+                    style="
+                        color:#0f4c81;
+                        font-size:17px;
+                    "
+                >
+
+                    ${escapeHTML(
+                        label.medicine
+                    )}
+
+                    ${escapeHTML(
+                        label.strength
+                    )}
+
+                </strong>
+
+
+                <p
+                    style="
+                        margin-top:7px;
+                    "
+                >
+
+                    ${escapeHTML(
+                        label.instructions
+                    )}
+
+                </p>
+
+
+                <small>
+
+                    Quantity:
+                    ${label.quantity}
+
+                    &nbsp; | &nbsp;
+
+                    Batch:
+                    ${escapeHTML(
+                        label.batch
+                    )}
+
+                    &nbsp; | &nbsp;
+
+                    Exp:
+                    ${escapeHTML(
+                        label.expiry
+                    )}
+
+                </small>
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+/* =========================================================
+   PRINT LABELS
+========================================================= */
+
+function printLabels(){
+
+    const printArea =
+        document.getElementById(
+            "printArea"
+        );
+
+
+    printArea.innerHTML =
+        successfulLabels
+        .map(label => `
+
+            <div class="medicine-label">
+
+                <div class="label-brand">
+
+                    NeoPharmaBridge
+
+                </div>
+
+
+                <div>
+
+                    Patient:
+
+                    <strong>
+
+                        ${escapeHTML(
+                            label.patient
+                        )}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="label-medicine">
+
+                    ${escapeHTML(
+                        label.medicine
+                    )}
+
+                    ${escapeHTML(
+                        label.strength
+                    )}
+
+                    ${
+                        label.form
+                        ?
+                        " — " +
+                        escapeHTML(
+                            label.form
+                        )
+                        :
+                        ""
+                    }
+
+                </div>
+
+
+                <div class="label-directions">
+
+                    <strong>
+                        Directions:
+                    </strong>
+
+                    ${escapeHTML(
+                        label.instructions
+                    )}
+
+                </div>
+
+
+                <div class="label-line">
+
+                    Quantity:
+                    ${label.quantity}
+
+                </div>
+
+
+                <div class="label-line">
+
+                    Batch:
+                    ${escapeHTML(
+                        label.batch
+                    )}
+
+                </div>
+
+
+                <div class="label-line">
+
+                    Expiry:
+                    ${escapeHTML(
+                        label.expiry
+                    )}
+
+                </div>
+
+
+                <div class="label-line">
+
+                    Prescription:
+                    ${escapeHTML(
+                        label.prescriptionNumber
+                    )}
+
+                </div>
+
+
+                <div class="label-line">
+
+                    Dispensed:
+                    ${escapeHTML(
+                        label.date
+                    )}
+
+                </div>
+
+
+                <div class="label-line">
+
+                    Pharmacist:
+                    ${escapeHTML(
+                        label.pharmacist
+                    )}
+
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
+
+    window.print();
+
+}
+
+
+/* =========================================================
+   CLOSE SUCCESS
+========================================================= */
+
+function closeSuccessModal(){
+
+    document.getElementById(
+        "successModal"
+    ).style.display =
+        "none";
+
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+function goBack(){
+
+    window.location.href =
+        "Pharmacist_Dashboard.html";
+
+}
+
+
+/* =========================================================
+   SECURITY / HTML ESCAPING
+========================================================= */
+
+function escapeHTML(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+function escapeAttribute(value){
+
+    return escapeHTML(value);
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+========================================================= */
+
+window.addEventListener(
+    "click",
+    function(event){
+
+        const modal =
+            document.getElementById(
+                "successModal"
+            );
+
+
+        if(
+            event.target === modal
+        ){
+
+            closeSuccessModal();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
